@@ -5,3 +5,5 @@
 *.synctex.gz
 *.bak
 *.asv
+# manuscript temporary backups
+*_backup_before_*.tex
