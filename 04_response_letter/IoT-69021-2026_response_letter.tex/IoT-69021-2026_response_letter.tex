@@ -1,0 +1,384 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt, twosides]{article}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{picinpar}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{flushend}
+\usepackage[latin1]{inputenc}
+\usepackage{colortbl}
+\usepackage{soul}
+\usepackage{multirow}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{pifont}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{alltt}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumerate}
+\usepackage{siunitx}
+\usepackage{breakurl}
+\usepackage{caption}
+\usepackage{epstopdf}
+\usepackage{pbox}
+\usepackage{stfloats}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{changebar}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\usepackage{amsthm}
+\usepackage{diagbox,tabu,enumerate,fancybox}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\long\def\comment#1{ }
+
+\usepackage[top=1in, bottom=1in, left=1.2in, right=1.2in]{geometry}
+\setlength{\parskip}{1em}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{conj}{Conjecture}[section]
+\newtheorem{exmp}{Example}[section]
+\newenvironment{fminipage}%
+{\begin{Sbox}\begin{minipage}}%
+{\end{minipage}\end{Sbox}\doublebox{\TheSbox}}
+
+\begin{document}
+\bigskip
+
+\noindent \textbf{Title:Event-Triggered Nonlinear Model Predictive Control for Energy-Aware UAV Obstacle Avoidance}
+
+\noindent \textbf{Authors: Heng Zhang, ~Liang Yuan, ~Xianghui Cao}
+
+\noindent \textbf{Reference:  IoT-69021-2026}
+
+\bigskip
+
+\begin{center}
+\textbf{\LARGE Authors' Responses to the Reviewers}
+\end{center}
+
+\bigskip First we would like to express our sincere thanks to the Associate Editor and the anonymous reviewers for their valuable comments and suggestions on our manuscript. The following is a detailed description of the reviewer comments and the currently completed response.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\textbf{\textit{\large Response to the Associate Editor}}
+\end{center}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Associate Editor}]} \textit{\textbf{Based on 3 qualified reviews, this AE makes Major Revision decision. The main concerns include weak connection to the Internet of Things, unclear real-time feasibility claims, unclear mechanism that drives the UAV toward the target during NMPC replanning,  and so on.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\textbf{\textit{\large Response to Reviewer \# 1}}
+\end{center}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{Comments to the Author}}
+
+\textit{\textbf{This manuscript proposes an event-triggered nonlinear model predictive control framework for energy-aware UAV obstacle avoidance in complex three-dimensional dynamic environments. The framework combines obstacle-motion prediction, composite risk assessment, dual-mode control, and an asymmetric climb penalty. The manuscript is generally well organized, and the authors have conducted comparative simulations, parameter-sensitivity analysis, computational profiling, and Monte Carlo experiments.}}
+
+\textit{\textbf{The topic is relevant to autonomous UAV systems and may be of interest for computationally constrained applications. However, several issues regarding the IoT-oriented positioning of the work, real-time feasibility, optimization formulation, validation of the claimed contributions, and experimental methodology need to be addressed before the manuscript can be considered for publication.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+\textit{\textbf{Major Comments}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{1. The connection to the Internet of Things should be strengthened.}}
+
+\textit{\textbf{The current manuscript is primarily framed as a UAV control and dynamic obstacle-avoidance study. Although autonomous UAVs are relevant to many IoT applications, the IoT context remains somewhat peripheral to the technical development in the present version.}}
+
+\textit{\textbf{The manuscript would benefit from a clearer description of the UAV's role within an IoT or autonomous IoT architecture. In particular, it should be clarified how the event-triggered mechanism translates into resource savings from an IoT-system perspective, for example, reduced onboard computational load or edge-computing demand. If communication overhead, sensing-data exchange, or other network-related resource consumption is also expected to benefit from the proposed framework, such effects should be explicitly modeled or discussed rather than only stated conceptually.}}
+
+\textit{\textbf{I suggest revising the introduction, system description, and conclusion so that the IoT motivation is consistently connected to the proposed control architecture and its resource-saving mechanism.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+Thank you for this valuable comment. We agree that, in the original manuscript, the connection between the proposed framework and the IoT system context was not sufficiently emphasized. Although the study considered UAV-assisted obstacle avoidance and energy-aware control, the role of the UAV and the proposed control framework within an IoT-enabled cyber-physical system required clearer system-level explanation.
+
+In response, we have revised the Abstract, Introduction, Section II, and Conclusion to clarify the IoT relevance and scope of this work. In the revised manuscript, the UAV is explicitly described as a mobile sensing-and-actuation node in an IoT-enabled cyber-physical system, where it operates through a local perception-decision-actuation loop. The revised system description further explains that obstacle observations are processed locally for prediction, risk assessment, mode selection, and control action generation. In particular, $y_i(k)$ is clarified as the available obstacle observation provided to the local perception-control loop.
+
+We have also clarified the role of the event-triggered mechanism from the perspective of resource-aware local computation. Specifically, the mechanism avoids unnecessary NMPC solver activations during low-risk conditions and reduces the associated local controller-computation workload, while nominal tracking control remains available under low-risk conditions. Therefore, the IoT relevance of the proposed approach is positioned as a resource-aware local perception-control component for an IoT-enabled cyber-physical system.
+
+To avoid overstatement, we explicitly clarify that communication scheduling, radio resource allocation, and communication-energy optimization are outside the modeling scope of this work. Accordingly, the revised manuscript does not claim communication optimization or network-resource benefits; rather, it focuses on the local perception-control and computational decision process of the UAV node.
+
+The corresponding modifications are shown below:
+
+``The framework is positioned in an IoT-enabled cyber-physical system, where the UAV operates as a mobile sensing-and-actuation node.''
+
+``From an IoT-system perspective, the event-triggered mechanism performs resource-aware local decision scheduling by avoiding unnecessary NMPC solver activations and reducing the associated local controller-computation workload.''
+
+``The UAV is modeled as a mobile sensing-and-actuation node in an IoT-enabled cyber-physical system, where the local perception-decision-actuation loop consists of observation acquisition, motion prediction, risk assessment, mode selection, and control action generation.''
+
+The corresponding modifications have been highlighted in blue in the revised manuscript.
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{2. The real-time feasibility claims need to be reconsidered.}}
+
+\textit{\textbf{The manuscript uses a sampling interval of 0.1 s, whereas the computational profiling results report an average CPU time per step of approximately 2074 ms and an average CPU time of approximately 2658 ms for triggered steps. These values are far larger than the stated 100-ms control interval.}}
+
+\textit{\textbf{Therefore, the current MATLAB/CasADi implementation does not appear to satisfy the stated closed-loop update frequency. The manuscript should clarify how simulation time is advanced relative to solver wall-clock time and whether computation delay is incorporated into the closed-loop dynamics. Given the reported timing results, it is also important to distinguish computational savings relative to continuous NMPC from actual real-time executability.}}
+
+\textit{\textbf{The reduction in unnecessary NMPC calls is still a meaningful computational advantage. However, reducing average computational cost relative to continuous NMPC is not equivalent to meeting a real-time deadline. Accordingly, the real-time feasibility claims in the abstract, introduction, Section IV-D, and conclusion should be moderated.}}
+
+\textit{\textbf{A compiled implementation, hardware-in-the-loop experiment, or onboard/embedded validation would substantially strengthen this aspect of the work. At minimum, I suggest reporting deadline-oriented timing statistics, including the median, 95th or 99th percentile computation time, and the percentage of control steps exceeding the 0.1-s sampling deadline.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you very much for the reviewer's insightful comment regarding the inconsistency between the real-time feasibility claims and the reported computational times. We appreciate the reviewer's request for a clearer and more rigorous disclosure of the computational scope and deadline-related limitations.
+
+We agree that the term ``real-time feasibility'' was too broad in the original manuscript. The reported experiments are based on desktop MATLAB/CasADi profiling, rather than an embedded deployment, and the measured CPU times do not provide a hard real-time guarantee at the simulated sampling interval of $\Delta t=0.1$ s. Although event triggering reduces unnecessary NMPC activations and achieves relative computational savings compared with continuous NMPC, this reduction is not equivalent to demonstrating that all control updates satisfy a 100-ms deadline.
+
+In the revised manuscript, we have moderated the computational claims in four locations. First, the Abstract now describes computational efficiency and resource-aware computation reduction, and identifies the reported 21.1\%--24.2\% CPU-time reduction as a desktop MATLAB/CasADi profiling result. Second, the Introduction now explicitly states that the present study provides desktop computational characterization rather than strict onboard real-time validation. Third, Section IV-D has been retitled ``Computational Performance Profiling and Deadline-Oriented Analysis.'' It now specifies the timing scope, reports deadline-oriented statistics, and distinguishes desktop controller-computation time from complete physical closed-loop latency. Finally, the Conclusion now characterizes the results as desktop computational behavior and relative CPU savings, while identifying embedded platforms, hardware-in-the-loop experiments, and compiled implementations as future validation work.
+
+The corresponding modifications are shown below:
+
+``The event-triggered mechanism reduces unnecessary optimization activations and computational workload, while the current study focuses on desktop MATLAB/CasADi computational characterization rather than strict onboard real-time validation. Accordingly, the reported CPU-time reductions represent relative computational savings, not a hard real-time guarantee.''
+
+``The reported computation time measures the controller computation process in MATLAB/CasADi simulation, including the triggered NMPC solving procedure, rather than the complete physical closed-loop latency including communication and hardware execution. Although the event-triggered strategy significantly reduces unnecessary NMPC calls, the current desktop MATLAB/CasADi implementation does not satisfy the strict 100-ms deadline for triggered optimization steps. With $\Delta t=0.1$ s, the deadline-violation ratio is 78.168\% over all recorded controller steps and 100.0\% over the triggered NMPC steps. Therefore, the reported results characterize desktop computational behavior and relative computational savings rather than hard real-time or onboard feasibility.''
+
+The complete computational-profiling table has also been revised as follows:
+
+\begin{table*}[t]
+	\captionsetup{labelformat=empty}
+	\caption{Table IV: Deadline-Oriented Computational Statistics and Solver Disclosure of the Proposed ET-NMPC}
+	\label{tab:response_computational_profiling}
+	\centering
+	\footnotesize
+	\setlength{\tabcolsep}{2.5pt}
+	\renewcommand{\arraystretch}{1.12}
+	\begin{tabular}{p{0.46\textwidth}p{0.46\textwidth}}
+		\toprule
+		\textbf{Item} & \textbf{Value} \\
+		\midrule
+		\multicolumn{2}{l}{\textbf{Profiling setup}} \\
+		Number of profiling runs & 30 \\
+		Total simulation steps & 4072 \\
+		Number of dynamic obstacles & 5 \\
+		Triggered steps & 3183 \\
+		Trigger rate & $77.8 \pm 3.5\%$ \\
+		\midrule
+		\multicolumn{2}{l}{\textbf{IPOPT statistics}} \\
+		Average IPOPT iterations & $22.0 \pm 12.9$ \\
+		Maximum IPOPT iterations & 87 \\
+		Solver failure count & 0 \\
+		Fallback count & 0 \\
+		\midrule
+		\multicolumn{2}{l}{\textbf{Memory statistics}} \\
+		Mean memory before simulation & 6361.1 MB \\
+		Mean memory after simulation & 6356.9 MB \\
+		Mean memory variation & -4.2 MB \\
+		Peak observed memory & 6367.6 MB \\
+		\midrule
+		\multicolumn{2}{l}{\textbf{Solver settings}} \\
+		IPOPT maximum iterations & 100 \\
+		IPOPT tolerance & $10^{-4}$ \\
+		IPOPT acceptable tolerance & $10^{-3}$ \\
+		Sparse linear solver & MUMPS \\
+		Warm-start strategy & Shifted reference initialization \\
+		\bottomrule
+	\end{tabular}
+
+	\medskip
+	\textcolor{blue}{\textbf{Deadline-oriented timing statistics (pooled step-level values)}}\\
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lccccc}
+			\toprule
+			\textcolor{blue}{\textbf{Metric}} & \textcolor{blue}{\textbf{Mean (ms)}} & \textcolor{blue}{\textbf{Median (ms)}} & \textcolor{blue}{\textbf{95th percentile (ms)}} & \textcolor{blue}{\textbf{99th percentile (ms)}} & \textcolor{blue}{\textbf{Maximum (ms)}} \\
+			\midrule
+			\textcolor{blue}{All controller steps} & \textcolor{blue}{2077.9} & \textcolor{blue}{2551.9} & \textcolor{blue}{2964.7} & \textcolor{blue}{3150.4} & \textcolor{blue}{3982.8} \\
+			\textcolor{blue}{Triggered NMPC steps} & \textcolor{blue}{2658.3} & \textcolor{blue}{2596.2} & \textcolor{blue}{2987.2} & \textcolor{blue}{3187.8} & \textcolor{blue}{3982.8} \\
+			\midrule
+			\textcolor{blue}{Deadline} & \multicolumn{5}{c}{\textcolor{blue}{100 ms ($\Delta t=0.1$ s)}} \\
+			\textcolor{blue}{Violation ratio (all steps)} & \multicolumn{5}{c}{\textcolor{blue}{3183/4072 (78.168\%)}} \\
+			\textcolor{blue}{Violation ratio (triggered steps)} & \multicolumn{5}{c}{\textcolor{blue}{3183/3183 (100.0\%)}} \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table*}
+
+\clearpage
+
+These revisions more accurately distinguish the demonstrated computational efficiency and relative CPU savings from hard real-time capability. The corresponding modifications have been highlighted in blue in the revised manuscript.
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{3. The mechanism that drives the UAV toward the target during NMPC replanning is unclear.}}
+
+\textit{\textbf{The objective function in (19)--(24) includes path-length, smoothness, energy, and collision-risk terms. However, I do not see an explicit reference-tracking term, path-progress term, or terminal goal cost in the high-risk NMPC formulation.}}
+
+\textit{\textbf{As currently written, it is unclear what mechanism promotes continued progress toward the target while the predictive optimizer is active, or how the UAV is encouraged to return to the nominal trajectory after an avoidance maneuver. In particular, because path length, control effort, and energy consumption are all penalized, a solution with limited motion could potentially be favored once the safety constraints are satisfied if progress toward the target is not explicitly rewarded.}}
+
+\textit{\textbf{If a reference-tracking cost, path-progress term, terminal goal cost, or equivalent mechanism is used in the actual implementation, it should be explicitly included in the mathematical formulation. Otherwise, the objective formulation may need to be revised, and the corresponding simulation results should be updated accordingly.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you very much for the reviewer's important comment regarding the target-oriented mechanism of the high-risk NMPC formulation.
+
+We agree that the original manuscript objective function lacked explicit reference-tracking, path-progress, and terminal-attraction mechanisms. Although the original formulation included path-length, smoothness, energy, and collision-risk terms, it did not explicitly state how the optimizer should remain aligned with the local reference or how it should be attracted toward the terminal target after an avoidance maneuver. Consequently, the target-oriented behavior during replanning was not sufficiently clear in the original manuscript.
+
+In the revised manuscript, Section III-C has been revised to make this mechanism explicit. First, a reference-tracking cost has been introduced to penalize the deviation between each predicted UAV position and the corresponding local reference position, thereby preserving reference-following behavior during local replanning. Second, a terminal goal cost has been added to penalize terminal position error and terminal velocity. Third, a stage-wise terminal-attraction term has been incorporated into the terminal cost. Its influence increases over the prediction horizon, so that the predicted trajectory is progressively attracted toward the conditional terminal reference. Together, these terms explicitly connect local obstacle avoidance with continued progression toward the target.
+
+The revised objective function combines the reference-tracking, control-increment, energy-aware, differentiable soft collision-avoidance, and terminal costs as follows:
+\[
+J = \rho_1 J_{\mathrm{track}} + \rho_2 J_{\mathrm{smooth}} + \rho_3 J_{\mathrm{energy}} + \rho_4 J_{\mathrm{risk}} + \rho_5 J_{\mathrm{terminal}}.
+\]
+
+The corresponding objective weights are $\rho_1=1.0$, $\rho_2=0.5$, $\rho_3=0.8$, $\rho_4=5.0$, and $\rho_5=1.0$. The terminal-cost weights are $\lambda_p=120$, $\lambda_v=20$, and $\lambda_{\mathrm{prog}}=8$. These parameters are reported in the revised Table II and are consistent with the MATLAB/CasADi NMPC solver.
+
+The corresponding modifications are shown below:
+
+``To balance local-reference tracking, control regularization, energy awareness, and differentiable soft collision avoidance, the overall objective function $J$ is defined as
+\[
+J = \rho_1 J_{\mathrm{track}} + \rho_2 J_{\mathrm{smooth}} + \rho_3 J_{\mathrm{energy}} + \rho_4 J_{\mathrm{risk}} + \rho_5 J_{\mathrm{terminal}},
+\]
+where $J_{\mathrm{track}}$, $J_{\mathrm{smooth}}$, $J_{\mathrm{energy}}$, $J_{\mathrm{risk}}$, and $J_{\mathrm{terminal}}$ denote the reference-tracking, control-increment, energy-aware, soft collision-avoidance, and terminal costs, respectively; $\rho_1,\ldots,\rho_5$ are their nonnegative weights. The risk-fusion weights $w_1$, $w_2$, and $w_3$ retain their distinct meaning in Section III-B.
+
+The reference-tracking cost is defined as
+\[
+J_{\mathrm{track}} = \sum_{\tau=0}^{H-1} \left\|\vect{p}_{k+\tau+1}-\vect{r}_{k+\tau+1}\right\|_2^2,
+\]
+where $\vect{r}_{k+\tau+1}$ is the local reference position at the corresponding prediction step. This term ensures that the UAV tracks the local reference trajectory during optimization. The control-increment penalty is defined as
+\[
+J_{\mathrm{smooth}} = \sum_{\tau=0}^{H-2} \left\|\vect{u}_{k+\tau+1}-\vect{u}_{k+\tau}\right\|_2^2,
+\]
+which penalizes large variations in the predicted control sequence to improve trajectory executability.
+
+To explicitly account for terminal-goal attainment and progressively stronger attraction over the prediction horizon, the terminal cost is defined as
+\[
+\begin{aligned}
+J_{\mathrm{terminal}} ={}& \lambda_p\left\|\vect{p}_{k+H}-\vect{p}_{\mathrm{terminal\_ref}}\right\|_2^2+\lambda_v\left\|\vect{v}_{k+H}\right\|_2^2 \\
+&+\lambda_{\mathrm{prog}}\sum_{\tau=0}^{H-1}\left(\frac{\tau+1}{H}\right)^2\left\|\vect{p}_{k+\tau+1}-\vect{p}_{\mathrm{terminal\_ref}}\right\|_2^2,
+\end{aligned}
+\]
+where the first two terms penalize terminal position error and terminal velocity, respectively. The final term is a stage-wise terminal-attraction penalty whose influence increases over the horizon. The terminal reference is $\vect{p}_{\mathrm{goal}}$ when $\left\|\vect{p}_{k}-\vect{p}_{\mathrm{goal}}\right\|_2\leq25\,\mathrm{m}$; otherwise, it is the last local reference point. Minimizing $J_{\mathrm{terminal}}$ therefore promotes terminal convergence while avoiding residual terminal motion.''
+
+The corresponding parameters in Table II have also been updated as follows:
+
+\begin{table}[h!]
+\centering
+\captionsetup{labelformat=empty}
+\caption{Table II: Key Parameters Used in the Simulations}
+\label{tab:response_key_parameters}
+\scriptsize
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l l c c}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Unit} & \textbf{Value} \\
+\midrule
+\multicolumn{4}{l}{\textit{UAV kinematic parameters}} \\
+\midrule
+$v_{\max}$ & Maximum UAV speed & m/s & 5.0 \\
+$u_{\max}$ & Maximum UAV acceleration & m/s$^2$ & 3.0 \\
+$z_{\min}$ & Minimum flight altitude & m & 0.5 \\
+$z_{\max}$ & Maximum flight altitude & m & 20.0 \\
+$r_u$ & UAV safety radius & m & 0.3 \\
+$\Delta t$ & Sampling time & s & 0.1 \\
+$H$ & Prediction horizon & steps & 15 \\
+\midrule
+\multicolumn{4}{l}{\textit{NMPC cost weights}} \\
+\midrule
+\textcolor{blue}{$\rho_1$} & \textcolor{blue}{Reference-tracking cost weight} & \textcolor{blue}{--} & \textcolor{blue}{1.0} \\
+\textcolor{blue}{$\rho_2$} & \textcolor{blue}{Control-increment cost weight} & \textcolor{blue}{--} & \textcolor{blue}{0.5} \\
+\textcolor{blue}{$\rho_3$} & \textcolor{blue}{Energy-aware cost weight} & \textcolor{blue}{--} & \textcolor{blue}{0.8} \\
+\textcolor{blue}{$\rho_4$} & \textcolor{blue}{Differentiable soft risk-cost weight} & \textcolor{blue}{--} & \textcolor{blue}{5.0} \\
+\textcolor{blue}{$\rho_5$} & \textcolor{blue}{Outer terminal-cost weight} & \textcolor{blue}{--} & \textcolor{blue}{1.0} \\
+$c_1$ & Distance-related energy weight & -- & 1.0 \\
+$c_2$ & Control-effort energy weight & -- & 0.1 \\
+$c_3$ & Asymmetric climb penalty weight & -- & 3.0 \\
+\textcolor{blue}{$\lambda_p$} & \textcolor{blue}{Terminal position weight} & \textcolor{blue}{--} & \textcolor{blue}{120} \\
+\textcolor{blue}{$\lambda_v$} & \textcolor{blue}{Terminal velocity weight} & \textcolor{blue}{--} & \textcolor{blue}{20} \\
+\textcolor{blue}{$\lambda_{\mathrm{prog}}$} & \textcolor{blue}{Stage-wise terminal-attraction/path weight} & \textcolor{blue}{--} & \textcolor{blue}{8} \\
+\midrule
+\multicolumn{4}{l}{\textit{Risk assessment and event-triggering parameters}} \\
+\midrule
+$w_1$ & TCPA-based encounter risk weight & -- & 0.4 \\
+$w_2$ & Predictive occupancy risk weight & -- & 0.4 \\
+$w_3$ & Reference deviation risk weight & -- & 0.2 \\
+$R_{on}$ & Risk activation threshold & -- & 0.6 \\
+$R_{off}$ & Risk deactivation threshold & -- & 0.2 \\
+$T_{ref}$ & Refractory interval & steps & 5 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The corresponding modifications have been highlighted in blue in the revised manuscript.
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{4. The claimed benefit of the asymmetric climb penalty is not sufficiently supported by the reported results.}}
+
+\textit{\textbf{The asymmetric climb penalty is presented as one of the main contributions of the manuscript. However, the results in Table III do not clearly demonstrate that the proposed formulation suppresses unnecessary climbing or reduces energy consumption. In fact, the symmetric-energy variant reports slightly lower climb and estimated energy consumption than the proposed method in that table.}}
+
+\textit{\textbf{The current evidence therefore does not appear sufficient to support a strong claim that the asymmetric penalty directly reduces unnecessary vertical maneuvers or energy consumption. More precisely, the additional term in (22) penalizes positive altitude gain rather than vertical motion in general, and its specific contribution should be demonstrated more clearly.}}
+
+\textit{\textbf{A focused ablation study would be useful. For example, the proposed asymmetric penalty could be compared with the symmetric-energy formulation in scenarios where both horizontal and vertical detours are feasible and where climbing has a meaningful energetic consequence. Relevant metrics could include the vertical trajectory, accumulated positive altitude gain, flight time, path length, and estimated energy consumption over multiple randomized trials.}}
+
+\textit{\textbf{Statistical variation should also be reported to determine whether the observed differences are meaningful. If the main effect of the asymmetric penalty is to alter the safety-energy trade-off rather than consistently reduce climb or total energy consumption, the contribution should be described in those more precise terms.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{5. The rationale and representativeness of the baseline methods should be better justified.}}
+
+\textit{\textbf{The manuscript compares the proposed method with continuous NMPC, two internal variants, 3D-APF, and RRT. These comparisons are useful, particularly for evaluating the effects of event triggering, prediction, and the energy formulation. However, continuous NMPC and the two event-triggered variants are primarily ablation baselines, whereas conventional APF and RRT may not represent strong recent competitors for prediction-based dynamic-obstacle avoidance.}}
+
+\textit{\textbf{Several aspects of the comparison therefore require clarification. In particular, the manuscript should explain how the parameters of the baseline methods were tuned and whether all methods were evaluated under identical initial conditions, obstacle realizations, and random seeds. It should also clarify whether all methods received the same obstacle observations and, where applicable, whether the same motion-prediction information was used.}}
+
+\textit{\textbf{The implementation of RRT* deserves particular attention. The manuscript should explain how RRT* was adapted to moving obstacles, how frequently replanning was performed, and how dynamic obstacle motion was incorporated into collision checking and closed-loop execution.}}
+
+\textit{\textbf{More generally, the manuscript should justify why the selected baseline set is sufficient to establish competitiveness for online UAV navigation in dynamic environments. A comparison with, or at least a substantive discussion of, a recent prediction-based dynamic-obstacle avoidance method would make the experimental evaluation more convincing.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+\medskip
+
+\textit{\textbf{Minor Comments}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{1. Section III could be streamlined for improved readability.}}
+
+\textit{\textbf{Section III is rather dense and combines obstacle prediction, risk assessment, event-triggered switching, NMPC formulation, theoretical discussion, solver implementation, and the complete algorithm in a single section. In addition, the explanation of solver activation and computational savings is repeated in several subsections.}}
+
+\textit{\textbf{I suggest keeping the core methodological formulation in the main text while shortening repeated explanations and separating implementation details from the main algorithmic development. Some solver-specific or extended analytical details could also be moved to an appendix if appropriate.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{2. Table III should report statistical variation and provide more information about the randomized trials.}}
+
+\textit{\textbf{The manuscript states that Table III is based on 30 randomized trials, but only point estimates are reported. Standard deviations, confidence intervals, or other measures of statistical variation should be provided for the main performance metrics.}}
+
+\textit{\textbf{It should also be clarified whether the algorithms were evaluated using paired random seeds and exactly the same obstacle trajectories in each trial. This is particularly important because several differences in clearance, climb, and estimated energy consumption are relatively small.}}
+
+\textit{\textbf{For such comparisons, confidence intervals for paired differences, or another appropriate paired statistical analysis, would help determine whether the observed differences are practically meaningful.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\textbf{\textit{\large Response to Reviewer \# 2}}
+\end{center}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{Comments to the Author}}
+
+\textit{\textbf{I have carefully reviewed the revised manuscript, along with the authors' responses to all reviewer comments. In my assessment, the authors have adequately addressed the concerns raised and have made substantial and appropriate revisions to the text. Overall, the manuscript now meets the publication standards of this journal. As a minor suggestion, I note that the reference list includes relatively few papers published within the last two years; updating some of the references with more recent literature would further enhance the manuscript's timeliness and relevance.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\textbf{\textit{\large Response to Reviewer \# 3}}
+\end{center}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{Comments to the Author}}
+
+\textit{\textbf{I have no more comments for this manuscript.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+\end{document}

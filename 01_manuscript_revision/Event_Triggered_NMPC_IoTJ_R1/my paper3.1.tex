@@ -68,7 +68,7 @@
 \maketitle
 
 \begin{abstract}
-	This paper proposes an event-triggered dual-mode nonlinear model predictive control (NMPC) framework for autonomous obstacle avoidance of uncrewed aerial vehicles (UAVs) in complex 3D dynamic environments. To balance real-time computational efficiency, motion safety, and energy preservation, a composite risk assessment mechanism is developed to schedule the NMPC solver according to instantaneous collision threats. Under low-risk conditions, the UAV follows nominal trajectory tracking. Under high-risk conditions, local predictive replanning is activated to generate a safe avoidance trajectory. By integrating a Kalman-based predictive horizon, the framework enables the UAV to anticipate heterogeneous dynamic obstacle motions and proactively avoid potential conflicts. An asymmetric energy penalty is also introduced to suppress unnecessary vertical maneuvers and reduce energy consumption. Extensive simulations, profiling experiments, and Monte Carlo stress tests show that the proposed framework maintains a 100\% obstacle-avoidance success rate under measurement noise and increasing obstacle density. Compared with the continuous NMPC baseline, it reduces average CPU time by 21.1\%--24.2\% while preserving reliable clearance and stable solver behavior.
+	This paper proposes an event-triggered dual-mode nonlinear model predictive control (NMPC) framework for autonomous obstacle avoidance of uncrewed aerial vehicles (UAVs) in complex 3D dynamic environments. \textcolor{blue}{The framework is positioned in an IoT-enabled cyber--physical system, where the UAV operates as a mobile sensing-and-actuation node that converts available obstacle observations into safety-critical motion decisions.} To balance \textcolor{blue}{computational efficiency and resource-aware computation reduction}, motion safety, and energy preservation, a composite risk assessment mechanism is developed to schedule the NMPC solver according to instantaneous collision threats. Under low-risk conditions, the UAV follows nominal trajectory tracking. Under high-risk conditions, local predictive replanning is activated to generate a safe avoidance trajectory. By integrating a Kalman-based predictive horizon, the framework enables the UAV to anticipate heterogeneous dynamic obstacle motions and proactively avoid potential conflicts. An asymmetric energy penalty is also introduced to suppress unnecessary vertical maneuvers and reduce energy consumption. Extensive simulations, profiling experiments, and Monte Carlo stress tests show that the proposed framework maintains a 100\% obstacle-avoidance success rate under measurement noise and increasing obstacle density. \textcolor{blue}{Compared with the continuous NMPC baseline, the proposed method reduces average CPU time by 21.1\%--24.2\% in the reported desktop MATLAB/CasADi profiling experiments while preserving reliable clearance and stable solver behavior.}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -79,6 +79,8 @@
 
 Autonomous navigation in complex 3D environments remains a critical challenge for uncrewed aerial vehicles (UAVs) \cite{ref1}. In these environments, UAVs must respond quickly to obstacles and other changes. At the same time, they must limit energy consumption to maintain sufficient flight endurance \cite{ref2}. Therefore, the trajectory planning and control method must consider safety, maneuverability, and energy efficiency together. Nonlinear model predictive control (NMPC) is a promising solution for this problem. It can handle nonlinear system dynamics and operational constraints explicitly. It can also generate proactive maneuvers for obstacle avoidance \cite{ref3}. However, NMPC usually requires the controller to solve an optimization problem at every sampling instant. This process creates a heavy computational burden. As a result, real-time implementation becomes difficult on UAV flight controllers with limited onboard computing resources.
 
+\textcolor{blue}{In an IoT-enabled cyber--physical system, the UAV can operate as a mobile sensing-and-actuation node that closes a local perception--decision--actuation loop: it uses environmental observations for local situation assessment, selects a control action, and executes the resulting maneuver.}
+
 Accurate environmental representation is essential for safe online planning. Recent studies use continuous occupancy mapping \cite{ref4} and risk-aware spatio-temporal corridors \cite{ref5} to describe safe flight regions. Topological risk-based path selection \cite{ref6} and integrated cost assessment models \cite{ref7, ref8} further improve planning reliability in dense urban areas. These methods provide an important foundation for safe trajectory generation.
 Based on these safety representations, predictive planning methods use motion forecasting \cite{ref9, ref10}, intent prediction \cite{ref11}, predictive velocity obstacles \cite{ref12, ref13}, and active perception-planning collaboration \cite{ref14} to detect future conflicts and improve navigation performance. In addition, reactive planning methods under limited sensing \cite{ref15, ref16} can improve decision-making in dynamic environments. However, the computational cost of predictive planning increases as the number of obstacles grows and the prediction horizon becomes longer.
 
@@ -86,7 +88,13 @@ To reduce the computational cost of predictive planning, recent studies have int
 
 The UAV obstacle avoidance also depends on energy efficiency because onboard battery capacity is limited. Recent studies have used propulsion models \cite{ref26, ref27, ref28} for energy-aware optimization in Internet of Things (IoT) networks \cite{ref29, ref30}. Some methods further apply reinforcement learning \cite{ref31} and resource allocation \cite{ref32} to improve energy performance. However, many of these methods focus on communication tasks and assume static environments \cite{ref33}. Therefore, they are not well suited for dynamic obstacle avoidance under uncertainty.
 
+\textcolor{blue}{Within this context, the present work focuses on the local perception--control computation required for dynamic obstacle avoidance. It does not model communication scheduling, radio resource allocation, or communication-energy optimization; these aspects are outside the scope of the proposed control formulation.}
+
 In complex 3D navigation, UAVs require on-demand solver activation, risk-aware threat assessment, and energy-aware maneuver regulation. However, existing methods rarely integrate these requirements into a unified obstacle-avoidance framework. To address this limitation, we propose an energy-aware ET-NMPC framework for 3D dynamic environments. The framework combines a risk-triggered dual-mode mechanism, a composite risk index, and an asymmetric energy penalty. These designs reduce unnecessary NMPC calls, schedule replanning according to real-time collision risk, and suppress unnecessary vertical maneuvers.
+
+\textcolor{blue}{The event-triggered mechanism reduces unnecessary optimization activations and computational workload, while the current study focuses on desktop MATLAB/CasADi computational characterization rather than strict onboard real-time validation. Accordingly, the reported CPU-time reductions represent relative computational savings, not a hard real-time guarantee.}
+
+\textcolor{blue}{From an IoT-system perspective, the event-triggered mechanism performs resource-aware local decision scheduling by avoiding unnecessary NMPC solver activations and reducing the associated local controller-computation workload.}
 
 The main contributions of this work are summarized as follows:
 \begin{itemize}
@@ -140,6 +148,8 @@ For readability, the main abbreviations used in this paper are summarized in Tab
 
 This section addresses the online obstacle-avoidance problem for a UAV in 3D environments with static and dynamic obstacles. As illustrated in Fig. 1, the vehicle must reach a target while satisfying velocity, control, and altitude constraints under environmental uncertainty. We establish the workspace, kinematic, and obstacle models to support the subsequent event-triggered planning framework.
 
+\textcolor{blue}{The UAV is modeled as a mobile sensing-and-actuation node in an IoT-enabled cyber--physical system. At each sampling instant, the local perception--decision--actuation loop processes available obstacle observations, predicts their future motion, assesses collision risk, selects an operating mode, and applies the corresponding control action. This work models this local loop and its motion consequences.}
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=3.2in]{1}
@@ -178,6 +188,8 @@ where $\vect{A}$ is the state transition matrix. $\vect{w}_i(k) \sim \mathcal{N}
 	\label{eq:obs_measurement}
 \end{equation}
 where $\vect{y}_i(k) \in \mathbb{R}^3$ is the position measurement. $\vect{n}_i(k) \sim \mathcal{N}(\vect{0}, \vect{R}_i)$ is the measurement noise. Matrix $\vect{C}$ extracts the position component $\vect{\xi}_i(k)$ from the state vector. 
+
+\textcolor{blue}{Here, $\vect{y}_i(k)$ represents the available obstacle observation provided to the local perception--control loop at time step $k$.}
 
 For obstacles with nonlinear or uncertain motion, extended Kalman filters or local linearization can be applied. In this work, the CV model is used as a lightweight online predictor for computational efficiency. In the experiments, the actual obstacle motions also include constant-acceleration, sinusoidal, and random maneuvering cases. These cases introduce model mismatch and are used to test robustness under more unpredictable conditions.
 
@@ -276,6 +288,7 @@ When $\sigma_k=1$, the system constructs a finite-horizon local predictive optim
 
 \textcolor{blue}{To balance local-reference tracking, control regularization, energy awareness, and differentiable soft collision avoidance, the overall objective function $J$ is defined as}
 \begin{equation}
+	\small
 	\textcolor{blue}{J = \rho_1 J_{\text{track}} + \rho_2 J_{\text{smooth}} + \rho_3 J_{\text{energy}} + \rho_4 J_{\text{risk}} + \rho_5 J_{\text{terminal}},}
 	\label{eq:total_cost}
 \end{equation}
@@ -470,7 +483,7 @@ The execution logic follows a receding-horizon principle governed by the trigger
 	\vect{u}_k=\mathcal{K}(\vect{x}_k,\vect{r}_k),
 	\label{eq:nominal_control}
 \end{equation}
-where $\vect{r}_k$ is the reference state and $\mathcal{K}(\cdot)$ denotes a low-complexity controller. The total online computational burden includes obstacle prediction $O(N_oH)$ and the NLP solver complexity $\mathcal{C}_s$. By restricting solver activation to high-risk events, this framework reduces average computational overhead and supports future deployment on onboard companion computers. The complete procedure is summarized in Algorithm~\ref{alg:etpp}.
+where $\vect{r}_k$ is the reference state and $\mathcal{K}(\cdot)$ denotes a low-complexity controller. The total online computational burden includes obstacle prediction $O(N_oH)$ and the NLP solver complexity $\mathcal{C}_s$. By restricting solver activation to high-risk events, this framework \textcolor{blue}{reduces average computational overhead; its embedded real-time feasibility is not assessed in this work.} The complete procedure is summarized in Algorithm~\ref{alg:etpp}.
 
 \begin{algorithm}[!h]
 	\caption{Event-Triggered Dual-Mode NMPC for Dynamic Obstacle Avoidance}
@@ -681,13 +694,13 @@ Fig.~\ref{fig:sensitivity_analysis}(c) and Fig.~\ref{fig:sensitivity_analysis}(d
 
 The weighting coefficients in Table~\ref{tab:key_parameters} are selected by empirical tuning under safety, smoothness, and energy-awareness requirements. The risk-related weights give priority to collision avoidance in high-risk regions. The tracking and control-effort weights maintain smooth motion and bounded acceleration. The asymmetric climb and energy-related weights reduce unnecessary vertical maneuvers while preserving the success rate. These weights are fixed in all reported experiments, and their effectiveness is supported by the comparative results, Monte Carlo tests, and sensitivity analysis. However, fixed weights may be sub-optimal under different operating conditions. Future work will study adaptive weighting mechanisms for more diverse environments.
 
-\subsection{Computational Performance Profiling and Real-Time Feasibility Analysis}
+\subsection{\textcolor{blue}{Computational Performance Profiling and Deadline-Oriented Analysis}}
 
-To disclose the computational performance of the proposed method, we conducted a profiling experiment before the Monte Carlo evaluation. Table~\ref{tab:computational_profiling} reports the timing distribution, IPOPT iterations, solver settings, memory usage, and triggering status. The results show that the event-triggered strategy avoids solving the NMPC problem at every sampling instant. Non-triggered steps require almost negligible computation, while the main cost comes from triggered NMPC optimization. This supports the computational advantage of the proposed risk-triggered scheduling mechanism.
+To disclose the computational performance of the proposed method, we conducted a profiling experiment before the Monte Carlo evaluation. Table~\ref{tab:computational_profiling} reports the timing distribution, IPOPT iterations, solver settings, memory usage, and triggering status. The results show that the event-triggered strategy avoids solving the NMPC problem at every sampling instant. Non-triggered steps require almost negligible computation, while the main cost comes from triggered NMPC optimization. This supports the computational advantage of the proposed risk-triggered scheduling mechanism. \textcolor{blue}{The reported computation time measures the controller computation process in MATLAB/CasADi simulation, including the triggered NMPC solving procedure, rather than the complete physical closed-loop latency including communication and hardware execution.}
 
 \begin{table}[h]
 	\centering
-	\caption{Computational profiling results of the proposed ET-NMPC.}
+	\caption{\textcolor{blue}{Deadline-oriented computational statistics and solver disclosure of the proposed ET-NMPC.}}
 	\label{tab:computational_profiling}
 	\scriptsize
 	\setlength{\tabcolsep}{2.5pt}
@@ -702,14 +715,6 @@ To disclose the computational performance of the proposed method, we conducted a
 		Number of dynamic obstacles & 5 \\
 		Triggered steps & 3183 \\
 		Trigger rate & $77.8 \pm 3.5\%$ \\
-		\midrule
-		\multicolumn{2}{l}{\textbf{Timing statistics}} \\
-		Average CPU time per step & $2074.1 \pm 131.4$ ms \\
-		Mean CPU-time standard deviation & 1112.6 ms \\
-		Maximum CPU time per step & 3982.8 ms \\
-		Average triggered CPU time & $2658.3 \pm 190.2$ ms \\
-		Maximum triggered CPU time & 3982.8 ms \\
-		Average non-triggered CPU time & 0.015 ms \\
 		\midrule
 		\multicolumn{2}{l}{\textbf{IPOPT statistics}} \\
 		Average IPOPT iterations & $22.0 \pm 12.9$ \\
@@ -731,11 +736,28 @@ To disclose the computational performance of the proposed method, we conducted a
 		Warm-start strategy & Shifted reference initialization \\
 		\bottomrule
 	\end{tabular}
+
+	\medskip
+	\textcolor{blue}{\textbf{Deadline-oriented timing statistics (pooled step-level values)}}\\
+	\resizebox{\columnwidth}{!}{%
+		\begin{tabular}{lccccc}
+			\toprule
+			\textcolor{blue}{\textbf{Metric}} & \textcolor{blue}{\textbf{Mean (ms)}} & \textcolor{blue}{\textbf{Median (ms)}} & \textcolor{blue}{\textbf{95th percentile (ms)}} & \textcolor{blue}{\textbf{99th percentile (ms)}} & \textcolor{blue}{\textbf{Maximum (ms)}} \\
+			\midrule
+			\textcolor{blue}{All controller steps} & \textcolor{blue}{2077.9} & \textcolor{blue}{2551.9} & \textcolor{blue}{2964.7} & \textcolor{blue}{3150.4} & \textcolor{blue}{3982.8} \\
+			\textcolor{blue}{Triggered NMPC steps} & \textcolor{blue}{2658.3} & \textcolor{blue}{2596.2} & \textcolor{blue}{2987.2} & \textcolor{blue}{3187.8} & \textcolor{blue}{3982.8} \\
+			\midrule
+			\textcolor{blue}{Deadline} & \multicolumn{5}{c}{\textcolor{blue}{100 ms ($\Delta t=0.1$ s)}} \\
+			\textcolor{blue}{Violation ratio (all steps)} & \multicolumn{5}{c}{\textcolor{blue}{3183/4072 (78.168\%)}} \\
+			\textcolor{blue}{Violation ratio (triggered steps)} & \multicolumn{5}{c}{\textcolor{blue}{3183/3183 (100.0\%)}} \\
+			\bottomrule
+		\end{tabular}%
+	}
 \end{table}
 
-Table~\ref{tab:computational_profiling} also reports the IPOPT statistics and solver configuration. The average IPOPT iteration number remains far below the maximum iteration limit, and no solver failure or fallback occurs during the profiling runs. The solver uses IPOPT with the MUMPS sparse linear solver, fixed convergence tolerances, and shifted-reference warm start. The memory statistics show no continuous memory growth, indicating stable numerical and memory behavior during repeated NMPC calls.
+\textcolor{blue}{Table~\ref{tab:computational_profiling} also reports the IPOPT statistics and solver configuration for the reported desktop MATLAB/CasADi implementation. The average IPOPT iteration number remains below the maximum iteration limit, and no solver failure or fallback occurs during the profiling runs. The profiling configuration uses IPOPT with the MUMPS sparse linear solver, fixed convergence tolerances, and shifted-reference warm start. The memory values refer to the MATLAB process during the reported runs; they indicate no continuous process-memory growth in this desktop experiment, but they are not solver-specific or embedded-memory measurements.}
 
-The current implementation is a MATLAB/CasADi prototype on a desktop platform. Thus, the measured CPU time includes MATLAB overhead and should not be regarded as the final runtime of a compiled onboard implementation. Embedded validation remains challenging because it requires solver code generation, real-time memory management, and integration with the flight-control loop. Nevertheless, the profiling results show negligible computation in non-triggered steps and reliable convergence in triggered steps. These results support future implementation on Jetson-class companion computers or compiled C++ platforms. Future work will conduct code generation, hardware-in-the-loop testing, and closed-loop onboard validation.
+\textcolor{blue}{Although the event-triggered strategy significantly reduces unnecessary NMPC calls, the current desktop MATLAB/CasADi implementation does not satisfy the strict 100-ms deadline for triggered optimization steps. With $\Delta t=0.1$ s, the deadline-violation ratio is 78.168\% over all recorded controller steps and 100.0\% over the triggered NMPC steps. Therefore, the reported results characterize desktop computational behavior and relative computational savings rather than hard real-time or onboard feasibility. Future validation on embedded platforms, hardware-in-the-loop experiments, and compiled implementations will be considered in future work.}
 
 \begin{table*}[t!]
 	\centering
@@ -790,9 +812,11 @@ The safety margin also supports the advantage of the proposed method. When the n
 
 This paper proposed an energy-aware event-triggered NMPC framework for UAV obstacle avoidance in complex 3D dynamic environments. The framework uses a composite risk index to schedule the NMPC solver. It also uses receding-horizon prediction to estimate dynamic obstacle motion. The UAV follows nominal tracking in low-risk states. The NMPC solver generates a local collision-free trajectory in high-risk states. This dual-mode strategy reduces unnecessary optimization calls and preserves motion safety.
 
-Simulation results verified the effectiveness of the proposed method. Comparative experiments showed that the proposed ET-NMPC achieves a good balance among safety, computational efficiency, and energy-aware performance. The prediction mechanism improves avoidance performance under dynamic threats. The asymmetric climb penalty reduces unnecessary vertical maneuvers. Monte Carlo tests with statistical variations showed robust performance under noise and random obstacle states. Computational profiling also reported IPOPT iterations, solver settings, memory usage, and timing distributions. These results showed stable solver behavior and supported the real-time feasibility discussion.
+\textcolor{blue}{From an IoT-system perspective, the proposed method provides a resource-aware local perception--control component for a mobile sensing-and-actuation node, with the demonstrated benefit of avoiding unnecessary NMPC activations and associated local computational workload.}
 
-Future work will focus on embedded deployment, prediction enhancement, and theoretical extension. We will test the proposed framework on Jetson-class platforms and compiled C++ implementations. We will extend the constant-velocity prediction model to more nonlinear and uncertain obstacle motions. We will also study adaptive weighting mechanisms and terminal-set-based stability analysis. In addition, we will extend the framework to cooperative multi-UAV obstacle avoidance in real cluttered environments.
+Simulation results verified the effectiveness of the proposed method. Comparative experiments showed that the proposed ET-NMPC achieves a good balance among safety, computational efficiency, and energy-aware performance. The prediction mechanism improves avoidance performance under dynamic threats. The asymmetric climb penalty reduces unnecessary vertical maneuvers. Monte Carlo tests with statistical variations showed robust performance under noise and random obstacle states. \textcolor{blue}{Computational profiling also reported IPOPT iterations, solver settings, MATLAB process-memory observations, and timing distributions. These results characterize desktop computational behavior and relative CPU savings; they do not establish hard real-time operation at the 0.1-s deadline or embedded feasibility.}
+
+\textcolor{blue}{Future work will consider validation on embedded platforms, hardware-in-the-loop experiments, and compiled implementations, together with prediction enhancement and theoretical extension. We will extend the constant-velocity prediction model to more nonlinear and uncertain obstacle motions, study adaptive weighting mechanisms and terminal-set-based stability analysis, and investigate cooperative multi-UAV obstacle avoidance in real cluttered environments.}
 
 
 \begin{thebibliography}{35}
