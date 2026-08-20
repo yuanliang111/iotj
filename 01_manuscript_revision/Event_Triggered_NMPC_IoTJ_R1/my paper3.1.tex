@@ -274,24 +274,24 @@ where $R_{on}$ is the activation threshold and $R_{off}$ is the deactivation thr
 
 When $\sigma_k=1$, the system constructs a finite-horizon local predictive optimization problem to generate a safe and dynamically feasible avoidance trajectory. The decision variables for this problem consist of the future position sequence $\Pi_k = \{\vect{p}_{k+1}, \vect{p}_{k+2}, \ldots, \vect{p}_{k+H}\}$ and the control-input sequence $U_k = \{\vect{u}_k, \vect{u}_{k+1}, \ldots, \vect{u}_{k+H-1}\}$, where $H$ denotes the prediction horizon.
 
-To balance path efficiency, trajectory smoothness, energy consumption, and collision avoidance, the overall objective function $J$ is defined as
+\textcolor{blue}{To balance local-reference tracking, control regularization, energy awareness, and differentiable soft collision avoidance, the overall objective function $J$ is defined as}
 \begin{equation}
-	J = \alpha J_{path} + \beta J_{smooth} + \gamma J_{energy} + \delta J_{risk},
+	\textcolor{blue}{J = \rho_1 J_{\text{track}} + \rho_2 J_{\text{smooth}} + \rho_3 J_{\text{energy}} + \rho_4 J_{\text{risk}} + \rho_5 J_{\text{terminal}},}
 	\label{eq:total_cost}
 \end{equation}
-where $J_{path}, J_{smooth}, J_{energy}$, and $J_{risk}$ represent the specific cost components. The weighting coefficients $\alpha, \beta, \gamma, \delta \ge 0$ balance these objectives and may satisfy $\alpha+\beta+\gamma+\delta=1$.
+\textcolor{blue}{where $J_{\text{track}}$, $J_{\text{smooth}}$, $J_{\text{energy}}$, $J_{\text{risk}}$, and $J_{\text{terminal}}$ denote the reference-tracking, control-increment, energy-aware, soft collision-avoidance, and terminal costs, respectively; $\rho_1,\ldots,\rho_5$ are their nonnegative weights. The risk-fusion weights $w_1,w_2,w_3$ retain their distinct meaning in Section~III-B.}
 
-The path-length cost $J_{path}$ is defined as
+\textcolor{blue}{The reference-tracking cost is defined as}
 \begin{equation}
-	J_{path} = \sum_{\tau=0}^{H-1} \|\vect{p}_{k+\tau+1} - \vect{p}_{k+\tau}\|,
-	\label{eq:jpath}
+	\textcolor{blue}{J_{\text{track}} = \sum_{\tau=0}^{H-1} \left\|\vect{p}_{k+\tau+1} - \vect{r}_{k+\tau+1}\right\|_2^2,}
+	\label{eq:jtrack}
 \end{equation}
-which penalizes unnecessary detours to minimize the flight distance. The smoothness cost $J_{smooth}$ is defined as
+\textcolor{blue}{where $\vect{r}_{k+\tau+1}$ is the local reference position at the corresponding prediction step. This term ensures that the UAV tracks the local reference trajectory during optimization. The control-increment penalty is defined as}
 \begin{equation}
-	J_{smooth} = \sum_{\tau=0}^{H-2} \|\vect{v}_{k+\tau+1} - \vect{v}_{k+\tau}\|^2,
+	\textcolor{blue}{J_{\text{smooth}} = \sum_{\tau=0}^{H-2} \left\|\vect{u}_{k+\tau+1} - \vect{u}_{k+\tau}\right\|_2^2,}
 	\label{eq:jsmooth}
 \end{equation}
-which suppresses abrupt changes in velocity to improve trajectory executability.
+\textcolor{blue}{which penalizes large variations in the predicted control sequence to improve trajectory executability.}
 
 To explicitly reflect the asymmetric energy characteristics of 3D flight, the local energy cost $J_{energy}$ is defined as
 \begin{equation}
@@ -303,7 +303,7 @@ To explicitly reflect the asymmetric energy characteristics of 3D flight, the lo
 	\end{aligned}
 	\label{eq:jenergy}
 \end{equation}
-where $c_1$, $c_2$, and $c_3$ are non-negative weighting coefficients. The first term approximates distance-related propulsion energy, the second accounts for energy from control actions, and the third implements an asymmetric climb penalty penalizing unnecessary positive altitude gains. $J_{energy}$ serves as a normalized cost within the NMPC optimization. It should be noted that $J_{energy}$ is used as a lightweight surrogate energy cost for online NMPC rather than a full rotor-level power model.
+\textcolor{blue}{where $c_1$, $c_2$, and $c_3$ are non-negative weighting coefficients. The first term captures motion-related energy, including horizontal motion, the second accounts for control effort, and the third implements an asymmetric climb penalty for unnecessary positive altitude gains. Thus, $J_{energy}$ is the energy-aware objective used during optimization. It remains a lightweight surrogate for online NMPC rather than a full rotor-level power model.}
 
 To provide a quantitative energy assessment beyond geometric metrics, the estimated energy consumption is computed using a simplified physical model
 \begin{equation}
@@ -312,13 +312,49 @@ To provide a quantitative energy assessment beyond geometric metrics, the estima
 \end{equation}
 where $P_{base}$ is the baseline propulsion power, $T$ is the flight duration, $m$ is the UAV mass, $g$ is the gravitational acceleration, $\Delta z_+$ denotes the accumulated positive altitude change, $\eta_c$ is the climb efficiency, and $k_u$ is the maneuvering-energy coefficient. The three terms represent the baseline flight energy, climb-related potential energy, and additional energy caused by control effort, respectively. The estimated energy is converted into Watt-hours as $E_{Wh}=E_{est}/3600$. This metric provides a physically interpretable quantitative comparison of energy-aware performance across different algorithms.
 
-The risk cost $J_{risk}$ is defined as
+\textcolor{blue}{The risk cost $J_{risk}$ is formulated as a differentiable soft collision-avoidance penalty over the predicted UAV--obstacle separations:}
 \begin{equation}
-	\small
-	J_{risk} = \sum_{\tau=1}^{H} \sum_{i=1}^{N_o} \frac{1}{\|\vect{p}_{k+\tau} - \hat{\vect{\xi}}_i(k+\tau|k)\| - \rho_i(k+\tau) + \varepsilon},
+	\begin{aligned}
+		\textcolor{blue}{J_{\text{risk}}} &\textcolor{blue}{= \sum_{\tau=1}^{H} \Biggl(\sum_{i=1}^{N_o} \ell_{\mathrm{dyn}}\!\left(\left\|\vect{p}_{k+\tau}-\hat{\vect{\xi}}_i(k+\tau|k)\right\|_2,d^{\mathrm{safe}}_i(k+\tau)\right)} \\
+		&\textcolor{blue}{\quad + \sum_{j=1}^{N_s} \ell_{\mathrm{stat}}\!\left(\vect{p}_{k+\tau},\mathcal{O}_j\right)\Biggr),}
+	\end{aligned}
 	\label{eq:jrisk}
 \end{equation}
-which penalizes trajectories that approach the inflated occupancy boundaries $\rho_i(k+\tau)$.
+\textcolor{blue}{where $N_o$ and $N_s$ are the numbers of dynamic and static obstacles, respectively; $\mathcal{O}_j$ denotes the geometry of the $j$th static obstacle; and $d^{\mathrm{safe}}_i(k+\tau)$ is the safety radius of the $i$th dynamic obstacle. In this local optimization formulation, $d^{\mathrm{safe}}_i(k+\tau)=r_u+r_i+\Delta_i(k+\tau)+d_m$, which avoids overloading the objective-weight notation $\rho_1,\ldots,\rho_5$.}
+
+\textcolor{blue}{The CasADi implementation uses the differentiable smooth positive operator}
+\begin{equation*}
+	\textcolor{blue}{[s]_{\epsilon}^{+}=\frac{1}{2}\left(s+\sqrt{s^2+\epsilon^2}\right),\qquad \epsilon>0.}
+\end{equation*}
+\textcolor{blue}{With $d$ denoting a predicted UAV--dynamic-obstacle distance, the dynamic penalty is}
+\begin{equation*}
+	\begin{aligned}
+		\textcolor{blue}{\ell_{\mathrm{dyn}}\!\left(d,d^{\mathrm{safe}}\right)} &\textcolor{blue}{=g_{\mathrm{dyn}}\Bigl(\left[d^{\mathrm{safe}}-d\right]_{\epsilon}^{+}\Bigr)^3} \\
+		&\textcolor{blue}{\quad+g_{\mathrm{near}}\Bigl(\left[d^{\mathrm{safe}}+b_{\mathrm{dyn}}-d\right]_{\epsilon}^{+}\Bigr)^2,}
+	\end{aligned}
+\end{equation*}
+\textcolor{blue}{where $g_{\mathrm{dyn}}$, $g_{\mathrm{near}}$, and $b_{\mathrm{dyn}}$ are the dynamic-risk gain, near-obstacle gain, and near-obstacle buffer, respectively. For a static obstacle, the code uses the corresponding geometry-dependent smooth polynomial penalty}
+\begin{equation*}
+	\begin{aligned}
+		\textcolor{blue}{\ell_{\mathrm{stat}}\!\left(\vect{p},\mathcal{O}_j\right)} &\textcolor{blue}{=q_j(\vect{p})g_{\mathrm{stat}}} \\
+		&\textcolor{blue}{\quad\times\Bigl(\left[d^{\mathrm{safe}}_j-d_j\!\left(\vect{p},\mathcal{O}_j\right)\right]_{\epsilon}^{+}\Bigr)^4} \\
+		&\textcolor{blue}{\quad+q_j(\vect{p})g_{\mathrm{stat,near}}} \\
+		&\textcolor{blue}{\quad\times\Bigl(\left[d^{\mathrm{safe}}_j+b_{\mathrm{stat}}-d_j\!\left(\vect{p},\mathcal{O}_j\right)\right]_{\epsilon}^{+}\Bigr)^2} \\
+		&\textcolor{blue}{\quad+q_j(\vect{p})g_{\mathrm{climb}}h_j(\vect{p})} \\
+		&\textcolor{blue}{\quad\times\Bigl(\left[d^{\mathrm{safe}}_j+b_{\mathrm{stat}}-d_j\!\left(\vect{p},\mathcal{O}_j\right)\right]_{\epsilon}^{+}\Bigr)^2,}
+	\end{aligned}
+\end{equation*}
+\textcolor{blue}{where $d_j(\vect{p},\mathcal{O}_j)$ is the geometry-dependent static-obstacle distance. The functions $q_j(\vect{p})$ and $h_j(\vect{p})$ denote the roof/altitude and climb-assistance factors, respectively. Thus, both obstacle terms are differentiable soft penalties rather than inverse-distance penalties.}
+
+\textcolor{blue}{To explicitly account for terminal-goal attainment and progressively stronger attraction over the prediction horizon, the terminal cost is defined as}
+\begin{equation}
+	\begin{aligned}
+		\textcolor{blue}{J_{\text{terminal}}} &\textcolor{blue}{=\lambda_p\left\|\vect{p}_{k+H}-\vect{p}_{\text{terminal\_ref}}\right\|_2^2+\lambda_v\left\|\vect{v}_{k+H}\right\|_2^2} \\
+		&\textcolor{blue}{\quad+\lambda_{\text{prog}}\sum_{\tau=0}^{H-1}\left(\frac{\tau+1}{H}\right)^2\left\|\vect{p}_{k+\tau+1}-\vect{p}_{\text{terminal\_ref}}\right\|_2^2,}
+	\end{aligned}
+	\label{eq:jterminal}
+\end{equation}
+\textcolor{blue}{where the first two terms penalize terminal position error and terminal velocity, respectively. The final term is a stage-wise terminal-attraction penalty whose influence increases over the horizon. The terminal reference is $\vect{p}_{\text{goal}}$ when $\left\|\vect{p}_{k}-\vect{p}_{\text{goal}}\right\|_2\leq25\,\mathrm{m}$; otherwise, it is the last local reference point. Minimizing $J_{\text{terminal}}$ therefore promotes terminal convergence while avoiding residual terminal motion.}
 
 This formulation enables the UAV to track a reference trajectory $\vect{r}_k$ while autonomously avoiding dynamic threats. Unlike conventional continuous schemes, we employ an on-demand strategy where the predictive optimizer is activated only when the instantaneous collision risk exceeds a prescribed threshold. Based on the estimated states $\hat{\vect{\xi}}_i(k)$, the goal is to compute an optimal control sequence that minimizes $J$ while maintaining safety and kinematic feasibility.
 
@@ -502,13 +538,17 @@ The workspace includes multiple static obstacles and dynamic obstacles with hete
 			\midrule
 			\multicolumn{4}{l}{\textit{NMPC cost weights}} \\
 			\midrule
-			$\alpha$ & Path-length cost weight & -- & 0.14 \\
-			$\beta$ & Trajectory smoothness cost weight & -- & 0.07 \\
-			$\gamma$ & Energy cost weight & -- & 0.11 \\
-			$\delta$ & Obstacle avoidance risk cost weight & -- & 0.68 \\
+			\textcolor{blue}{$\rho_1$} & \textcolor{blue}{Reference-tracking cost weight} & \textcolor{blue}{--} & \textcolor{blue}{1.0} \\
+			\textcolor{blue}{$\rho_2$} & \textcolor{blue}{Control-increment cost weight} & \textcolor{blue}{--} & \textcolor{blue}{0.5} \\
+			\textcolor{blue}{$\rho_3$} & \textcolor{blue}{Energy-aware cost weight} & \textcolor{blue}{--} & \textcolor{blue}{0.8} \\
+			\textcolor{blue}{$\rho_4$} & \textcolor{blue}{Differentiable soft risk-cost weight} & \textcolor{blue}{--} & \textcolor{blue}{5.0} \\
+			\textcolor{blue}{$\rho_5$} & \textcolor{blue}{Outer terminal-cost weight} & \textcolor{blue}{--} & \textcolor{blue}{1.0} \\
 			$c_1$ & Distance-related energy weight & -- & 1.0 \\
 			$c_2$ & Control-effort energy weight & -- & 0.1 \\
 			$c_3$ & Asymmetric climb penalty weight & -- & 3.0 \\
+			\textcolor{blue}{$\lambda_p$} & \textcolor{blue}{Terminal position weight} & \textcolor{blue}{--} & \textcolor{blue}{120} \\
+			\textcolor{blue}{$\lambda_v$} & \textcolor{blue}{Terminal velocity weight} & \textcolor{blue}{--} & \textcolor{blue}{20} \\
+			\textcolor{blue}{$\lambda_{\text{prog}}$} & \textcolor{blue}{Stage-wise terminal-attraction/path weight} & \textcolor{blue}{--} & \textcolor{blue}{8} \\
 			\midrule
 			\multicolumn{4}{l}{\textit{Risk assessment and event-triggering parameters}} \\
 			\midrule
@@ -797,5 +837,3 @@ Future work will focus on embedded deployment, prediction enhancement, and theor
 \vfill
 
 \end{document}
-
-
