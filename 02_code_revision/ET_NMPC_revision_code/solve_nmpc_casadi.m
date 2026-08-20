@@ -177,22 +177,26 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
         params.terminal_goal_attract_radius = 25.0;
     end
 
-    % 平滑函数小量
-    smooth_eps = 1e-4;
+    % 风险和数值平滑参数的默认值保护。
+    if ~isfield(params, 'smooth_eps')
+        params.smooth_eps = 1e-4;
+    end
 
-    % 动态障碍物避障代价权重
-    dyn_risk_gain = 3000;
+    if ~isfield(params, 'dyn_risk_gain')
+        params.dyn_risk_gain = 3000;
+    end
 
-    % 静态障碍物避障代价权重
-    % 你之前撞到 B9，说明静态障碍物权重偏弱，所以这里明显提高。
-    static_risk_gain = 12000;
+    if ~isfield(params, 'static_risk_gain')
+        params.static_risk_gain = 12000;
+    end
 
-    % 静态障碍物额外安全缓冲，单位 m
-    % 作用：让 NMPC 在规划时比真实碰撞检测更保守一些。
-    static_extra_margin = 0.55;
+    if ~isfield(params, 'static_near_gain')
+        params.static_near_gain = 2500;
+    end
 
-    % 靠近建筑物边界时的额外强惩罚权重
-    static_near_gain = 2500;
+    if ~isfield(params, 'static_extra_margin')
+        params.static_extra_margin = 0.55;
+    end
 
     %% =========================================================
     % 2. 初始化 CasADi Opti 优化器
@@ -318,7 +322,7 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
         dz = X(3, k + 1) - X(3, k);
 
         if params.use_asymmetric_energy
-            climb_positive = 0.5 * (dz + sqrt(dz^2 + smooth_eps));
+            climb_positive = 0.5 * (dz + sqrt(dz^2 + params.smooth_eps));
             climb_penalty = params.c3 * climb_positive;
         else
             climb_penalty = 0;
@@ -357,14 +361,14 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
 
                 margin_dyn = rho_dyn - dist_dyn;
 
-                violation_dyn = smooth_positive_part(margin_dyn, smooth_eps);
+                violation_dyn = smooth_positive_part(margin_dyn, params.smooth_eps);
 
                 % 三次惩罚：进入危险区后惩罚快速增大
                 % 新增 terminal_risk_decay_k：
                 % 靠近终点且直达目标时，避免动态风险软代价继续导致绕圈。
                 J_risk = J_risk ...
                     + terminal_risk_decay_k ...
-                    * dyn_risk_gain ...
+                    * params.dyn_risk_gain ...
                     * violation_dyn^3;
 
                 % 弱近距离惩罚：还没碰撞时也鼓励远离
@@ -373,7 +377,7 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
                 % 原来的 1/(dist_dyn-rho_dyn+3) 在极端情况下可能出现分母过小，
                 % 这里改为平滑正部函数形式，只在接近安全边界时产生有限惩罚。
                 near_margin_dyn = rho_dyn + 3.0 - dist_dyn;
-                near_dyn = smooth_positive_part(near_margin_dyn, smooth_eps);
+                near_dyn = smooth_positive_part(near_margin_dyn, params.smooth_eps);
                 J_risk = J_risk ...
                     + terminal_risk_decay_k ...
                     * 2.0 ...
@@ -414,7 +418,7 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
                 % 如果无人机在建筑物水平附近且低于楼顶，会鼓励往上飞一点。
                 % 这个不是硬约束，只是帮助 NMPC 不贴墙。
                 % ---------------------------------------------
-                climb_help = smooth_positive_part(height_margin, smooth_eps);
+                climb_help = smooth_positive_part(height_margin, params.smooth_eps);
 
                 if b.type == 1
 
@@ -422,34 +426,34 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
                     % 长方体建筑物：矩形 footprint 的平滑外部距离
                     % =================================================
 
-                    dx_raw = sqrt((px - b.x)^2 + smooth_eps) - b.w / 2;
-                    dy_raw = sqrt((py - b.y)^2 + smooth_eps) - b.l / 2;
+                    dx_raw = sqrt((px - b.x)^2 + params.smooth_eps) - b.w / 2;
+                    dy_raw = sqrt((py - b.y)^2 + params.smooth_eps) - b.l / 2;
 
-                    dx_out = smooth_positive_part(dx_raw, smooth_eps);
-                    dy_out = smooth_positive_part(dy_raw, smooth_eps);
+                    dx_out = smooth_positive_part(dx_raw, params.smooth_eps);
+                    dy_out = smooth_positive_part(dy_raw, params.smooth_eps);
 
                     dist_xy = sqrt(dx_out^2 + dy_out^2 + 1e-6);
 
-                    safe_r = params.r_u + params.d_m + static_extra_margin;
+                    safe_r = params.r_u + params.d_m + params.static_extra_margin;
 
                     margin_static = safe_r - dist_xy;
 
-                    violation_static = smooth_positive_part(margin_static, smooth_eps);
+                    violation_static = smooth_positive_part(margin_static, params.smooth_eps);
 
                     % 主惩罚
                     % 新增 terminal_risk_decay_k：
                     % 靠近终点且直线路径可达时，避免静态软风险过度拉弯轨迹。
                     J_risk = J_risk ...
                         + terminal_risk_decay_k ...
-                        * static_risk_gain ...
+                        * params.static_risk_gain ...
                         * violation_static^4 ...
                         * below_roof_weight;
 
                     % 近距离缓冲惩罚
-                    near_static = smooth_positive_part(safe_r + 1.0 - dist_xy, smooth_eps);
+                    near_static = smooth_positive_part(safe_r + 1.0 - dist_xy, params.smooth_eps);
                     J_risk = J_risk ...
                         + terminal_risk_decay_k ...
-                        * static_near_gain ...
+                        * params.static_near_gain ...
                         * near_static^2 ...
                         * below_roof_weight;
 
@@ -469,24 +473,24 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
 
                     dist_xy = sqrt((px - b.x)^2 + (py - b.y)^2 + 1e-6);
 
-                    safe_r = b.r + params.r_u + params.d_m + static_extra_margin;
+                    safe_r = b.r + params.r_u + params.d_m + params.static_extra_margin;
 
                     margin_static = safe_r - dist_xy;
 
-                    violation_static = smooth_positive_part(margin_static, smooth_eps);
+                    violation_static = smooth_positive_part(margin_static, params.smooth_eps);
 
                     % 主惩罚
                     J_risk = J_risk ...
                         + terminal_risk_decay_k ...
-                        * static_risk_gain ...
+                        * params.static_risk_gain ...
                         * violation_static^4 ...
                         * below_roof_weight;
 
                     % 近距离缓冲惩罚
-                    near_static = smooth_positive_part(safe_r + 1.2 - dist_xy, smooth_eps);
+                    near_static = smooth_positive_part(safe_r + 1.2 - dist_xy, params.smooth_eps);
                     J_risk = J_risk ...
                         + terminal_risk_decay_k ...
-                        * static_near_gain ...
+                        * params.static_near_gain ...
                         * near_static^2 ...
                         * below_roof_weight;
 
@@ -505,30 +509,30 @@ function [u_cmd, X_opt, U_opt] = solve_nmpc_casadi(x_curr, Pi_ref_local, obs_pre
                     % =================================================
 
                     cone_scale_raw = 1 - pz / max(b.h, 1e-6);
-                    cone_scale = smooth_positive_part(cone_scale_raw, smooth_eps);
+                    cone_scale = smooth_positive_part(cone_scale_raw, params.smooth_eps);
 
                     cone_radius = b.r * cone_scale;
 
                     dist_xy = sqrt((px - b.x)^2 + (py - b.y)^2 + 1e-6);
 
-                    safe_r = cone_radius + params.r_u + params.d_m + static_extra_margin;
+                    safe_r = cone_radius + params.r_u + params.d_m + params.static_extra_margin;
 
                     margin_static = safe_r - dist_xy;
 
-                    violation_static = smooth_positive_part(margin_static, smooth_eps);
+                    violation_static = smooth_positive_part(margin_static, params.smooth_eps);
 
                     % 主惩罚
                     J_risk = J_risk ...
                         + terminal_risk_decay_k ...
-                        * static_risk_gain ...
+                        * params.static_risk_gain ...
                         * violation_static^4 ...
                         * below_roof_weight;
 
                     % 近距离缓冲惩罚
-                    near_static = smooth_positive_part(safe_r + 1.0 - dist_xy, smooth_eps);
+                    near_static = smooth_positive_part(safe_r + 1.0 - dist_xy, params.smooth_eps);
                     J_risk = J_risk ...
                         + terminal_risk_decay_k ...
-                        * static_near_gain ...
+                        * params.static_near_gain ...
                         * near_static^2 ...
                         * below_roof_weight;
 

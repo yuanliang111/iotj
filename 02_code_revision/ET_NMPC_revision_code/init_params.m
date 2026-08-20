@@ -371,6 +371,21 @@ function params = init_params()
     % 0.45 表示至少保留 45% 的避障软代价，防止安全性被完全削弱。
     params.terminal_risk_min_factor = 0.45;
 
+    % CasADi 平滑正部函数与平滑爬升项的数值小量。
+    params.smooth_eps = 1e-4;
+
+    % 动态障碍物软风险主惩罚增益。
+    params.dyn_risk_gain = 3000;
+
+    % 静态建筑物软风险主惩罚增益。
+    params.static_risk_gain = 12000;
+
+    % 静态建筑物近边界软惩罚增益。
+    params.static_near_gain = 2500;
+
+    % 静态建筑物规划安全半径的额外保守裕度，单位：m。
+    params.static_extra_margin = 0.55;
+
 
     %% ========================================================================
     % 9. 能耗代价子权重参数
