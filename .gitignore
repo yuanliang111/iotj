@@ -1,0 +1,7 @@
+00_original_backup/
+
+*.aux
+*.log
+*.synctex.gz
+*.bak
+*.asv
