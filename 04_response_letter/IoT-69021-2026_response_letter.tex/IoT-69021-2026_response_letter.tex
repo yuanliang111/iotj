@@ -321,6 +321,48 @@ The corresponding modifications have been highlighted in blue in the revised man
 
 \textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
 
+Thank you for this important comment. We agree that the original manuscript did not sufficiently isolate the contribution of the asymmetric climb penalty. Although this penalty was presented as a main contribution, Table III reports an overall framework comparison rather than an ablation that isolates the $c_3$ term. Therefore, the original results could not fully support a strong conclusion about the independent influence of the asymmetric penalty on cumulative positive climb or the estimated energy proxy.
+
+In response, we have added a 30-trial paired Monte Carlo ablation study, entitled \textit{Paired Ablation of the Asymmetric Climb Penalty}, in Section IV, together with a new Table IV. We have also revised the Abstract, Introduction, energy-aware cost formulation, baseline discussion, parameter-sensitivity discussion, and Conclusion. These revisions avoid overstatement and describe the contribution in terms of energy-aware altitude regulation, optimization-preference shaping, and the energy-related trade-off.
+
+The new ablation study compares Asymmetric ET-NMPC with Symmetric-energy ET-NMPC. For each paired trial, both controllers use identical random seeds, identical static maps, identical UAV initial states, identical goal positions, identical dynamic-obstacle realizations, and identical measurement-noise sequences. The only changed setting is the asymmetric positive-climb penalty: Asymmetric ET-NMPC uses $c_3=3.0$, whereas Symmetric-energy ET-NMPC sets $c_3=0$. All other controller, prediction, risk-assessment, event-triggering, and scenario parameters remain unchanged.
+
+The paired results show that Asymmetric ET-NMPC achieves 30/30 successful trials with 0/30 collisions, whereas Symmetric-energy ET-NMPC achieves 29/30 successful trials with 1/30 collision. With paired differences defined as Asymmetric $-$ Symmetric, the total positive-climb difference is 0.217 m with a 95\% confidence interval of [$-0.069$, $0.503$], and the estimated energy-proxy difference is 0.00368 Wh with a 95\% confidence interval of [$-0.00169$, $0.00904$]. Both confidence intervals include zero. Therefore, the experiment does not provide statistical evidence that the asymmetric penalty reduces cumulative positive climb or estimated energy proxy under the tested parameterization.
+
+Accordingly, the asymmetric climb penalty is retained as an energy-aware altitude regulation mechanism, an optimization-preference shaping mechanism, and a component for regulating the safety--energy trade-off. It assigns additional cost to positive altitude gains without claiming a guaranteed lower energy outcome or suppression of unnecessary climbing. The estimated energy is explicitly described as a model-based mission-energy proxy for comparative analysis, rather than a hardware battery measurement.
+
+The corresponding modifications are shown below:
+
+\textit{C. Paired Ablation of the Asymmetric Climb Penalty}
+
+To isolate the influence of the asymmetric climb penalty, we conducted 30 paired Monte Carlo scenarios comparing Asymmetric ET-NMPC with Symmetric-energy ET-NMPC. For each paired scenario, both controllers used the same random seed, static map, UAV initial state, goal position, dynamic-obstacle realization, and measurement-noise sequence. The only changed setting was the additional positive-climb penalty: the asymmetric controller used $c_3=3.0$, whereas the symmetric-energy controller disabled this term by setting $c_3=0$.
+
+The asymmetric controller achieved 30/30 successful trials with no collision, whereas the symmetric-energy controller achieved 29/30 successful trials with one collision. The paired difference in total positive climb was 0.217 m (95\% CI: [$-0.069$, $0.503$]), and the paired difference in estimated energy proxy was 0.00368 Wh (95\% CI: [$-0.00169$, $0.00904$]), where each difference is defined as Asymmetric $-$ Symmetric. Both confidence intervals include zero. Therefore, this experiment does not provide statistical evidence that the asymmetric penalty reduces cumulative positive climb or estimated mission energy under the tested parameterization. Instead, the additional term shapes altitude-related optimization preference and provides energy-aware altitude regulation within the safety--energy tradeoff.
+
+\begin{table}[h!]
+\centering
+\captionsetup{labelformat=empty}
+\caption{\textcolor{blue}{Table IV: Paired Ablation Results for the Asymmetric Climb Penalty over 30 Matched Scenarios}}
+\scriptsize
+\setlength{\tabcolsep}{1.3pt}
+\renewcommand{\arraystretch}{1.12}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l c c c c c c c c c}
+\toprule
+\textcolor{blue}{\textbf{Algorithm}} & \textcolor{blue}{\textbf{Success}} & \textcolor{blue}{\textbf{Collision}} & \textcolor{blue}{\textbf{Total positive climb (m)}} & \textcolor{blue}{\textbf{Estimated energy proxy (Wh)}} & \textcolor{blue}{\textbf{Path length (m)}} & \textcolor{blue}{\textbf{Flight time (s)}} & \textcolor{blue}{\textbf{Minimum clearance (m)}} & \textcolor{blue}{\textbf{Trigger rate (\%)}} & \textcolor{blue}{\textbf{Control effort}} \\
+\midrule
+\textcolor{blue}{Asymmetric ET-NMPC} & \textcolor{blue}{30/30} & \textcolor{blue}{0/30} & \textcolor{blue}{11.52 $\pm$ 1.20} & \textcolor{blue}{0.22554 $\pm$ 0.01187} & \textcolor{blue}{60.55 $\pm$ 1.43} & \textcolor{blue}{13.55 $\pm$ 0.58} & \textcolor{blue}{1.93 $\pm$ 0.66} & \textcolor{blue}{77.92 $\pm$ 1.45} & \textcolor{blue}{107.51 $\pm$ 5.43} \\
+\textcolor{blue}{Symmetric-energy ET-NMPC} & \textcolor{blue}{29/30} & \textcolor{blue}{1/30} & \textcolor{blue}{11.30 $\pm$ 1.23} & \textcolor{blue}{0.22186 $\pm$ 0.01807} & \textcolor{blue}{59.67 $\pm$ 4.60} & \textcolor{blue}{13.34 $\pm$ 1.09} & \textcolor{blue}{1.93 $\pm$ 0.66} & \textcolor{blue}{77.45 $\pm$ 2.69} & \textcolor{blue}{105.83 $\pm$ 9.60} \\
+\bottomrule
+\end{tabular}%
+}
+\begin{flushleft}
+\textcolor{blue}{\textit{Note: Continuous metrics are reported as mean $\pm$ standard deviation over 30 trials. The paired differences are defined as Asymmetric $-$ Symmetric. Estimated energy is a model-based mission-energy proxy rather than a hardware battery measurement.}}
+\end{flushleft}
+\end{table}
+
+The corresponding modifications have been highlighted in blue in the revised manuscript.
+
 \medskip
 
 \textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{5. The rationale and representativeness of the baseline methods should be better justified.}}

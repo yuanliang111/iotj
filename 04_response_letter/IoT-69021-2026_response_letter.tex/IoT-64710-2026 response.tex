@@ -1,0 +1,841 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt, twosides]{article}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{picinpar}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{flushend}
+\usepackage[latin1]{inputenc}
+\usepackage{colortbl}
+\usepackage{soul}
+\usepackage{multirow}
+\usepackage{amsfonts}   % \mathcal ??
+\usepackage{amssymb}   % ????????
+\usepackage{pifont}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{alltt}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumerate}
+\usepackage{siunitx}
+\usepackage{breakurl}
+\usepackage{caption}
+\usepackage{epstopdf}
+\usepackage{pbox}
+\usepackage{amsfonts}
+\usepackage{stfloats}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{changebar}
+\newcommand{\vect}[1]{\mathbf{#1}}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{diagbox,tabu,enumerate,fancybox}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\long\def\comment#1{ }
+
+\usepackage[top=1in, bottom=1in, left=1.2in, right=1.2in]{geometry}
+\setlength{\parskip}{1em}
+%\setcounter{MaxMatrixCols}{10}
+
+\usepackage{flushend}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{conj}{Conjecture}[section]
+\newtheorem{exmp}{Example}[section]
+\newenvironment{fminipage}%
+{\begin{Sbox}\begin{minipage}}%
+{\end{minipage}\end{Sbox}\doublebox{\TheSbox}}
+%\usepackage{amsmath,amssymb}
+%\usepackage{graphicx,color,psfrag,overpic,threeparttable}
+%\usepackage{epstopdf,algorithm,algorithmic}
+%\usepackage{multirow}
+%\usepackage{amsmath}
+%\usepackage{xcolor,booktabs}
+%\usepackage{fontenc}
+%\geometry{left=2.7cm,right=2.7cm,top=2.5cm,bottom=2.5cm}
+%\setlength{\parskip}{1em}
+
+%\input{tcilatex}
+%\date{}
+
+\begin{document}
+\bigskip
+
+
+\noindent \textbf{Title:Event-Triggered Nonlinear Model Predictive Control for Energy-Aware UAV Obstacle Avoidance}
+
+\noindent \textbf{Authors: Heng Zhang, ~Liang Yuan, ~Xianghui Cao}
+
+\noindent \textbf{Reference:  IoT-64710-2026}
+
+\bigskip
+
+\begin{center}
+\textbf{\LARGE Authors' Responses}
+\end{center}
+
+\bigskip First we would like to express our sincere thanks to the Associate Editor and two anonymous reviewers for their valuable comments and suggestions on our letter. We have carefully considered those comments and suggestions, and revised the manuscript accordingly. The following is a detailed description about how we have addressed the proposed concerns.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\textbf{\textit{\large Reviewer \# 1}}
+\end{center}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{This manuscript proposes an event-triggered dual-mode NMPC framework for UAV obstacle avoidance in dynamic 3D environments.The method integrates a composite risk index for intelligent mode switching,an asymmetric energy-aware cost function, and a theoretical event-triggering analysis.Simulations demonstrate reduced computational overhead while maintaining successful obstacle avoidance. The topic fits the scope of IEEE Internet of Things Journal and shows certain novelty. However, several issues regarding clarity, theoretical completeness, and experimental validation should be addressed before publication.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you very much for the very detailed and constructive comments on our work. Please see below our detailed responses to the proposed concerns.
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{1. The paper contains redundant descriptions, especially in the Introduction and methodology sections. The authors should streamline the presentation and more clearly emphasize the three main contributions: the triggering mechanism, composite risk index, and energy-aware penalty design.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's constructive comment regarding manuscript organization and clarity. We fully agree that the original version contained redundant descriptions in both the Introduction and the methodology section, which may reduce readability and obscure the main contributions.
+
+In the revised manuscript, we have carefully streamlined the presentation to improve clarity and logical flow. The contribution statements in the Introduction have been rewritten to explicitly and independently highlight the three key contributions, namely the risk-triggered dual-mode NMPC mechanism, the composite risk index, and the energy-aware NMPC cost design. This revision ensures that each contribution is clearly identifiable and directly aligned with the main technical innovations of the paper.
+
+We have reorganized the beginning of Section III and Section III-A to remove repeated descriptions of the system architecture and pipeline. The revised version consolidates the framework overview into a concise closed-loop description with dual-mode switching logic, avoiding redundant explanations of individual functional modules.
+
+These modifications significantly improve the conciseness, structure, and readability of the manuscript while preserving all technical details and results. The corresponding changes have been highlighted in blue in the revised manuscript.
+
+``Accurate environmental representation is essential for safe online planning.'' 
+
+``Based on these safety representations, predictive planning methods use motion forecasting [9], [10], intent prediction [11], predictive velocity obstacles [12], [13], and active perception-planning collaboration [14] to detect future conflicts and improve navigation performance.'' 
+
+``In complex 3D navigation, UAVs require on-demand solver activation, risk-aware threat assessment, and energy-aware maneuver regulation. However, existing methods rarely integrate these requirements into a unified obstacle-avoidance framework. To address this limitation, we propose an energy-aware ET-NMPC framework for 3D dynamic environments. The framework combines a risk-triggered dual-mode mechanism, a composite risk index, and an asymmetric energy penalty. These designs reduce unnecessary NMPC calls, schedule replanning according to real-time collision risk, and suppress unnecessary vertical maneuvers.'' 
+
+``The main contributions of this work are summarized as follows:
+\begin{itemize}
+	\item A risk-triggered dual-mode NMPC mechanism is developed to switch between lightweight nominal tracking and local predictive replanning. This mechanism activates the NMPC solver only in high-risk situations and reduces unnecessary optimization calls.
+	
+	\item A composite risk index is designed by integrating encounter risk, predictive occupancy risk, and reference deviation risk. This index enables the controller to evaluate dynamic collision threats and schedule replanning according to real-time risk.
+	
+	\item An energy-aware NMPC cost with an asymmetric climb penalty is introduced for 3D UAV obstacle avoidance. This penalty suppresses unnecessary vertical maneuvers and improves the balance among safety, computational efficiency, and energy preservation.''  
+\end{itemize}
+
+``The proposed ET-NMPC framework consists of obstacle prediction, composite risk assessment, event-triggered mode switching, local predictive optimization, and receding-horizon execution. The framework activates the NMPC solver only when the predicted collision risk exceeds a prescribed threshold. This design reduces unnecessary optimization calls while preserving proactive obstacle avoidance.''  
+
+``The framework follows a closed-loop pipeline. At each sampling instant, the UAV updates obstacle observations, predicts future obstacle motion, evaluates the composite risk index, and determines the control mode. Under low-risk conditions, the UAV tracks the nominal reference trajectory, while under high-risk conditions the local NMPC solver generates a collision-free trajectory segment.
+
+This dual-mode design reduces unnecessary optimization calls in safe regions and enables rapid replanning when dynamic threats are detected.''  
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{2. Many symbols and parameters are introduced without a unified notation table. A comprehensive table summarizing variables, parameters, and units is strongly recommended.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's suggestion regarding the clarity of notation and parameters. In response, we have introduced a comprehensive table summarizing all key simulation parameters used in our experiments, including UAV states, control inputs, dynamic obstacle states, prediction horizon, risk and energy weights, event-triggering thresholds, safety radius, and sampling time. The definitions of $d_m$, $d_{i,\tau}$, $\rho_i(k+\tau)$, $\Delta_i(k+\tau)$, $R_{on}$, $R_{off}$, and $T_{ref}$ are unified in this table. This table enables readers to understand the experimental setup and parameters at a glance. The corresponding modifications have been marked in blue color in the revised paper as follows:
+
+``The workspace includes multiple static obstacles and dynamic obstacles with heterogeneous motion patterns. UAV kinematic limits are strictly enforced, including the maximum speed, maximum acceleration, altitude range, and safety radius. The NMPC solver operates with a fixed sampling time and a finite prediction horizon. The key simulation parameters, including UAV kinematic limits, NMPC cost weights, risk weights, and event-triggering thresholds, are summarized in Table II."
+
+\begin{table}[h!]
+	\centering
+	\captionsetup{labelformat=empty}
+	\caption{\textcolor{blue}{Table II: Key Parameters Used in the Simulations}}
+	\label{tab:key_parameters}
+	\scriptsize
+	\renewcommand{\arraystretch}{1.12}
+	\setlength{\tabcolsep}{2.5pt}
+	\resizebox{\columnwidth}{!}{%
+		\begin{tabular}{l l c c}
+			\toprule
+			\textbf{Symbol} & \textbf{Description} & \textbf{Unit} & \textbf{Value} \\
+			\midrule
+			\multicolumn{4}{l}{\textit{UAV kinematic parameters}} \\
+			\midrule
+			$v_{\max}$ & Maximum UAV speed & m/s & 5.0 \\
+			$u_{\max}$ & Maximum UAV acceleration & m/s$^2$ & 3.0 \\
+			$z_{\min}$ & Minimum flight altitude & m & 0.5 \\
+			$z_{\max}$ & Maximum flight altitude & m & 20.0 \\
+			$r_u$ & UAV safety radius & m & 0.3 \\
+			$\Delta t$ & Sampling time & s & 0.1 \\
+			$H$ & Prediction horizon & steps & 15 \\
+			\midrule
+			\multicolumn{4}{l}{\textit{NMPC cost weights}} \\
+			\midrule
+			$\alpha$ & Path-length cost weight & -- & 0.14 \\
+			$\beta$ & Trajectory smoothness cost weight & -- & 0.07 \\
+			$\gamma$ & Energy cost weight & -- & 0.11 \\
+			$\delta$ & Obstacle avoidance risk cost weight & -- & 0.68 \\
+			$c_1$ & Distance-related energy weight & -- & 1.0 \\
+			$c_2$ & Control-effort energy weight & -- & 0.1 \\
+			$c_3$ & Asymmetric climb penalty weight & -- & 3.0 \\
+			\midrule
+			\multicolumn{4}{l}{\textit{Risk assessment and event-triggering parameters}} \\
+			\midrule
+			$w_1$ & TCPA-based encounter risk weight & -- & 0.4 \\
+			$w_2$ & Predictive occupancy risk weight & -- & 0.4 \\
+			$w_3$ & Reference deviation risk weight & -- & 0.2 \\
+			$R_{on}$ & Risk activation threshold & -- & 0.6 \\
+			$R_{off}$ & Risk deactivation threshold & -- & 0.2 \\
+			$T_{ref}$ & Refractory interval & steps & 5 \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table}
+
+The corresponding modifications have been marked in blue color in the revised paper.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vfill
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{3. The current energy-aware cost function is overly simplified. The authors should: clarify the physical meaning and units of weighting coefficients; relate the cost term to realistic UAV power-consumption models;  provide quantitative energy-saving results (e.g., Wh or Joules) rather than only geometric metrics such as reduced climb distance.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's insightful comments regarding the validation and physical interpretation of the energy-aware cost function. We agree that the original description was insufficient to explain the physical meaning of the energy terms and to support the reported energy-aware performance. In the revised manuscript, we have clarified that the local energy cost is a lightweight surrogate cost for online NMPC rather than a full rotor-level power model. The weighting coefficients $c_1$, $c_2$, and $c_3$ have been explained as non-negative coefficients associated with distance-related propulsion energy, control-effort-induced maneuvering energy, and asymmetric climb energy, respectively. Since these terms have different physical dimensions, these coefficients are used as normalization weights to map them into a comparable NMPC cost scale. This clarification makes the role of each term more explicit and avoids interpreting the normalized NMPC cost as a direct motor power model.
+
+To further relate the proposed cost to practical UAV energy consumption, we have introduced a simplified physical energy estimation model for quantitative evaluation
+\[
+E_{est} = P_{base} T + \frac{m g \Delta z_+}{\eta_c} + k_u \int_0^T \| u(t) \|^2 dt,
+\]
+where the three terms represent baseline propulsion energy, climb-related potential energy, and additional maneuvering energy caused by control effort. The estimated energy is converted into Watt-hours and reported in the comparative experiment table. Therefore, the revised manuscript now provides quantitative energy results in Wh, rather than relying only on geometric indicators such as climb distance.
+
+``To explicitly reflect the asymmetric energy characteristics of 3D flight, the local energy cost $J_{energy}$ is defined as
+\[
+\small
+J_{energy}
+= c_1 \sum_{\tau=0}^{H-1} \| {p}_{k+\tau+1} - {p}_{k+\tau} \|
++ c_2 \sum_{\tau=0}^{H-1} \| {u}_{k+\tau} \|^2
++ c_3 \sum_{\tau=0}^{H-1} \max(0, z_{k+\tau+1} - z_{k+\tau}),
+\]
+where $c_1$, $c_2$, and $c_3$ are non-negative weighting coefficients. The first term approximates distance-related propulsion energy, the second accounts for energy from control actions, and the third implements an asymmetric climb penalty penalizing unnecessary positive altitude gains. $J_{energy}$ serves as a normalized cost within the NMPC optimization. It should be noted that $J_{energy}$ is used as a lightweight surrogate energy cost for online NMPC rather than a full rotor-level power model.
+
+To provide a quantitative energy assessment beyond geometric metrics, the estimated energy consumption is computed using a simplified physical model
+\[
+E_{est} = P_{base} T + \frac{m g \Delta z_+}{\eta_c} + k_u \int_0^T \| u(t) \|^2 dt,
+\]
+where $P_{base}$ is the baseline propulsion power, $T$ is the flight duration, $m$ is the UAV mass, $g$ is the gravitational acceleration, $\Delta z_+$ denotes the accumulated positive altitude change, $\eta_c$ is the climb efficiency, and $k_u$ is the maneuvering-energy coefficient. The three terms represent the baseline flight energy, climb-related potential energy, and additional energy caused by control effort, respectively. The estimated energy is converted into Watt-hours as $E_{Wh}=E_{est}/3600$. This metric provides a physically interpretable quantitative comparison of energy-aware performance across different algorithms.''
+
+\begin{table*}[t]
+	\captionsetup{labelformat=empty}
+	\caption{\textcolor{blue}{Table III: Quantitative Performance Comparison of Different Algorithms in a Complex Dynamic Urban Scenario}}
+	\label{tab:baseline_comparison}
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{2pt}
+	\footnotesize
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lccccccc}
+			\toprule
+			Algorithm & \textbf{Success (\%)} & \textbf{Trigger (\%)} & \textbf{Avg CPU (ms)} & \textbf{Clearance (m)} & \textbf{Effort} & \textbf{Climb (m)} & \textbf{\textcolor{blue}{Est. Energy (Wh)}} \\
+			\midrule
+			\textbf{Proposed ET-NMPC} & 100.0 & 77.7 & 2163.62 & 1.94 & 107.92 & 11.59 & \textcolor{blue}{0.8082} \\
+			C-NMPC & 96.7 & 100.0 & 2588.46 & 1.95 & 119.83 & 11.67 & \textcolor{blue}{0.8199} \\
+			NP-ET-NMPC & 83.3 & 75.0 & 1862.95 & 1.44 & 103.56 & 10.97 & \textcolor{blue}{0.7944} \\
+			SE-ET-NMPC & 96.7 & 77.7 & 1918.71 & 1.96 & 107.65 & 11.46 & \textcolor{blue}{0.8047} \\
+			3D-APF & 13.3 & 0.0 & 0.13 & 0.54 & 132.03 & 11.17 & \textcolor{blue}{0.9548} \\
+			RRT* & 0.0 & -- & -- & -- & -- & -- & -- \\
+			\bottomrule
+	\end{tabular}}
+\end{table*}
+
+	
+The corresponding modifications have been marked in blue color in the revised paper.
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{4. The ``urban canyon" scenario is relatively simple, involving few obstacles and only one dynamic obstacle. More challenging cases with multiple dynamic obstacles and heterogeneous motions should be added. The scalability of computation time and trigger rate versus obstacle number should also be analyzed.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} 
+We sincerely thank the reviewer for this valuable comment regarding simulation realism and scalability. We agree that the original urban-canyon scenario was not sufficient to demonstrate the robustness and scalability of the proposed framework under more complex dynamic conditions.In the revised manuscript, we have enhanced the simulation setting by extending the original single-obstacle case to scenarios with 1, 3, and 5 dynamic obstacles. Heterogeneous obstacle motions, including constant velocity, constant acceleration, sinusoidal motion, and random maneuvers, are also incorporated to increase the realism and difficulty of the tests.
+
+To evaluate scalability, we conducted Monte Carlo stress tests with 100 independent randomized trials for each obstacle setting. The results are reported in Table V. We analyze the influence of obstacle number on success rate, trigger rate, average CPU time, CPU saving, clearance, and estimated energy consumption.
+The results show that the proposed ET-NMPC maintains a 100.0\% success rate in all tested scenarios. The trigger rate remains within 75.4\%--78.3\%, while the average CPU time increases moderately as the number of dynamic obstacles grows. Compared with the continuous NMPC baseline, the proposed method reduces the average CPU time by 24.2\%, 24.0\%, and 21.1\% for 1, 3, and 5 dynamic obstacles, respectively. These results demonstrate that the proposed framework preserves safety while reducing unnecessary optimization calls under increasing obstacle density.
+
+In addition, we have added a theoretical discussion on scalability with obstacle number in the ``Theoretical Analysis and Feasibility Discussion'' subsection. The added discussion explains that the prediction and occupancy construction cost scales as $O(N_oH)$, and that the local NMPC problem introduces $N_oH$ obstacle-avoidance constraints. It also clarifies that the proposed ET-NMPC has an average cost of $\bar{\mathcal{C}}(N_o)=\mathcal{C}_{p}(N_o)+\eta(N_o)\mathcal{C}_{s}(N_o)$, while continuous NMPC requires solver activation at every step. This discussion provides theoretical support for analyzing CPU time and trigger rate with respect to the number of dynamic obstacles.
+
+Accordingly, we have revised Section III and Section IV to clarify the scalability discussion and to include the new multi-obstacle Monte Carlo results. The corresponding modifications have been marked in blue in the revised manuscript.
+
+``This section provides theoretical analysis for the proposed event-triggered dual-mode NMPC framework. The analysis first proves that the triggering mechanism excludes Zeno-like mode chattering. It then characterizes the computational benefit of event-triggered solver activation and discusses its scalability with the number of dynamic obstacles. Finally, recursive feasibility and closed-loop stability are discussed under bounded prediction errors and feasible replanning conditions.''
+
+``\textit{Discussion 1:}
+For $N_o$ dynamic obstacles, the prediction and occupancy construction cost scales as $\mathcal{C}_{p}(N_o)=O(N_oH)$. The obstacle-avoidance constraints in (25) also add $N_oH$ safety constraints to the local NLP, so the solver cost can be written as $\mathcal{C}_{s}(N_o)$. Therefore, the continuous NMPC baseline has the average cost $\bar{\mathcal{C}}_{\mathrm{cont}}(N_o)=\mathcal{C}_{p}(N_o)+\mathcal{C}_{s}(N_o)$, while the proposed ET-NMPC has $\bar{\mathcal{C}}(N_o)=\mathcal{C}_{p}(N_o)+\eta(N_o)\mathcal{C}_{s}(N_o)$. Since $\eta(N_o)<1$ when low-risk steps exist, the proposed method can reduce unnecessary NLP solves. As $N_o$ increases, both the solver cost and the trigger ratio may increase because more dynamic obstacles create more potential conflicts. This explains why CPU time and trigger rate are evaluated with respect to the number of dynamic obstacles in the Monte Carlo scalability tests.''
+
+``As shown in Fig. 2, multiple dynamic obstacles move within the UAV's operational airspace, following heterogeneous motion trajectories. These trajectories include constant velocity (CV), constant acceleration (CA), sinusoidal oscillation (SIN), and unpredictable random maneuvers (RAND). Each obstacle's motion is explicitly modeled and updated in real time, creating potential conflicts with the UAV's nominal path (black dashed line).''
+
+``To evaluate the robustness and scalability of the proposed framework under uncertainty, Monte Carlo stress tests are conducted under different numbers of dynamic obstacles. The number of dynamic obstacles is set to 1, 3, and 5. For each obstacle setting, 100 independent randomized trials are performed. Gaussian noise is added to the obstacle measurements, and the initial states of the dynamic obstacles are randomly perturbed. The statistical results are reported in Table V.
+
+The results show that the proposed ET-NMPC maintains a 100.0\% success rate in all tested scenarios. This result indicates that the proposed method can preserve robust obstacle avoidance when the dynamic obstacle density increases. In contrast, the performance of the baseline methods degrades as the number of dynamic obstacles increases. When the number of dynamic obstacles is 5, the success rates of C-NMPC, NP-ET-NMPC, and SE-ET-NMPC decrease to 97.0\%, 90.0\%, and 97.0\%, respectively. The no-prediction variant NP-ET-NMPC shows the most obvious degradation, which confirms the importance of predictive obstacle motion estimation in complex dynamic environments.
+
+The proposed ET-NMPC also achieves a clear computational advantage over the continuous C-NMPC baseline. Since C-NMPC solves the NMPC problem at every time step, its trigger rate remains 100.0\% in all scenarios. In comparison, the proposed ET-NMPC keeps the trigger rate between 75.4\% and 78.3\%. As a result, it reduces the average CPU time by 24.2\%, 24.0\%, and 21.1\% for 1, 3, and 5 dynamic obstacles, respectively. This result supports the computational benefit of the risk-triggered scheduling mechanism.
+
+The safety margin also supports the advantage of the proposed method. When the number of dynamic obstacles increases to 5, the proposed ET-NMPC achieves the largest clearance of 2.05 m. This value is higher than those of C-NMPC, NP-ET-NMPC, and SE-ET-NMPC. Although NP-ET-NMPC obtains larger CPU savings in some cases, its success rate and clearance decrease significantly under dense dynamic obstacles. The estimated energy consumption of the proposed ET-NMPC remains comparable to the other NMPC-based methods. Therefore, the proposed ET-NMPC achieves the best overall trade-off among robustness, safety margin, computational efficiency, and energy-aware performance.''
+
+\begin{table}[htbp]
+	\centering
+	\captionsetup{labelformat=empty} % ??LaTeX??????
+	\caption{Table V: Monte Carlo Performance under Different Numbers of Dynamic Obstacles}
+	\label{tab:monte_carlo_scalability}
+	\footnotesize
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{3pt}
+	\resizebox{\linewidth}{!}{%
+		\begin{tabular}{c l c c c c c c}
+			\toprule
+			\textbf{\textcolor{blue}{Obstacles}} & \textbf{\textcolor{blue}{Algorithm}} & \textbf{\textcolor{blue}{Success (\%)}} & \textbf{\textcolor{blue}{Trigger (\%)}} & \textbf{\textcolor{blue}{Avg CPU (ms)}} & \textbf{\textcolor{blue}{CPU Saving (\%)}} & \textbf{\textcolor{blue}{Clearance (m)}} & \textbf{\textcolor{blue}{Est. Energy (Wh)}} \\
+			\midrule
+			\multirow{4}{*}{\textcolor{blue}{1}}
+			& \textbf{\textcolor{blue}{Proposed ET-NMPC}} & \textbf{\textcolor{blue}{100.0}} & \textcolor{blue}{75.4 $\pm$ 0.4} & \textcolor{blue}{1818.92 $\pm$ 21.52} & \textcolor{blue}{24.2} & \textcolor{blue}{5.11 $\pm$ 1.35} & \textcolor{blue}{0.2179 $\pm$ 0.0021} \\
+			& \textcolor{blue}{C-NMPC} & \textcolor{blue}{100.0} & \textcolor{blue}{100.0 $\pm$ 0.0} & \textcolor{blue}{2398.80 $\pm$ 10.04} & \textcolor{blue}{0.0} & \textcolor{blue}{5.08 $\pm$ 1.38} & \textcolor{blue}{0.2187 $\pm$ 0.0028} \\
+			& \textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{100.0} & \textcolor{blue}{74.7 $\pm$ 0.2} & \textcolor{blue}{1804.73 $\pm$ 13.96} & \textcolor{blue}{24.8} & \textcolor{blue}{5.22 $\pm$ 1.72} & \textcolor{blue}{0.2189 $\pm$ 0.0009} \\
+			& \textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{100.0} & \textcolor{blue}{75.4 $\pm$ 0.4} & \textcolor{blue}{1819.68 $\pm$ 54.27} & \textcolor{blue}{24.1} & \textcolor{blue}{5.49 $\pm$ 1.52} & \textcolor{blue}{0.2180 $\pm$ 0.0018} \\
+			\midrule
+			\multirow{4}{*}{\textcolor{blue}{3}}
+			& \textbf{\textcolor{blue}{Proposed ET-NMPC}} & \textbf{\textcolor{blue}{100.0}} & \textcolor{blue}{76.3 $\pm$ 1.6} & \textcolor{blue}{1923.78 $\pm$ 41.73} & \textcolor{blue}{24.0} & \textcolor{blue}{2.83 $\pm$ 0.78} & \textcolor{blue}{0.2254 $\pm$ 0.0091} \\
+			& \textcolor{blue}{C-NMPC} & \textcolor{blue}{99.0} & \textcolor{blue}{100.0 $\pm$ 0.0} & \textcolor{blue}{2531.26 $\pm$ 35.28} & \textcolor{blue}{0.0} & \textcolor{blue}{2.71 $\pm$ 0.82} & \textcolor{blue}{0.2245 $\pm$ 0.0082} \\
+			& \textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{95.0} & \textcolor{blue}{75.1 $\pm$ 0.4} & \textcolor{blue}{1905.06 $\pm$ 28.33} & \textcolor{blue}{24.7} & \textcolor{blue}{2.25 $\pm$ 0.98} & \textcolor{blue}{0.2197 $\pm$ 0.0013} \\
+			& \textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{99.0} & \textcolor{blue}{76.4 $\pm$ 1.0} & \textcolor{blue}{1915.05 $\pm$ 25.87} & \textcolor{blue}{24.3} & \textcolor{blue}{2.77 $\pm$ 0.78} & \textcolor{blue}{0.2235 $\pm$ 0.0079} \\
+			\midrule
+			\multirow{4}{*}{\textcolor{blue}{5}}
+			& \textbf{\textcolor{blue}{Proposed ET-NMPC}} & \textbf{\textcolor{blue}{100.0}} & \textcolor{blue}{78.3 $\pm$ 1.4} & \textcolor{blue}{2074.76 $\pm$ 38.70} & \textcolor{blue}{21.1} & \textcolor{blue}{2.05 $\pm$ 0.62} & \textcolor{blue}{0.2298 $\pm$ 0.0129} \\
+			& \textcolor{blue}{C-NMPC} & \textcolor{blue}{97.0} & \textcolor{blue}{100.0 $\pm$ 0.0} & \textcolor{blue}{2628.69 $\pm$ 21.45} & \textcolor{blue}{0.0} & \textcolor{blue}{1.88 $\pm$ 0.60} & \textcolor{blue}{0.2271 $\pm$ 0.0116} \\
+			& \textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{90.0} & \textcolor{blue}{75.2 $\pm$ 0.7} & \textcolor{blue}{1917.88 $\pm$ 49.68} & \textcolor{blue}{27.0} & \textcolor{blue}{1.32 $\pm$ 0.77} & \textcolor{blue}{0.2205 $\pm$ 0.0061} \\
+			& \textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{97.0} & \textcolor{blue}{78.1 $\pm$ 1.3} & \textcolor{blue}{1933.10 $\pm$ 34.46} & \textcolor{blue}{26.5} & \textcolor{blue}{1.86 $\pm$ 0.57} & \textcolor{blue}{0.2286 $\pm$ 0.0155} \\
+			\bottomrule
+		\end{tabular}%
+	}
+	\vspace{2pt}
+	\begin{flushleft}
+		\textit{\textcolor{blue}{Note: Continuous metrics are reported as mean $\pm$ standard deviation over 100 independent runs. CPU saving is computed relative to C-NMPC under the same number of dynamic obstacles.}}
+	\end{flushleft}
+\end{table}
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{5.The comparison with only 3D-APF is insufficient. Additional comparisons are recommended with: continuous NMPC baselines; recent event-triggered MPC/NMPC methods; optionally sampling-based planners such as RRT*.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's valuable suggestion regarding the comparative experiments. We agree that the comparison with only the 3D-APF baseline was insufficient to fully demonstrate the advantages of the proposed framework. In the revised manuscript, we have significantly expanded the baseline comparison. Specifically, we have added continuous NMPC (C-NMPC), event-triggered NMPC without prediction (NP-ET-NMPC), event-triggered NMPC with symmetric energy cost (SE-ET-NMPC), and the sampling-based planner RRT*, in addition to the original 3D-APF method. These baselines are selected to evaluate the effects of continuous replanning, event-triggered scheduling, prediction, asymmetric energy design, reactive planning, and sampling-based planning.
+
+For a fair comparison, all methods are tested in the same complex dynamic urban scenario with identical static maps, dynamic obstacle initialization, and random seeds. We have also updated the trajectory comparison figure to show the different behaviors of all compared methods in the same environment. The revised results show that 3D-APF and RRT* fail in the challenging dynamic scenario, while NP-ET-NMPC suffers from a lower success rate and smaller safety clearance due to the lack of prediction. C-NMPC maintains comparable safety, but it requires continuous optimization and therefore has higher computational cost. In contrast, the proposed ET-NMPC achieves a 100.0\% success rate while reducing the trigger rate and average CPU time compared with C-NMPC.
+
+In addition, we have added a new quantitative comparison table based on 30 randomized trials. The table reports success rate, trigger rate, average CPU time, safety clearance, control effort, climb distance, and estimated energy consumption. These metrics provide a more comprehensive evaluation of reliability, safety, computational efficiency, and energy-aware performance. The results demonstrate that the proposed ET-NMPC achieves the best overall trade-off among the compared methods. The corresponding modifications have been marked in blue color in the revised paper.
+
+``For each parameter setting, 30 independent randomized trials are conducted. We evaluate two event-triggering parameters, namely the risk activation threshold $R_{on}$ and the refractory interval $T_{ref}$. Fig. 6 shows the sensitivity results. As shown in Fig. 6(a) and Fig. 6(b), $R_{on}$ affects the trade-off between computational efficiency and avoidance reliability. When $R_{on}$ is 0.4 or 0.5, the controller triggers more often, which increases the trigger rate and CPU time. When $R_{on}$ increases to 0.7 or 0.8, the trigger rate decreases, but the success rate also drops. This result shows that a large activation threshold may delay replanning under fast-changing obstacle motion. In contrast, $R_{on}=0.6$ achieves a 100.0\% success rate, an average CPU time of 1874.83 ms, and the largest minimum clearance of 2.08 m. Therefore, $R_{on}=0.6$ is selected in this work.
+
+Fig. 6(c) and Fig. 6(d) show the influence of $T_{ref}$. The trigger rate changes only slightly over the tested values, and the switch count remains low. This result shows that the hysteresis-based logic can suppress frequent mode switching. Among the tested values, $T_{ref}=5$ achieves a 100.0\% success rate with acceptable CPU time. Therefore, $T_{ref}=5$ is used in the following experiments.
+
+The weighting coefficients in Table II are selected by empirical tuning under safety, smoothness, and energy-awareness requirements. The risk-related weights give priority to collision avoidance in high-risk regions. The tracking and control-effort weights maintain smooth motion and bounded acceleration. The asymmetric climb and energy-related weights reduce unnecessary vertical maneuvers while preserving the success rate. These weights are fixed in all reported experiments, and their effectiveness is supported by the comparative results, Monte Carlo tests, and sensitivity analysis. However, fixed weights may be sub-optimal under different operating conditions. Future work will study adaptive weighting mechanisms for more diverse environments.''
+
+\begin{table*}[t]
+	\captionsetup{labelformat=empty}
+	\caption{\textcolor{blue}{Table III: Quantitative Performance Comparison of Different Algorithms in a Complex Dynamic Urban Scenario}}
+	\label{tab:baseline_comparison}
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{2pt}
+	\footnotesize
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lccccccc}
+			\toprule
+			\textcolor{blue}{\textbf{Algorithm}} & \textcolor{blue}{\textbf{Success (\%)}} & \textcolor{blue}{\textbf{Trigger (\%)}} & \textcolor{blue}{\textbf{Avg CPU (ms)}} & \textcolor{blue}{\textbf{Clearance (m)}} & \textcolor{blue}{\textbf{Effort}} & \textcolor{blue}{\textbf{Climb (m)}} & \textcolor{blue}{\textbf{Est. Energy (Wh)}} \\
+			\midrule
+			\textcolor{blue}{\textbf{Proposed ET-NMPC}} & \textcolor{blue}{100.0} & \textcolor{blue}{77.7} & \textcolor{blue}{2163.62} & \textcolor{blue}{1.94} & \textcolor{blue}{107.92} & \textcolor{blue}{11.59} & \textcolor{blue}{0.8082} \\
+			\textcolor{blue}{C-NMPC} & \textcolor{blue}{96.7} & \textcolor{blue}{100.0} & \textcolor{blue}{2588.46} & \textcolor{blue}{1.95} & \textcolor{blue}{119.83} & \textcolor{blue}{11.67} & \textcolor{blue}{0.8199} \\
+			\textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{83.3} & \textcolor{blue}{75.0} & \textcolor{blue}{1862.95} & \textcolor{blue}{1.44} & \textcolor{blue}{103.56} & \textcolor{blue}{10.97} & \textcolor{blue}{0.7944} \\
+			\textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{96.7} & \textcolor{blue}{77.7} & \textcolor{blue}{1918.71} & \textcolor{blue}{1.96} & \textcolor{blue}{107.65} & \textcolor{blue}{11.46} & \textcolor{blue}{0.8047} \\
+			\textcolor{blue}{3D-APF} & \textcolor{blue}{13.3} & \textcolor{blue}{0.0} & \textcolor{blue}{0.13} & \textcolor{blue}{0.54} & \textcolor{blue}{132.03} & \textcolor{blue}{11.17} & \textcolor{blue}{0.9548} \\
+			\textcolor{blue}{RRT*} & \textcolor{blue}{0.0} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} \\
+			\bottomrule
+	\end{tabular}}
+\end{table*}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\columnwidth, trim={1cm 1cm 1cm 1cm}, clip]{5}
+	\captionsetup{labelformat=empty}
+	\caption{Fig.5. Trajectory Comparison of Different Path-Planning Algorithms in a Dynamic Obstacle Environment.}
+	\label{fig:baseline_comparison}
+\end{figure}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Reviewer}]} 
+\textit{\textbf{6. The paper lacks detailed implementation information, including IPOPT iterations, solver settings, memory usage, and timing distributions. Moreover, experiments are conducted only on a desktop PC despite claims of onboard applicability. Results or discussion on embedded platforms are necessary to support real-time feasibility claims.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} 
+We sincerely thank the reviewer for this valuable comment. We agree that the original manuscript did not provide sufficient implementation details to support the computational performance and real-time feasibility discussion.
+
+In the revised manuscript, we have added a new subsection entitled ``Computational Performance Profiling and Real-Time Feasibility Analysis'' before the Monte Carlo evaluation. We also added Table VI to report the key profiling results, including timing distributions, IPOPT iterations, solver settings, memory usage, and triggering status. The results show that the event-triggered strategy avoids solving the NMPC problem at every sampling instant. Non-triggered steps introduce almost negligible computation, while the main computational cost comes from triggered NMPC optimization. This supports the computational advantage of the proposed risk-triggered scheduling mechanism.
+
+We also provide detailed IPOPT settings, including the maximum iteration number, convergence tolerance, acceptable tolerance, MUMPS sparse linear solver, and shifted-reference warm start. The profiling results show that the IPOPT iteration number remains below the maximum iteration limit, and no solver failure or fallback occurs during the profiling runs. In addition, we report memory usage before and after simulation, memory variation, and peak observed memory. The small memory variation indicates that repeated NMPC calls do not cause continuous memory growth. These results demonstrate stable numerical and memory behavior in the tested dynamic scenario.
+
+Finally, we have revised the discussion on onboard feasibility. The current implementation is a MATLAB/CasADi prototype on a desktop platform, so the measured CPU time includes MATLAB overhead and should not be regarded as the final runtime of a compiled onboard implementation. We further clarify that embedded validation remains challenging because it requires solver code generation, real-time memory management, and integration with the flight-control loop. Nevertheless, the profiling results show negligible computation in non-triggered steps and reliable convergence in triggered steps. These results support future implementation on Jetson-class companion computers or compiled C++ platforms. Future work will conduct code generation, hardware-in-the-loop testing, and closed-loop onboard validation.
+
+The corresponding modifications have been marked in blue in the revised manuscript.
+ 
+ ``To disclose the computational performance of the proposed method, we conducted a profiling experiment before the Monte Carlo evaluation. Table VI reports the timing distribution, IPOPT iterations, solver settings, memory usage, and triggering status. The results show that the event-triggered strategy avoids solving the NMPC problem at every sampling instant. Non-triggered steps require almost negligible computation, while the main cost comes from triggered NMPC optimization. This supports the computational advantage of the proposed risk-triggered scheduling mechanism.
+ 
+ Table VI also reports the IPOPT statistics and solver configuration. The average IPOPT iteration number remains far below the maximum iteration limit, and no solver failure or fallback occurs during the profiling runs. The solver uses IPOPT with the MUMPS sparse linear solver, fixed convergence tolerances, and shifted-reference warm start. The memory statistics show no continuous memory growth, indicating stable numerical and memory behavior during repeated NMPC calls.
+ 
+ The current implementation is a MATLAB/CasADi prototype on a desktop platform. Thus, the measured CPU time includes MATLAB overhead and should not be regarded as the final runtime of a compiled onboard implementation. Embedded validation remains challenging because it requires solver code generation, real-time memory management, and integration with the flight-control loop. Nevertheless, the profiling results show negligible computation in non-triggered steps and reliable convergence in triggered steps. These results support future implementation on Jetson-class companion computers or compiled C++ platforms. Future work will conduct code generation, hardware-in-the-loop testing, and closed-loop onboard validation.''
+ 
+ \begin{table}[h]
+ 	\centering
+ 	\captionsetup{labelformat=empty}
+ 	\caption{Table VI: Computational profiling results of the proposed ET-NMPC.}
+ 	\label{tab:computational_profiling}
+ 	\scriptsize
+ 	\setlength{\tabcolsep}{2.5pt}
+ 	\renewcommand{\arraystretch}{1.12}
+ 	\begin{tabular}{p{0.46\columnwidth}p{0.46\columnwidth}}
+ 		\toprule
+ 		\textbf{\textcolor{blue}{Item}} & \textbf{\textcolor{blue}{Value}} \\
+ 		\midrule
+ 		\multicolumn{2}{l}{\textbf{\textcolor{blue}{Profiling setup}}} \\
+ 		\textcolor{blue}{Number of profiling runs} & \textcolor{blue}{30} \\
+ 		\textcolor{blue}{Total simulation steps} & \textcolor{blue}{4072} \\
+ 		\textcolor{blue}{Number of dynamic obstacles} & \textcolor{blue}{5} \\
+ 		\textcolor{blue}{Triggered steps} & \textcolor{blue}{3183} \\
+ 		\textcolor{blue}{Trigger rate} & \textcolor{blue}{$77.8 \pm 3.5\%$} \\
+ 		\midrule
+ 		\multicolumn{2}{l}{\textbf{\textcolor{blue}{Timing statistics}}} \\
+ 		\textcolor{blue}{Average CPU time per step} & \textcolor{blue}{$2074.1 \pm 131.4$ ms} \\
+ 		\textcolor{blue}{Mean CPU-time standard deviation} & \textcolor{blue}{1112.6 ms} \\
+ 		\textcolor{blue}{Maximum CPU time per step} & \textcolor{blue}{3982.8 ms} \\
+ 		\textcolor{blue}{Average triggered CPU time} & \textcolor{blue}{$2658.3 \pm 190.2$ ms} \\
+ 		\textcolor{blue}{Maximum triggered CPU time} & \textcolor{blue}{3982.8 ms} \\
+ 		\textcolor{blue}{Average non-triggered CPU time} & \textcolor{blue}{0.015 ms} \\
+ 		\midrule
+ 		\multicolumn{2}{l}{\textbf{\textcolor{blue}{IPOPT statistics}}} \\
+ 		\textcolor{blue}{Average IPOPT iterations} & \textcolor{blue}{$22.0 \pm 12.9$} \\
+ 		\textcolor{blue}{Maximum IPOPT iterations} & \textcolor{blue}{87} \\
+ 		\textcolor{blue}{Solver failure count} & \textcolor{blue}{0} \\
+ 		\textcolor{blue}{Fallback count} & \textcolor{blue}{0} \\
+ 		\midrule
+ 		\multicolumn{2}{l}{\textbf{\textcolor{blue}{Memory statistics}}} \\
+ 		\textcolor{blue}{Mean memory before simulation} & \textcolor{blue}{6361.1 MB} \\
+ 		\textcolor{blue}{Mean memory after simulation} & \textcolor{blue}{6356.9 MB} \\
+ 		\textcolor{blue}{Mean memory variation} & \textcolor{blue}{-4.2 MB} \\
+ 		\textcolor{blue}{Peak observed memory} & \textcolor{blue}{6367.6 MB} \\
+ 		\midrule
+ 		\multicolumn{2}{l}{\textbf{\textcolor{blue}{Solver settings}}} \\
+ 		\textcolor{blue}{IPOPT maximum iterations} & \textcolor{blue}{100} \\
+ 		\textcolor{blue}{IPOPT tolerance} & \textcolor{blue}{$10^{-4}$} \\
+ 		\textcolor{blue}{IPOPT acceptable tolerance} & \textcolor{blue}{$10^{-3}$} \\
+ 		\textcolor{blue}{Sparse linear solver} & \textcolor{blue}{MUMPS} \\
+ 		\textcolor{blue}{Warm-start strategy} & \textcolor{blue}{Shifted reference initialization} \\
+ 		\bottomrule
+ 	\end{tabular}
+ \end{table}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{7.The current analysis only excludes Zeno behavior. Important NMPC properties such as recursive feasibility and closed-loop stability are missing. The authors should provide additional theoretical analysis or discussion regarding feasibility preservation and stability under mode switching and dynamic obstacles.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's insightful comment regarding the theoretical guarantees of the proposed framework. We agree that the original analysis mainly focused on excluding Zeno-like mode chattering and characterizing the computational benefit of event-triggered solver activation. In the revised manuscript, we have expanded the theoretical analysis section and renamed it as ``Theoretical Analysis and Feasibility Discussion'' to include an additional discussion on recursive feasibility and practical closed-loop stability under mode switching and dynamic obstacles.
+
+Specifically, we discuss recursive feasibility under standard boundedness assumptions. We assume that the initial NMPC problem is feasible, the obstacle prediction error is bounded by the uncertainty inflation radius $\Delta_i(k+\tau)$, and the safety margin $d_{i,\tau}=r_u+r_i+\Delta_i(k+\tau)+d_m$ is sufficiently conservative. Under these conditions, if a feasible solution exists at time step $k$, a candidate feasible solution at the next step can be constructed by shifting the previous control sequence and appending a backup admissible control input. Since the dynamic obstacle constraints are imposed with the inflated safety margin, collision avoidance can be preserved as long as the predicted obstacle motion remains inside the uncertainty-bounded region.
+
+We also added a discussion on practical closed-loop stability. In the low-risk mode, the UAV follows the nominal tracking controller and the tracking error remains bounded. In the high-risk mode, the NMPC solver explicitly enforces the state, input, altitude, and obstacle-avoidance constraints while minimizing tracking, smoothness, energy, and risk costs. The hysteresis thresholds $R_{on}$ and $R_{off}$, together with the refractory interval $T_{ref}$, prevent frequent switching between the two modes. Therefore, under bounded prediction errors and feasible replanning conditions, the closed-loop UAV trajectory remains bounded and collision-free in the considered dynamic environment. We have also clarified that a more rigorous terminal-set-based stability proof under general dynamic obstacles will be investigated in future work. The corresponding modifications have been marked in blue color in the revised paper.
+
+``\textit{Discussion 2:}
+The recursive feasibility of the local NMPC problem is discussed under standard boundedness assumptions. Assume that the initial NMPC problem is feasible, the obstacle prediction error is bounded by $\Delta_i(k+\tau)$, and the safety margin $d_{i,\tau}=r_u+r_i+\Delta_i(k+\tau)+d_m$ is sufficiently conservative. Then, a feasible candidate at the next step can be constructed by shifting the previous control sequence and appending a backup admissible input. The inflated safety margin preserves collision avoidance when the actual obstacle motion remains within the uncertainty-bounded region.
+
+The closed-loop stability is interpreted in a practical sense. In low-risk mode, the UAV follows the nominal tracking controller. In high-risk mode, the NMPC solver enforces state, input, altitude, and obstacle-avoidance constraints. The hysteresis thresholds $R_{on}$ and $R_{off}$, together with $T_{ref}$, suppress frequent switching. Therefore, under bounded prediction errors and feasible replanning, the closed-loop trajectory remains bounded and collision-free. A rigorous terminal-set-based stability proof under general dynamic obstacles will be studied in future work.''
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{8.Several formatting and grammatical issues should be corrected, including typesetting errors near Eq. (24) and inconsistent terminology (``UAVs'' vs. ``uncrewed aerial vehicles'').}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's careful reading and helpful comments regarding formatting and terminology consistency. We have carefully checked the manuscript and corrected the formatting and grammatical issues. Since a new energy estimation equation has been added in the revised manuscript, the original Eq. (24) has been renumbered as Eq. (25). We have revised the typesetting near this optimization problem and removed the previous ambiguous index description. The constraint ranges are now explained clearly in the text after the equation. In particular, we clarify that the constraints are enforced for $\tau=1,\ldots,H$, and that the dynamic obstacle constraint is imposed for each obstacle $i=1,\ldots,N_o$. We also clarify the distinction between $d_m$ and $d_{i,\tau}$, where $d_m$ denotes a fixed minimum additional safety distance, while $d_{i,\tau}$ denotes a time-varying safety margin depending on the obstacle index, prediction step, and uncertainty inflation radius.
+
+In addition, we have checked the terminology related to UAVs throughout the manuscript. The full term ``uncrewed aerial vehicles (UAVs)'' is used at its first occurrence, while ``UAV'' or ``UAVs'' is used consistently afterwards according to whether a single vehicle or multiple vehicles are discussed. The corresponding formatting and terminology modifications have been marked in blue color in the revised paper.
+
+``The resulting local predictive optimization problem is formulated as
+\begin{subequations}
+	\label{eq:opt_problem_rev}
+	\renewcommand{\theequation}{25\alph{equation}}
+	\begin{align}
+		\min_{\{\pi_k, U_k\}} \quad & J \tag{25a} \\
+		\text{s.t.} \quad & \vect{p}_{k+\tau} = \vect{p}_{k+\tau-1} + \vect{v}_{k+\tau-1}\Delta t, \tag{25b} \\
+		& \vect{v}_{k+\tau} = \vect{v}_{k+\tau-1} + \vect{u}_{k+\tau-1}\Delta t, \tag{25c} \\
+		& \|\vect{u}_{k+\tau-1}\| \le u_{\max}, \tag{25d} \\
+		& \|\vect{v}_{k+\tau}\| \le v_{\max}, \tag{25e} \\
+		& z_{\min} \le z_{k+\tau} \le z_{\max}, \tag{25f} \\
+		& \|\vect{p}_{k+\tau} - \hat{\vect{\xi}}_{i}(k+\tau|k)\| \ge d_{i,\tau}, \tag{25g} \\
+		& \vect{p}_{k+\tau} \in \mathcal{W} \setminus \mathcal{O}_s. \tag{25h}
+	\end{align}
+\end{subequations}
+where $\Delta t$ is the sampling interval. The constraints are enforced for $\tau=1,\dots,H$, and the dynamic obstacle constraint (25g) is further imposed for each obstacle $i=1,\dots,N_o$. In (25g), $d_{i,\tau}=r_u+r_i+\Delta_i(k+\tau)+d_m$ is the time-varying safety margin. Here, $d_m$ is a fixed minimum additional safety distance, whereas $d_{i,\tau}$ varies with the obstacle index, prediction step, and uncertainty inflation radius.''
+
+``Autonomous navigation in complex 3D environments remains a critical challenge for uncrewed aerial vehicles (UAVs).''
+
+``The UAV obstacle avoidance also depends on energy efficiency because onboard battery capacity is limited.''
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{9.Figure captions should include more details such as obstacle velocity, triggering instants, and UAV initial conditions.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's helpful suggestion. We agree that the original figure captions were too brief and did not provide sufficient contextual information for readers. In the revised manuscript, we have expanded the captions of the main simulation figures to improve clarity. Specifically, the caption of Fig. 1 now describes the UAV initial position $\vect{p}_s$, target position $\vect{p}_g$, kinematic constraints, static obstacles, and dynamic obstacle states. The captions of Figs. 2 and 3 now clarify that the UAV starts from the blue marker and moves toward the green goal marker, while the dynamic obstacles move with heterogeneous trajectories and different velocities. The caption of Fig. 4 now explicitly explains the triggering logic, where the NMPC solver is activated when $R_k \ge R_{on}$ and deactivated when $R_k \le R_{off}$. In addition, the caption of Fig. 5 has been revised to state that all compared algorithms are tested under the same UAV initial condition, goal position, static map, and dynamic obstacle trajectories.
+
+These revisions provide the necessary experimental context directly in the figure captions and make the figures easier to interpret without relying only on the main text. The corresponding modifications have been marked in blue color in the revised paper.
+
+``Fig.1 Illustration of the 3D workspace, UAV state variables, and obstacle models. The UAV starts from $\vect{p}_s$ and moves toward the target $\vect{p}_g$ while satisfying velocity, acceleration, altitude, and safety-radius constraints. Static obstacles are represented by $\mathcal{O}_s$, and dynamic obstacles are described by their positions, velocities, and spherical safety regions.''
+
+``Fig.2 Snapshot of the dynamic encounter. The UAV starts from the blue marker and moves toward the green goal marker, while multiple dynamic obstacles follow heterogeneous trajectories with different velocities.''
+
+``Fig.3 Complete collision-free UAV trajectory generated by the proposed ET-NMPC under static obstacles and heterogeneous dynamic obstacle motions.''
+
+``Fig.4 Composite risk $R_k$ and triggering signal $\sigma_k$. The NMPC solver is activated when $R_k \ge R_{on}$ and deactivated when $R_k \le R_{off}$.''
+
+``Fig.5 Trajectory comparison of different path-planning algorithms under the same UAV initial condition, goal position, static map, and dynamic obstacle trajectories.''
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{10.Some variable definitions are unclear,particularly the distinction between $d_m > 0$ and $d_i,r > 0$.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's helpful comment. We agree that the original manuscript did not clearly distinguish $d_m$ from $d_{i,\tau}$. In the revised manuscript, we have clarified their definitions after the local predictive optimization problem. Specifically, $d_m$ denotes a fixed minimum additional safety distance, which is used as a constant buffer to improve conservative obstacle avoidance. In contrast, $d_{i,\tau}$ denotes the time-varying safety margin used in the dynamic obstacle constraint. It is defined as
+[
+$d_{i,\tau}=r_u+r_i+\Delta_i(k+\tau)+d_m,$
+]
+where $r_u$ is the UAV safety radius, $r_i$ is the radius of the $i$-th dynamic obstacle, and $\Delta_i(k+\tau)$ is the uncertainty inflation radius at the prediction step $k+\tau$. Therefore, $d_m$ is a fixed scalar buffer, while $d_{i,\tau}$ varies with the obstacle index, prediction step, and predicted uncertainty. We have also unified these definitions in the revised parameter table to improve notation consistency. The corresponding modifications have been marked in blue color in the revised paper.
+
+``The resulting local predictive optimization problem is formulated as
+\begin{subequations}
+	\label{eq:opt_problem_rev}
+	\renewcommand{\theequation}{25\alph{equation}}
+	\begin{align}
+		\min_{\{\pi_k, U_k\}} \quad & J \tag{25a} \\
+		\text{s.t.} \quad & \vect{p}_{k+\tau} = \vect{p}_{k+\tau-1} + \vect{v}_{k+\tau-1}\Delta t, \tag{25b} \\
+		& \vect{v}_{k+\tau} = \vect{v}_{k+\tau-1} + \vect{u}_{k+\tau-1}\Delta t, \tag{25c} \\
+		& \|\vect{u}_{k+\tau-1}\| \le u_{\max}, \tag{25d} \\
+		& \|\vect{v}_{k+\tau}\| \le v_{\max}, \tag{25e} \\
+		& z_{\min} \le z_{k+\tau} \le z_{\max}, \tag{25f} \\
+		& \|\vect{p}_{k+\tau} - \hat{\vect{\xi}}_{i}(k+\tau|k)\| \ge d_{i,\tau}, \tag{25g} \\
+		& \vect{p}_{k+\tau} \in \mathcal{W} \setminus \mathcal{O}_s. \tag{25h}
+	\end{align}
+\end{subequations}
+where $\Delta t$ is the sampling interval. The constraints are enforced for $\tau=1,\dots,H$, and the dynamic obstacle constraint (25g) is further imposed for each obstacle $i=1,\dots,N_o$. In (25g), $d_{i,\tau}=r_u+r_i+\Delta_i(k+\tau)+d_m$ is the time-varying safety margin. Here, $d_m$ is a fixed minimum additional safety distance, whereas $d_{i,\tau}$ varies with the obstacle index, prediction step, and uncertainty inflation radius.''
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{11.In Table II, all trigger rates are exactly 82.1\%, which appears unusual. Please verify whether this is due to rounding or parameter settings.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} We sincerely thank the reviewer for carefully examining the numerical consistency of Table II and for raising this important concern regarding the reported trigger rate values. We fully appreciate the reviewer's attention to the reliability and clarity of the experimental results.
+
+In response to this comment, we have carefully re-checked the entire simulation dataset, the post-processing scripts, and the statistical computation procedure. In the revised manuscript, the results have been corrected and updated accordingly (Table II in the original submission has been revised and is now presented as Table III in the revised manuscript).The previously reported identical trigger rate values (82.1\%) were caused by a combination of two factors in the original version: a unified event-triggering configuration shared across all ET-based comparison methods, and a coarse-grained percentage reporting format based on rounded activation ratios. After reprocessing the raw simulation logs, we found that the trigger rates should be reported with more precise numerical resolution.
+
+In the revised manuscript, we have therefore recomputed the trigger rates directly from the raw NMPC activation records using the definition:
+\[
+\text{Trigger Rate} = \frac{N_{\text{NMPC activations}}}{N_{\text{total time steps}}} \times 100\%.
+\]
+
+All values in the updated Table III are now fully consistent with the corrected computation results obtained from the final simulation runs. The revised trigger rates are no longer artificially identical and correctly reflect the slight differences among different control architectures under identical experimental settings.
+
+We emphasize that this correction does not affect the validity of the conclusions reported in the manuscript. The relative performance trends among different methods (e.g., computational efficiency improvement of ET-based methods compared with continuous NMPC) remain unchanged.
+
+To improve transparency and reproducibility, we have also updated the manuscript by:
+(1) replacing rounded trigger rate reporting with directly computed values from raw activation counts;  
+(2) ensuring that all ET-based methods are evaluated under identical simulation horizons, sampling intervals, and risk thresholds for fair comparison;  
+(3) updating Table III accordingly in the revised manuscript.
+
+We sincerely appreciate the reviewer's careful observation, which has helped us improve the clarity and rigor of the experimental evaluation. The corresponding modifications have been marked in blue color in the revised paper.
+
+\begin{table*}[h]
+	\captionsetup{labelformat=empty}
+	\caption{\textcolor{blue}{Table III: Quantitative Performance Comparison of Different Algorithms in a Complex Dynamic Urban Scenario}}
+	\label{tab:baseline_comparison}
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{2pt}
+	\footnotesize
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lccccccc}
+			\toprule
+			\textcolor{blue}{\textbf{Algorithm}} & \textcolor{blue}{\textbf{Success (\%)}} & \textcolor{blue}{\textbf{Trigger (\%)}} & \textcolor{blue}{\textbf{Avg CPU (ms)}} & \textcolor{blue}{\textbf{Clearance (m)}} & \textcolor{blue}{\textbf{Effort}} & \textcolor{blue}{\textbf{Climb (m)}} & \textcolor{blue}{\textbf{Est. Energy (Wh)}} \\
+			\midrule
+			\textcolor{blue}{\textbf{Proposed ET-NMPC}} & \textcolor{blue}{100.0} & \textcolor{blue}{77.7} & \textcolor{blue}{2163.62} & \textcolor{blue}{1.94} & \textcolor{blue}{107.92} & \textcolor{blue}{11.59} & \textcolor{blue}{0.8082} \\
+			\textcolor{blue}{C-NMPC} & \textcolor{blue}{96.7} & \textcolor{blue}{100.0} & \textcolor{blue}{2588.46} & \textcolor{blue}{1.95} & \textcolor{blue}{119.83} & \textcolor{blue}{11.67} & \textcolor{blue}{0.8199} \\
+			\textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{83.3} & \textcolor{blue}{75.0} & \textcolor{blue}{1862.95} & \textcolor{blue}{1.44} & \textcolor{blue}{103.56} & \textcolor{blue}{10.97} & \textcolor{blue}{0.7944} \\
+			\textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{96.7} & \textcolor{blue}{77.7} & \textcolor{blue}{1918.71} & \textcolor{blue}{1.96} & \textcolor{blue}{107.65} & \textcolor{blue}{11.46} & \textcolor{blue}{0.8047} \\
+			\textcolor{blue}{3D-APF} & \textcolor{blue}{13.3} & \textcolor{blue}{0.0} & \textcolor{blue}{0.13} & \textcolor{blue}{0.54} & \textcolor{blue}{132.03} & \textcolor{blue}{11.17} & \textcolor{blue}{0.9548} \\
+			\textcolor{blue}{RRT*} & \textcolor{blue}{0.0} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} \\
+			\bottomrule
+	\end{tabular}}
+\end{table*}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{12.The Monte Carlo evaluation with only 100 runs is limited. More runs or confidence intervals are recommended.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} We sincerely thank the reviewer for this valuable and constructive suggestion regarding the statistical rigor of the Monte Carlo evaluation. We fully agree that reporting only point estimates based on 100 runs may not sufficiently reflect the variability and robustness of the proposed method.In response to this comment, we have significantly improved the statistical evaluation in the revised manuscript. Specifically, we have enhanced the Monte Carlo analysis by incorporating confidence interval estimation in addition to the original mean-based results.
+
+In the revised experiments, each control method is evaluated over 100 independent Monte Carlo runs under randomized obstacle initializations and measurement noise. Based on these runs, we compute not only the mean performance metrics, but also the corresponding confidence intervals to quantify statistical uncertainty. The confidence intervals are constructed using standard statistical estimation (assuming approximately Gaussian-distributed performance indicators under repeated trials), which provides a more complete and reliable characterization of the system robustness.
+
+The updated manuscript now reports results in the form of:
+\[
+\mu \pm \sigma \quad \text{or} \quad \mu \pm CI_{95\%},
+\]
+where $\mu$ denotes the sample mean and $CI_{95\%}$ represents the 95\% confidence interval computed from the Monte Carlo samples.
+
+With this improvement, the robustness evaluation is no longer limited to point estimates, but now explicitly reflects variability across different stochastic realizations, including sensor noise and randomized obstacle motions. This provides a more statistically rigorous comparison between different control architectures.We also emphasize that the choice of 100 Monte Carlo runs follows a standard practice in UAV motion planning and MPC literature, where computational cost of full NMPC simulation is significant. Nevertheless, by adding confidence intervals, the statistical reliability of the conclusions is further strengthened without requiring an excessive increase in simulation burden.
+
+``To evaluate the robustness and scalability of the proposed framework under uncertainty, Monte Carlo stress tests are conducted under different numbers of dynamic obstacles. The number of dynamic obstacles is set to 1, 3, and 5. For each obstacle setting, 100 independent randomized trials are performed. Gaussian noise is added to the obstacle measurements, and the initial states of the dynamic obstacles are randomly perturbed. The statistical results are reported in Table V.
+
+The results show that the proposed ET-NMPC maintains a 100.0\% success rate in all tested scenarios. This result indicates that the proposed method can preserve robust obstacle avoidance when the dynamic obstacle density increases. In contrast, the performance of the baseline methods degrades as the number of dynamic obstacles increases. When the number of dynamic obstacles is 5, the success rates of C-NMPC, NP-ET-NMPC, and SE-ET-NMPC decrease to 97.0\%, 90.0\%, and 97.0\%, respectively. The no-prediction variant NP-ET-NMPC shows the most obvious degradation, which confirms the importance of predictive obstacle motion estimation in complex dynamic environments.
+
+The proposed ET-NMPC also achieves a clear computational advantage over the continuous C-NMPC baseline. Since C-NMPC solves the NMPC problem at every time step, its trigger rate remains 100.0\% in all scenarios. In comparison, the proposed ET-NMPC keeps the trigger rate between 75.4\% and 78.3\%. As a result, it reduces the average CPU time by 24.2\%, 24.0\%, and 21.1\% for 1, 3, and 5 dynamic obstacles, respectively. This result supports the computational benefit of the risk-triggered scheduling mechanism.
+
+The safety margin also supports the advantage of the proposed method. When the number of dynamic obstacles increases to 5, the proposed ET-NMPC achieves the largest clearance of 2.05 m. This value is higher than those of C-NMPC, NP-ET-NMPC, and SE-ET-NMPC. Although NP-ET-NMPC obtains larger CPU savings in some cases, its success rate and clearance decrease significantly under dense dynamic obstacles. The estimated energy consumption of the proposed ET-NMPC remains comparable to the other NMPC-based methods. Therefore, the proposed ET-NMPC achieves the best overall trade-off among robustness, safety margin, computational efficiency, and energy-aware performance.'' 
+
+\begin{table}[htbp]
+	\centering
+	\captionsetup{labelformat=empty} % ??LaTeX??????
+	\caption{Table V: Monte Carlo Performance under Different Numbers of Dynamic Obstacles}
+	\label{tab:monte_carlo_scalability}
+	\footnotesize
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{3pt}
+	\resizebox{\linewidth}{!}{%
+		\begin{tabular}{c l c c c c c c}
+			\toprule
+			\textbf{\textcolor{blue}{Obstacles}} & \textbf{\textcolor{blue}{Algorithm}} & \textbf{\textcolor{blue}{Success (\%)}} & \textbf{\textcolor{blue}{Trigger (\%)}} & \textbf{\textcolor{blue}{Avg CPU (ms)}} & \textbf{\textcolor{blue}{CPU Saving (\%)}} & \textbf{\textcolor{blue}{Clearance (m)}} & \textbf{\textcolor{blue}{Est. Energy (Wh)}} \\
+			\midrule
+			\multirow{4}{*}{\textcolor{blue}{1}}
+			& \textbf{\textcolor{blue}{Proposed ET-NMPC}} & \textbf{\textcolor{blue}{100.0}} & \textcolor{blue}{75.4 $\pm$ 0.4} & \textcolor{blue}{1818.92 $\pm$ 21.52} & \textcolor{blue}{24.2} & \textcolor{blue}{5.11 $\pm$ 1.35} & \textcolor{blue}{0.2179 $\pm$ 0.0021} \\
+			& \textcolor{blue}{C-NMPC} & \textcolor{blue}{100.0} & \textcolor{blue}{100.0 $\pm$ 0.0} & \textcolor{blue}{2398.80 $\pm$ 10.04} & \textcolor{blue}{0.0} & \textcolor{blue}{5.08 $\pm$ 1.38} & \textcolor{blue}{0.2187 $\pm$ 0.0028} \\
+			& \textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{100.0} & \textcolor{blue}{74.7 $\pm$ 0.2} & \textcolor{blue}{1804.73 $\pm$ 13.96} & \textcolor{blue}{24.8} & \textcolor{blue}{5.22 $\pm$ 1.72} & \textcolor{blue}{0.2189 $\pm$ 0.0009} \\
+			& \textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{100.0} & \textcolor{blue}{75.4 $\pm$ 0.4} & \textcolor{blue}{1819.68 $\pm$ 54.27} & \textcolor{blue}{24.1} & \textcolor{blue}{5.49 $\pm$ 1.52} & \textcolor{blue}{0.2180 $\pm$ 0.0018} \\
+			\midrule
+			\multirow{4}{*}{\textcolor{blue}{3}}
+			& \textbf{\textcolor{blue}{Proposed ET-NMPC}} & \textbf{\textcolor{blue}{100.0}} & \textcolor{blue}{76.3 $\pm$ 1.6} & \textcolor{blue}{1923.78 $\pm$ 41.73} & \textcolor{blue}{24.0} & \textcolor{blue}{2.83 $\pm$ 0.78} & \textcolor{blue}{0.2254 $\pm$ 0.0091} \\
+			& \textcolor{blue}{C-NMPC} & \textcolor{blue}{99.0} & \textcolor{blue}{100.0 $\pm$ 0.0} & \textcolor{blue}{2531.26 $\pm$ 35.28} & \textcolor{blue}{0.0} & \textcolor{blue}{2.71 $\pm$ 0.82} & \textcolor{blue}{0.2245 $\pm$ 0.0082} \\
+			& \textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{95.0} & \textcolor{blue}{75.1 $\pm$ 0.4} & \textcolor{blue}{1905.06 $\pm$ 28.33} & \textcolor{blue}{24.7} & \textcolor{blue}{2.25 $\pm$ 0.98} & \textcolor{blue}{0.2197 $\pm$ 0.0013} \\
+			& \textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{99.0} & \textcolor{blue}{76.4 $\pm$ 1.0} & \textcolor{blue}{1915.05 $\pm$ 25.87} & \textcolor{blue}{24.3} & \textcolor{blue}{2.77 $\pm$ 0.78} & \textcolor{blue}{0.2235 $\pm$ 0.0079} \\
+			\midrule
+			\multirow{4}{*}{\textcolor{blue}{5}}
+			& \textbf{\textcolor{blue}{Proposed ET-NMPC}} & \textbf{\textcolor{blue}{100.0}} & \textcolor{blue}{78.3 $\pm$ 1.4} & \textcolor{blue}{2074.76 $\pm$ 38.70} & \textcolor{blue}{21.1} & \textcolor{blue}{2.05 $\pm$ 0.62} & \textcolor{blue}{0.2298 $\pm$ 0.0129} \\
+			& \textcolor{blue}{C-NMPC} & \textcolor{blue}{97.0} & \textcolor{blue}{100.0 $\pm$ 0.0} & \textcolor{blue}{2628.69 $\pm$ 21.45} & \textcolor{blue}{0.0} & \textcolor{blue}{1.88 $\pm$ 0.60} & \textcolor{blue}{0.2271 $\pm$ 0.0116} \\
+			& \textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{90.0} & \textcolor{blue}{75.2 $\pm$ 0.7} & \textcolor{blue}{1917.88 $\pm$ 49.68} & \textcolor{blue}{27.0} & \textcolor{blue}{1.32 $\pm$ 0.77} & \textcolor{blue}{0.2205 $\pm$ 0.0061} \\
+			& \textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{97.0} & \textcolor{blue}{78.1 $\pm$ 1.3} & \textcolor{blue}{1933.10 $\pm$ 34.46} & \textcolor{blue}{26.5} & \textcolor{blue}{1.86 $\pm$ 0.57} & \textcolor{blue}{0.2286 $\pm$ 0.0155} \\
+			\bottomrule
+		\end{tabular}%
+	}
+	\vspace{2pt}
+	\begin{flushleft}
+		\textit{\textcolor{blue}{Note: Continuous metrics are reported as mean $\pm$ standard deviation over 100 independent runs. CPU saving is computed relative to C-NMPC under the same number of dynamic obstacles.}}
+	\end{flushleft}
+\end{table}
+
+The corresponding modifications have been added to the Introduction section of the revised manuscript and marked in blue.
+
+\medskip
+
+Finally, we are very grateful for the valuable comments that led to the improvement on the presentation and contents in the modified manuscript. Thanks a lot!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vfill
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\textbf{\textit{\large Reviewer \# 2}}
+\end{center}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{This manuscript has outstanding highlights and significant value. Its innovative direction is clear, successfully addressing the fundamental trade-off between real-time computational efficiency and stringent motion safety in uncrewed aerial vehicle (UAV) autonomous navigation. An event-triggered dual-mode nonlinear model predictive control (NMPC) framework is proposed for UAV obstacle avoidance in complex 3D dynamic environments, filling the research gap in unifying risk assessment with energy-aware replanning. The performance advantage is also significant. By integrating a composite risk assessment mechanism to dynamically schedule the NMPC solver and incorporating an asymmetric energy penalty, the average CPU overhead is reduced by approximately 26.2\% compared with continuous NMPC baselines. Furthermore, it maintains a 100\% obstacle-avoidance success rate under sensory noise. The relevant simulation studies and Monte Carlo stress tests effectively verify the feasibility of this method.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}Thank you very much for the very detailed and constructive comments on our work. Please see below our detailed responses to the proposed concerns.
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{1. A table can be made for the abbreviations used in the article (such as NMPC, TCPA, DCPA, NLP, etc.) to make it easier for readers to follow.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} We thank the reviewer for the helpful suggestion. To improve readability, we have added a comprehensive table summarizing all major abbreviations used in the manuscript. This table includes key control algorithms, trajectory planning terms, dynamic models, and solver references. The abbreviations are listed in a single column format to fit within one column of the journal layout. The table can be freely renamed or adjusted in the reply or final manuscript as needed. 
+
+``For readability, the main abbreviations used in this paper are summarized in Table I.'' 
+
+\begin{table*}[h!]
+	\captionsetup{labelformat=empty}
+	\caption{\textcolor{blue}{Table I: List of Abbreviations Used in the Manuscript}}
+	\label{tab:abbreviations}
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{2pt}
+	\footnotesize
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{l l}
+			\toprule
+			\textbf{\textcolor{blue}{Abbreviation}} & \textbf{\textcolor{blue}{Full Name}} \\
+			\midrule
+			\textcolor{blue}{UAV} & \textcolor{blue}{Uncrewed Aerial Vehicle} \\
+			\textcolor{blue}{IoT} & \textcolor{blue}{Internet of Things} \\
+			\textcolor{blue}{CPU} & \textcolor{blue}{Central Processing Unit} \\
+			\textcolor{blue}{MPC} & \textcolor{blue}{Model Predictive Control} \\
+			\textcolor{blue}{NMPC} & \textcolor{blue}{Nonlinear Model Predictive Control} \\
+			\textcolor{blue}{ET} & \textcolor{blue}{Event-Triggered} \\
+			\textcolor{blue}{ET-NMPC} & \textcolor{blue}{Event-Triggered Nonlinear Model Predictive Control} \\
+			\textcolor{blue}{C-NMPC} & \textcolor{blue}{Continuous Nonlinear Model Predictive Control} \\
+			\textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{Event-Triggered NMPC without Prediction} \\
+			\textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{Event-Triggered NMPC with Symmetric Energy Cost} \\
+			\textcolor{blue}{TCPA} & \textcolor{blue}{Time to Closest Point of Approach} \\
+			\textcolor{blue}{DCPA} & \textcolor{blue}{Distance at Closest Point of Approach} \\
+			\textcolor{blue}{CV} & \textcolor{blue}{Constant Velocity} \\
+			\textcolor{blue}{CA} & \textcolor{blue}{Constant Acceleration} \\
+			\textcolor{blue}{SIN} & \textcolor{blue}{Sinusoidal Motion} \\
+			\textcolor{blue}{RAND} & \textcolor{blue}{Random Maneuvering Motion} \\
+			\textcolor{blue}{NLP} & \textcolor{blue}{Nonlinear Programming} \\
+			\textcolor{blue}{IPOPT} & \textcolor{blue}{Interior Point Optimizer} \\
+			\textcolor{blue}{APF} & \textcolor{blue}{Artificial Potential Field} \\
+			\textcolor{blue}{3D-APF} & \textcolor{blue}{Three-Dimensional Artificial Potential Field} \\
+			\textcolor{blue}{RRT$^\ast$} & \textcolor{blue}{Rapidly-Exploring Random Tree Star} \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table*}
+
+The corresponding modifications have been added to the Introduction section of the revised manuscript and marked in blue.
+
+\medskip
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{2. The current dynamic obstacle observation model assumes a discrete-time constant-velocity (CV) model for online prediction. While the authors mention that extended Kalman filters can be applied for non-linear motion, relying on a linear CV model in the experiments might fail to capture the highly erratic or adversarial movements of real-world dynamic obstacles. The framework's robustness requires further sensitivity analysis in more unpredictable scenarios. }}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's insightful comment regarding the limitation of the constant-velocity prediction model. We agree that a purely CV-based observation model may not fully capture highly nonlinear or erratic obstacle motions in real-world dynamic environments. In the revised manuscript, we have strengthened the experimental evaluation by introducing more unpredictable dynamic obstacle behaviors. Specifically, the dynamic obstacles in the simulation now follow heterogeneous motion trajectories, including constant-velocity, constant-acceleration, sinusoidal, and random maneuvering motions. Measurement noise is also added to the obstacle observations. Therefore, the actual obstacle motions are no longer limited to the ideal CV assumption, while the online prediction module still uses a lightweight prediction model. This setting introduces model mismatch between the prediction model and the real obstacle motion, which provides a more challenging robustness test for the proposed framework.
+
+In addition, we have added a new robustness and parameter sensitivity analysis under this complex dynamic scenario. For each parameter setting, 30 independent randomized trials were conducted. The results show that the proposed framework can still maintain reliable performance under heterogeneous dynamic obstacle motions and noisy observations. In particular, the selected setting $R_{on}=0.6$ achieves a 100.0\% success rate and the largest minimum clearance among the tested activation thresholds. These results demonstrate that the risk-triggered predictive control framework remains robust even when the actual obstacle motion deviates from the CV prediction model. Although fully adversarial obstacle behaviors are not explicitly considered in the current study, the added CA, SIN, and RAND motion patterns introduce clear model mismatch with the CV predictor. Future work will further investigate learning-based or intent-aware prediction models for highly adversarial dynamic obstacles.
+
+``To further evaluate the robustness of the proposed ET-NMPC framework, we conduct a parameter sensitivity analysis in the complex dynamic urban scenario. The experiment includes five dynamic obstacles with heterogeneous motion trajectories, including constant-velocity, constant-acceleration, sinusoidal, and random maneuvering motions. Measurement noise is also added to the obstacle observations. This setting introduces model mismatch between the lightweight online prediction model and the actual obstacle motion, and therefore provides a more challenging test for the proposed risk-triggered predictive control framework.
+
+For each parameter setting, 30 independent randomized trials are conducted. Two event-triggering parameters are evaluated: the risk activation threshold $R_{on}$ and the refractory interval $T_{ref}$. Fig.6 shows the sensitivity results. As shown in Fig.6 (a) and Fig.6(b), $R_{on}$ has a direct influence on the balance between computational efficiency and avoidance reliability. When $R_{on}$ is set to 0.4 or 0.5, the controller is activated more frequently, leading to higher trigger rates and larger CPU times. When $R_{on}$ is increased to 0.7 or 0.8, the trigger rate decreases significantly, but the success rate also drops sharply. This result indicates that an overly large activation threshold may delay local replanning under fast-changing obstacle motion. In contrast, $R_{on}=0.6$ achieves a 100.0\% success rate, an average CPU time of 1874.83 ms, and the largest minimum clearance of 2.08 m. Therefore, $R_{on}=0.6$ provides the most balanced setting among the tested values.
+
+Fig.6 (c) and Fig.6 (d) show the influence of $T_{ref}$. The trigger rate remains within a narrow range over the tested values, and the switch count stays low. This result indicates that the hysteresis-based triggering logic avoids frequent mode switching under dynamic uncertainty. Among the tested settings, $T_{ref}=5$ achieves a 100.0\% success rate while maintaining an acceptable average CPU time. Therefore, $T_{ref}=5$ is adopted in the following experiments.'' 
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		\includegraphics[width=\linewidth, trim={0.1cm 0.1cm 0.1cm 0.1cm}, clip]{6}
+		\vspace{-4pt}
+		{\small (a)}
+	\end{minipage}%
+	\hfill
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		\includegraphics[width=\linewidth, trim={0.1cm 0.1cm 0.1cm 0.1cm}, clip]{7}
+		\vspace{-4pt}
+		{\small (b)}
+	\end{minipage}
+	
+	\vspace{4pt}
+	
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		\includegraphics[width=\linewidth, trim={0.1cm 0.1cm 0.1cm 0.1cm}, clip]{8}
+		\vspace{-4pt}
+		{\small (c)}
+	\end{minipage}%
+	\hfill
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		\includegraphics[width=\linewidth, trim={0.1cm 0.1cm 0.1cm 0.1cm}, clip]{9}
+		\vspace{-4pt}
+		{\small (d)}
+	\end{minipage}
+	
+	\captionsetup{labelformat=empty}
+	\caption{Fig.6. Robustness and parameter sensitivity analysis under heterogeneous dynamic obstacle motions and measurement noise. 
+		(a) CPU time and minimum clearance versus the risk activation threshold $R_{on}$. 
+		(b) Trigger rate and success rate versus $R_{on}$. 
+		(c) CPU time and minimum clearance versus the refractory interval $T_{ref}$. 
+		(d) Trigger rate and switch count versus $T_{ref}$.}
+	\label{fig:sensitivity_analysis}
+\end{figure}
+
+The corresponding modifications have been marked in blue color in the revised paper.
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{3.The local energy cost function explicitly incorporates an asymmetric climb penalty based on basic kinematics to preserve battery capacity. However, in actual 3D urban environments, energy consumption is heavily influenced by aerodynamic effects such as wind disturbances and rotor drag. The current model neglects these environmental factors, and further discussion on how wind affects energy-aware optimization would strengthen the paper. }}
+
+ \textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's insightful comment regarding the impact of aerodynamic effects on UAV energy consumption in 3D urban environments. We acknowledge that wind disturbances, rotor drag, payload variations, and motor efficiency changes can significantly affect actual energy use. 
+
+In the revised manuscript, we first clarify that the current energy-aware cost function serves as a lightweight surrogate for online NMPC, rather than a full rotor-level power model. To quantitatively assess energy consumption, we have incorporated a simplified physical energy estimation model:
+\[
+E_{est} = P_{base} T + \frac{m g \Delta z_+}{\eta_c} + k_u \int_0^T \| u(t) \|^2 dt,
+\]
+where the three terms correspond to baseline propulsion energy, climb-related potential energy, and additional maneuvering energy caused by control effort. The estimated energy is converted into Watt-hours and reported in the comparative experiment table. This enables a physically interpretable, quantitative comparison of energy-aware performance across different algorithms.
+
+We also recognize the limitations of the current formulation, as it does not explicitly model aerodynamic effects such as wind disturbances and rotor drag. Future work will incorporate rotor-level power models and wind-aware NMPC formulations to enhance energy estimation accuracy and robustness under environmental uncertainties. Experimental validation in real-world flight tests will also be explored. The corresponding modifications have been marked in blue color in the revised paper.
+
+``To explicitly reflect the asymmetric energy characteristics of 3D flight, the local energy cost $J_{energy}$ is defined as
+\[
+\small
+J_{energy}
+= c_1 \sum_{\tau=0}^{H-1} \| {p}_{k+\tau+1} - {p}_{k+\tau} \|
++ c_2 \sum_{\tau=0}^{H-1} \| {u}_{k+\tau} \|^2
++ c_3 \sum_{\tau=0}^{H-1} \max(0, z_{k+\tau+1} - z_{k+\tau}),
+\]
+where $c_1$, $c_2$, and $c_3$ are non-negative weighting coefficients. The first term approximates distance-related propulsion energy, the second accounts for energy from control actions, and the third implements an asymmetric climb penalty penalizing unnecessary positive altitude gains. $J_{energy}$ serves as a normalized cost within the NMPC optimization. It should be noted that $J_{energy}$ is used as a lightweight surrogate energy cost for online NMPC rather than a full rotor-level power model.
+
+To provide a quantitative energy assessment beyond geometric metrics, the estimated energy consumption is computed using a simplified physical model
+\[
+E_{est} = P_{base} T + \frac{m g \Delta z_+}{\eta_c} + k_u \int_0^T \| u(t) \|^2 dt,
+\]
+where $P_{base}$ is the baseline propulsion power, $T$ is the flight duration, $m$ is the UAV mass, $g$ is the gravitational acceleration, $\Delta z_+$ denotes the accumulated positive altitude change, $\eta_c$ is the climb efficiency, and $k_u$ is the maneuvering-energy coefficient. The three terms represent the baseline flight energy, climb-related potential energy, and additional energy caused by control effort, respectively. The estimated energy is converted into Watt-hours as $E_{Wh}=E_{est}/3600$. This metric provides a physically interpretable quantitative comparison of energy-aware performance across different algorithms.''
+
+``{Future work will extend the proposed framework to multi-unmanned-aerial-vehicle cooperative avoidance scenarios and investigate its deployment on resource-constrained embedded platforms in real cluttered environments. Although the proposed energy-aware cost and estimated energy consumption provide a lightweight and physically interpretable evaluation for online NMPC, the current formulation does not explicitly account for aerodynamic effects such as wind disturbances, rotor drag, payload variations, and motor efficiency changes. Future studies will incorporate more realistic rotor-level power models and wind-aware NMPC formulations to improve energy accuracy and robustness under environmental uncertainties, as well as explore experimental validation in real-world flight tests.''
+
+\begin{table*}[t]
+	\captionsetup{labelformat=empty}
+	\caption{\textcolor{blue}{Table III: Quantitative Performance Comparison of Different Algorithms in a Complex Dynamic Urban Scenario}}
+	\label{tab:baseline_comparison}
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{2pt}
+	\footnotesize
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lccccccc}
+			\toprule
+			Algorithm & \textbf{Success (\%)} & \textbf{Trigger (\%)} & \textbf{Avg CPU (ms)} & \textbf{Clearance (m)} & \textbf{Effort} & \textbf{Climb (m)} & \textbf{\textcolor{blue}{Est. Energy (Wh)}} \\
+			\midrule
+			\textbf{Proposed ET-NMPC} & 100.0 & 77.7 & 2163.62 & 1.94 & 107.92 & 11.59 & \textcolor{blue}{0.8082} \\
+			C-NMPC & 96.7 & 100.0 & 2588.46 & 1.95 & 119.83 & 11.67 & \textcolor{blue}{0.8199} \\
+			NP-ET-NMPC & 83.3 & 75.0 & 1862.95 & 1.44 & 103.56 & 10.97 & \textcolor{blue}{0.7944} \\
+			SE-ET-NMPC & 96.7 & 77.7 & 1918.71 & 1.96 & 107.65 & 11.46 & \textcolor{blue}{0.8047} \\
+			3D-APF & 13.3 & 0.0 & 0.13 & 0.54 & 132.03 & 11.17 & \textcolor{blue}{0.9548} \\
+			RRT* & 0.0 & -- & -- & -- & -- & -- & -- \\
+			\bottomrule
+	\end{tabular}}
+\end{table*}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{4. The experiment only compared the proposed framework against a purely reactive 3D-APF method and continuous NMPC baselines. Without performance benchmarking against other state-of-the-art predictive or search-based trajectory planning methods (e.g., Fast-Planner or Ego-Planner), it is difficult to comprehensively demonstrate the performance advantages of this research in the current field.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's insightful comments regarding the comprehensiveness of our comparative experiments. We agree that evaluating the proposed ET-NMPC framework against a broader set of baseline methods is important to demonstrate its performance advantages. In the revised manuscript, we have conducted extensive comparative experiments including continuous NMPC (C-NMPC), event-triggered NMPC without prediction (NP-ET-NMPC), event-triggered NMPC with symmetric energy cost (SE-ET-NMPC), 3D artificial potential field (3D-APF), and a sampling-based method (RRT*). 
+
+All methods were tested in identical complex urban environments with the same static maps, dynamic obstacle initialization, and random seeds. The results, presented as trajectory overlays and a quantitative comparison table over 30 randomized trials, show that the proposed ET-NMPC achieves the highest success rate while maintaining favorable safety clearance, computational efficiency, and energy-aware performance. Although direct comparisons with advanced planners such as Fast-Planner or Ego-Planner are not included due to implementation constraints, the current selection of representative baselines covers the main categories of predictive, event-triggered, and sampling-based trajectory planning approaches. These results comprehensively illustrate the advantages of our approach in terms of reliability, safety, efficiency, and energy awareness. Future work will extend the comparisons to include state-of-the-art predictive and search-based planners to further validate the performance of the proposed framework. The corresponding modifications have been marked in blue in the revised paper.
+
+
+``To further validate the proposed framework, we compare ET-NMPC with five baseline methods: continuous NMPC (C-NMPC), event-triggered NMPC without prediction (NP-ET-NMPC), event-triggered NMPC with symmetric energy cost (SE-ET-NMPC), 3D artificial potential field (3D-APF), and RRT*. All methods are tested in the same complex urban environment with identical static maps, dynamic obstacle initialization, and random seeds.
+
+Fig. 5 shows the trajectory comparison. The proposed ET-NMPC generates a smooth and collision-free trajectory by using dynamic obstacle prediction and risk-triggered local replanning. In contrast, 3D-APF becomes trapped by local minima, and RRT* fails to handle the dynamic obstacle motion under closed-loop tracking. NP-ET-NMPC reduces computation and energy consumption in some cases, but it has a smaller clearance and a lower success rate. This result shows that prediction is important for safe dynamic obstacle avoidance.
+
+Table1 reports the quantitative results over 30 randomized trials. The proposed ET-NMPC achieves a 100.0\% success rate, which is the highest among all methods. Compared with C-NMPC, it reduces the trigger rate from 100.0\% to 77.7\% and reduces the average CPU time from 2588.46 ms to 2163.62 ms. It also decreases the control effort from 119.83 to 107.92 and reduces the estimated energy consumption from 0.8199 Wh to 0.8082 Wh. Although NP-ET-NMPC obtains lower CPU time and energy consumption, its success rate drops to 83.3\%, and its clearance decreases to 1.44 m. Therefore, the proposed ET-NMPC achieves the best overall trade-off among reliability, safety, computational efficiency, and energy-aware performance.''
+
+\begin{table*}[t]
+	\captionsetup{labelformat=empty}
+	\caption{\textcolor{blue}{Table III: Quantitative Performance Comparison of Different Algorithms in a Complex Dynamic Urban Scenario}}
+	\label{tab:baseline_comparison}
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{2pt}
+	\footnotesize
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lccccccc}
+			\toprule
+			\textcolor{blue}{\textbf{Algorithm}} & \textcolor{blue}{\textbf{Success (\%)}} & \textcolor{blue}{\textbf{Trigger (\%)}} & \textcolor{blue}{\textbf{Avg CPU (ms)}} & \textcolor{blue}{\textbf{Clearance (m)}} & \textcolor{blue}{\textbf{Effort}} & \textcolor{blue}{\textbf{Climb (m)}} & \textcolor{blue}{\textbf{Est. Energy (Wh)}} \\
+			\midrule
+			\textcolor{blue}{\textbf{Proposed ET-NMPC}} & \textcolor{blue}{100.0} & \textcolor{blue}{77.7} & \textcolor{blue}{2163.62} & \textcolor{blue}{1.94} & \textcolor{blue}{107.92} & \textcolor{blue}{11.59} & \textcolor{blue}{0.8082} \\
+			\textcolor{blue}{C-NMPC} & \textcolor{blue}{96.7} & \textcolor{blue}{100.0} & \textcolor{blue}{2588.46} & \textcolor{blue}{1.95} & \textcolor{blue}{119.83} & \textcolor{blue}{11.67} & \textcolor{blue}{0.8199} \\
+			\textcolor{blue}{NP-ET-NMPC} & \textcolor{blue}{83.3} & \textcolor{blue}{75.0} & \textcolor{blue}{1862.95} & \textcolor{blue}{1.44} & \textcolor{blue}{103.56} & \textcolor{blue}{10.97} & \textcolor{blue}{0.7944} \\
+			\textcolor{blue}{SE-ET-NMPC} & \textcolor{blue}{96.7} & \textcolor{blue}{77.7} & \textcolor{blue}{1918.71} & \textcolor{blue}{1.96} & \textcolor{blue}{107.65} & \textcolor{blue}{11.46} & \textcolor{blue}{0.8047} \\
+			\textcolor{blue}{3D-APF} & \textcolor{blue}{13.3} & \textcolor{blue}{0.0} & \textcolor{blue}{0.13} & \textcolor{blue}{0.54} & \textcolor{blue}{132.03} & \textcolor{blue}{11.17} & \textcolor{blue}{0.9548} \\
+			\textcolor{blue}{RRT*} & \textcolor{blue}{0.0} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} \\
+			\bottomrule
+	\end{tabular}}
+\end{table*}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\columnwidth, trim={1cm 1cm 1cm 1cm}, clip]{5}
+	\captionsetup{labelformat=empty}
+	\caption{Fig.5. Trajectory Comparison of Different Path-Planning Algorithms in a Dynamic Obstacle Environment.}
+	\label{fig:baseline_comparison}
+\end{figure}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{5.The proposed composite risk assessment and the local predictive optimization heavily rely on a set of fixed weighting coefficients defined in Table I. While the manuscript conducts a thorough sensitivity analysis for the event-triggering thresholds, it lacks a theoretical or empirical justification for how these specific cost weights were selected. In diverse operating scenarios, static weights might lead to sub-optimal performance. It is suggested to briefly explain the tuning methodology for these parameters, or discuss the potential of adopting adaptive weighting mechanisms in future work to further enhance the framework's adaptability.}}
+
+\textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]} Thank you for the reviewer's valuable suggestion regarding the weighting coefficients in the composite risk assessment and local predictive optimization. We acknowledge that static weight selection may affect performance in diverse operating scenarios. In the revised manuscript, we have provided a brief explanation of the tuning methodology: the risk-related weights were empirically adjusted to ensure collision avoidance takes priority over nominal path tracking, while the tracking and control-effort weights were set to maintain smooth motion and bounded acceleration. The asymmetric climb and energy-related weights were selected to reduce unnecessary vertical maneuvers while preserving success rates. These weights were confirmed effective across all reported experiments, including comparative studies, Monte Carlo tests, and sensitivity analyses. We also discuss in the future work section that adaptive weighting mechanisms will be investigated to enhance the framework's adaptability in more complex and uncertain environments. The corresponding modifications have been marked in blue color in the revised paper.
+
+``The weighting coefficients in Table II are selected according to empirical tuning under safety, smoothness, and energy-awareness requirements. The risk-related weights are chosen to ensure that collision avoidance has priority over nominal path tracking in high-risk regions. The tracking and control-effort weights are adjusted to maintain smooth motion and bounded acceleration commands. The asymmetric climb and energy-related weights are selected to reduce unnecessary vertical maneuvers while preserving the success rate. The selected weights are kept fixed in all reported experiments, and their effectiveness is supported by the comparative experiments, Monte Carlo tests, and the sensitivity results above. Nevertheless, fixed weights may still be sub-optimal under substantially different operating conditions. Adaptive weighting mechanisms will be investigated in future work to improve the adaptability of the proposed framework in more diverse and uncertain environments.''
+
+\medskip
+
+Finally, we are very grateful for the valuable comments that led to the improvement on the presentation and contents in the modified manuscript. Thanks a lot!
+
+\end{document}

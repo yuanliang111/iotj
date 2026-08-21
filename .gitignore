@@ -9,3 +9,17 @@
 *_backup_before_*.tex
 # LaTeX generated PDF
 *.pdf
+
+# LaTeX generated files
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.cb
+*.cb2
+
+# Generated figures
+*.eps
