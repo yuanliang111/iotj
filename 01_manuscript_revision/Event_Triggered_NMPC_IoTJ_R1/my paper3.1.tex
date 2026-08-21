@@ -195,13 +195,13 @@ For obstacles with nonlinear or uncertain motion, extended Kalman filters or loc
 
 \section{Energy-Aware Event-Triggered NMPC Framework} 
 
-The proposed ET-NMPC framework consists of obstacle prediction, composite risk assessment, event-triggered mode switching, local predictive optimization, and receding-horizon execution. The framework activates the NMPC solver only when the predicted collision risk exceeds a prescribed threshold. This design reduces unnecessary optimization calls while preserving proactive obstacle avoidance.
+The proposed ET-NMPC framework consists of obstacle prediction, composite risk assessment, event-triggered mode switching, local predictive optimization, and receding-horizon execution. The framework activates the NMPC solver only when the predicted collision risk exceeds a prescribed threshold.
 
 \subsection{Overall Architecture}
 
 The framework follows a closed-loop pipeline. At each sampling instant, the UAV updates obstacle observations, predicts future obstacle motion, evaluates the composite risk index, and determines the control mode. Under low-risk conditions, the UAV tracks the nominal reference trajectory, while under high-risk conditions the local NMPC solver generates a collision-free trajectory segment.
 
-This dual-mode design reduces unnecessary optimization calls in safe regions and enables rapid replanning when dynamic threats are detected.
+\textcolor{blue}{This dual-mode design enables risk-dependent switching between lightweight tracking and predictive replanning according to the estimated collision risk.}
 
 \subsection{Spatiotemporal Prediction of Dynamic Obstacles}
 
@@ -401,7 +401,7 @@ where $\Delta t$ is the sampling interval. The constraints are enforced for $\ta
 
 \subsection{Theoretical Analysis and Feasibility Discussion}
 
-This section provides theoretical analysis for the proposed event-triggered dual-mode NMPC framework. The analysis first proves that the triggering mechanism excludes Zeno-like mode chattering. It then characterizes the computational benefit of event-triggered solver activation and discusses its scalability with the number of dynamic obstacles. Finally, recursive feasibility and closed-loop stability are discussed under bounded prediction errors and feasible replanning conditions.
+\textcolor{blue}{This section provides theoretical analysis for the proposed event-triggered dual-mode NMPC framework. The analysis first proves that the triggering mechanism excludes Zeno-like mode chattering. It then characterizes the computational complexity of prediction and event-triggered solver activation. Finally, recursive feasibility and closed-loop stability are discussed under bounded prediction errors and feasible replanning conditions.}
 
 \begin{theorem}
 	Consider the dual-mode switching logic defined in \eqref{eq:trigger}. For any sequence of triggering instants $\{k_1, k_2, \dots, k_j\}$, the number of sampling steps between any two consecutive activations $(\sigma_k = 1)$ is lower-bounded by $T_{ref}$
@@ -460,7 +460,7 @@ In the continuous baseline, the solver executes at every step $(\sigma_k = 1, \f
 The proof is complete. \hfill $\square$
 
 {Discussion 1:}
-	For $N_o$ dynamic obstacles, the prediction and occupancy construction cost scales as $\mathcal{C}_{p}(N_o)=O(N_oH)$. The obstacle-avoidance constraints in \eqref{eq:opt_problem} also add $N_oH$ safety constraints to the local NLP, so the solver cost can be written as $\mathcal{C}_{s}(N_o)$. Therefore, the continuous NMPC baseline has the average cost $\bar{\mathcal{C}}_{\mathrm{cont}}(N_o)=\mathcal{C}_{p}(N_o)+\mathcal{C}_{s}(N_o)$, while the proposed ET-NMPC has $\bar{\mathcal{C}}(N_o)=\mathcal{C}_{p}(N_o)+\eta(N_o)\mathcal{C}_{s}(N_o)$. Since $\eta(N_o)<1$ when low-risk steps exist, the proposed method can reduce unnecessary NLP solves. As $N_o$ increases, both the solver cost and the trigger ratio may increase because more dynamic obstacles create more potential conflicts. This explains why CPU time and trigger rate are evaluated with respect to the number of dynamic obstacles in the Monte Carlo scalability tests.
+	For $N_o$ dynamic obstacles, the prediction and occupancy construction cost scales as $\mathcal{C}_{p}(N_o)=O(N_oH)$. The obstacle-avoidance constraints in \eqref{eq:opt_problem} also add $N_oH$ safety constraints to the local NLP, so the solver cost can be written as $\mathcal{C}_{s}(N_o)$. Therefore, the continuous NMPC baseline has the average cost $\bar{\mathcal{C}}_{\mathrm{cont}}(N_o)=\mathcal{C}_{p}(N_o)+\mathcal{C}_{s}(N_o)$, while the proposed ET-NMPC has $\bar{\mathcal{C}}(N_o)=\mathcal{C}_{p}(N_o)+\eta(N_o)\mathcal{C}_{s}(N_o)$. Since $\eta(N_o)<1$ when low-risk steps exist, the proposed method can reduce unnecessary NLP solves. As $N_o$ increases, both the solver cost and the trigger ratio may increase because more dynamic obstacles create more potential conflicts.
 
 \textit{Discussion 2:}
 	The recursive feasibility of the local NMPC problem is discussed under standard boundedness assumptions. Assume that the initial NMPC problem is feasible, the obstacle prediction error is bounded by $\Delta_i(k+\tau)$, and the safety margin $d_{i,\tau}=r_u+r_i+\Delta_i(k+\tau)+d_m$ is sufficiently conservative. Then, a feasible candidate at the next step can be constructed by shifting the previous control sequence and appending a backup admissible input. The inflated safety margin preserves collision avoidance when the actual obstacle motion remains within the uncertainty-bounded region.
@@ -471,19 +471,16 @@ The closed-loop stability is interpreted in a practical sense. In low-risk mode,
 
 \subsection{NMPC-Based Online Solver}
 
-The nonlinear constrained optimal control problem is transcribed into a Nonlinear Programming (NLP) problem via a multiple-shooting scheme to enhance numerical stability. This approach treats the control sequence $U_k$ and the state sequence $X_k = \{\vect{x}_{k+1}, \ldots, \vect{x}_{k+H}\}$ as simultaneous decision variables. Dynamic consistency is enforced throughout the horizon using explicit defect constraints
+\textcolor{blue}{The NMPC optimization problem is implemented as a sparse nonlinear programming problem using multiple shooting. The resulting NLP is solved through the CasADi/IPOPT framework. During triggered replanning, a shifted-reference warm-start strategy is adopted, while low-risk periods bypass the optimization module and apply a lightweight tracking controller. Detailed solver configurations and computational profiling results are provided in Section IV-E.}
 \begin{equation}
 	\vect{x}_{k+\tau+1} - \vect{f}(\vect{x}_{k+\tau}, \vect{u}_{k+\tau}) = \vect{0}, \quad \tau=0,\ldots,H-1,
 	\label{eq:multiple_shooting}
 \end{equation}
-where $\vect{f}(\cdot, \cdot)$ represents the UAV kinematics defined in \eqref{eq:pk} and \eqref{eq:vk}. The resulting sparse NLP is modeled using CasADi and solved by the IPOPT interior-point solver. This implementation leverages automatic differentiation for exact derivatives and exploits the structured sparsity of the multiple-shooting transcription to accelerate solver iterations.
-
-The execution logic follows a receding-horizon principle governed by the trigger $\sigma_k$. When $\sigma_k=1$, the solver is warm-started around the reference trajectory to compute the optimal control $\vect{u}_k^\ast$. Only the first control input is applied to the system to compensate for new observations. Conversely, when $\sigma_k=0$, the NMPC module is bypassed to conserve computational resources, and the UAV follows a lightweight tracking law
 \begin{equation}
 	\vect{u}_k=\mathcal{K}(\vect{x}_k,\vect{r}_k),
 	\label{eq:nominal_control}
 \end{equation}
-where $\vect{r}_k$ is the reference state and $\mathcal{K}(\cdot)$ denotes a low-complexity controller. The total online computational burden includes obstacle prediction $O(N_oH)$ and the NLP solver complexity $\mathcal{C}_s$. By restricting solver activation to high-risk events, this framework \textcolor{blue}{reduces average computational overhead; its embedded real-time feasibility is not assessed in this work.} The complete procedure is summarized in Algorithm~\ref{alg:etpp}.
+\textcolor{blue}{The complete procedure is summarized in Algorithm~\ref{alg:etpp}.}
 
 \begin{algorithm}[!h]
 	\caption{Event-Triggered Dual-Mode NMPC for Dynamic Obstacle Avoidance}

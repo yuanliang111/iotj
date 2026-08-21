@@ -107,11 +107,19 @@ To avoid overstatement, we explicitly clarify that communication scheduling, rad
 
 The corresponding modifications are shown below:
 
-``The framework is positioned in an IoT-enabled cyber-physical system, where the UAV operates as a mobile sensing-and-actuation node.''
+"The framework is positioned in an IoT-enabled cyber--physical system, where the UAV operates as a mobile sensing-and-actuation node that converts available obstacle observations into safety-critical motion decisions."
 
-``From an IoT-system perspective, the event-triggered mechanism performs resource-aware local decision scheduling by avoiding unnecessary NMPC solver activations and reducing the associated local controller-computation workload.''
+"In an IoT-enabled cyber--physical system, the UAV can operate as a mobile sensing-and-actuation node that closes a local perception--decision--actuation loop: it uses environmental observations for local situation assessment, selects a control action, and executes the resulting maneuver."
 
-``The UAV is modeled as a mobile sensing-and-actuation node in an IoT-enabled cyber-physical system, where the local perception-decision-actuation loop consists of observation acquisition, motion prediction, risk assessment, mode selection, and control action generation.''
+"Within this context, the present work focuses on the local perception--control computation required for dynamic obstacle avoidance. It does not model communication scheduling, radio resource allocation, or communication-energy optimization; these aspects are outside the scope of the proposed control formulation."
+
+"From an IoT-system perspective, the event-triggered mechanism performs resource-aware local decision scheduling by avoiding unnecessary NMPC solver activations and reducing the associated local controller-computation workload."
+
+"The UAV is modeled as a mobile sensing-and-actuation node in an IoT-enabled cyber--physical system. At each sampling instant, the local perception--decision--actuation loop processes available obstacle observations, predicts their future motion, assesses collision risk, selects an operating mode, and applies the corresponding control action. This work models this local loop and its motion consequences."
+
+"Here, $\vect{y}_i(k)$ represents the available obstacle observation provided to the local perception--control loop at time step $k$."
+
+"From an IoT-system perspective, the proposed method provides a resource-aware local perception--control component for a mobile sensing-and-actuation node, with the demonstrated benefit of avoiding unnecessary NMPC activations and associated local computational workload."
 
 The corresponding modifications have been highlighted in blue in the revised manuscript.
 
@@ -135,9 +143,21 @@ In the revised manuscript, we have moderated the computational claims in four lo
 
 The corresponding modifications are shown below:
 
-``The event-triggered mechanism reduces unnecessary optimization activations and computational workload, while the current study focuses on desktop MATLAB/CasADi computational characterization rather than strict onboard real-time validation. Accordingly, the reported CPU-time reductions represent relative computational savings, not a hard real-time guarantee.''
+"computational efficiency and resource-aware computation reduction"
 
-``The reported computation time measures the controller computation process in MATLAB/CasADi simulation, including the triggered NMPC solving procedure, rather than the complete physical closed-loop latency including communication and hardware execution. Although the event-triggered strategy significantly reduces unnecessary NMPC calls, the current desktop MATLAB/CasADi implementation does not satisfy the strict 100-ms deadline for triggered optimization steps. With $\Delta t=0.1$ s, the deadline-violation ratio is 78.168\% over all recorded controller steps and 100.0\% over the triggered NMPC steps. Therefore, the reported results characterize desktop computational behavior and relative computational savings rather than hard real-time or onboard feasibility.''
+"Compared with the continuous NMPC baseline, the proposed method reduces average CPU time by 21.1\%--24.2\% in the reported desktop MATLAB/CasADi profiling experiments while preserving reliable clearance and stable solver behavior."
+
+"The event-triggered mechanism reduces unnecessary optimization activations and computational workload, while the current study focuses on desktop MATLAB/CasADi computational characterization rather than strict onboard real-time validation. Accordingly, the reported CPU-time reductions represent relative computational savings, not a hard real-time guarantee."
+
+"The reported computation time measures the controller computation process in MATLAB/CasADi simulation, including the triggered NMPC solving procedure, rather than the complete physical closed-loop latency including communication and hardware execution."
+
+"Table V also reports the IPOPT statistics and solver configuration for the reported desktop MATLAB/CasADi implementation. The average IPOPT iteration number remains below the maximum iteration limit, and no solver failure or fallback occurs during the profiling runs. The profiling configuration uses IPOPT with the MUMPS sparse linear solver, fixed convergence tolerances, and shifted-reference warm start. The memory values refer to the MATLAB process during the reported runs; they indicate no continuous process-memory growth in this desktop experiment, but they are not solver-specific or embedded-memory measurements."
+
+"Although the event-triggered strategy significantly reduces unnecessary NMPC calls, the current desktop MATLAB/CasADi implementation does not satisfy the strict 100-ms deadline for triggered optimization steps. With $\Delta t=0.1$ s, the deadline-violation ratio is 78.168\% over all recorded controller steps and 100.0\% over the triggered NMPC steps. Therefore, the reported results characterize desktop computational behavior and relative computational savings rather than hard real-time or onboard feasibility. Future validation on embedded platforms, hardware-in-the-loop experiments, and compiled implementations will be considered in future work."
+
+"Computational profiling also reported IPOPT iterations, solver settings, MATLAB process-memory observations, and timing distributions. These results characterize desktop computational behavior and relative CPU savings; they do not establish hard real-time operation at the 0.1-s deadline or embedded feasibility."
+
+"Future work will consider validation on embedded platforms, hardware-in-the-loop experiments, and compiled implementations, together with prediction enhancement and theoretical extension. We will extend the constant-velocity prediction model to more nonlinear and uncertain obstacle motions, study adaptive weighting mechanisms and terminal-set-based stability analysis, and investigate cooperative multi-UAV obstacle avoidance in real cluttered environments."
 
 The complete computational-profiling table has also been revised as follows:
 
@@ -228,11 +248,11 @@ The corresponding objective weights are $\rho_1=1.0$, $\rho_2=0.5$, $\rho_3=0.8$
 
 The corresponding modifications are shown below:
 
-``To balance local-reference tracking, control regularization, energy awareness, and differentiable soft collision avoidance, the overall objective function $J$ is defined as
+"To balance local-reference tracking, control regularization, energy awareness, and differentiable soft collision avoidance, the overall objective function $J$ is defined as
 \[
 J = \rho_1 J_{\mathrm{track}} + \rho_2 J_{\mathrm{smooth}} + \rho_3 J_{\mathrm{energy}} + \rho_4 J_{\mathrm{risk}} + \rho_5 J_{\mathrm{terminal}},
 \]
-where $J_{\mathrm{track}}$, $J_{\mathrm{smooth}}$, $J_{\mathrm{energy}}$, $J_{\mathrm{risk}}$, and $J_{\mathrm{terminal}}$ denote the reference-tracking, control-increment, energy-aware, soft collision-avoidance, and terminal costs, respectively; $\rho_1,\ldots,\rho_5$ are their nonnegative weights. The risk-fusion weights $w_1$, $w_2$, and $w_3$ retain their distinct meaning in Section III-B.
+where $J_{\text{track}}$, $J_{\text{smooth}}$, $J_{\text{energy}}$, $J_{\text{risk}}$, and $J_{\text{terminal}}$ denote the reference-tracking, control-increment, energy-aware, soft collision-avoidance, and terminal costs, respectively; $\rho_1,\ldots,\rho_5$ are their nonnegative weights. The risk-fusion weights $w_1,w_2,w_3$ retain their distinct meaning in Section~III-B.
 
 The reference-tracking cost is defined as
 \[
@@ -251,7 +271,7 @@ J_{\mathrm{terminal}} ={}& \lambda_p\left\|\vect{p}_{k+H}-\vect{p}_{\mathrm{term
 &+\lambda_{\mathrm{prog}}\sum_{\tau=0}^{H-1}\left(\frac{\tau+1}{H}\right)^2\left\|\vect{p}_{k+\tau+1}-\vect{p}_{\mathrm{terminal\_ref}}\right\|_2^2,
 \end{aligned}
 \]
-where the first two terms penalize terminal position error and terminal velocity, respectively. The final term is a stage-wise terminal-attraction penalty whose influence increases over the horizon. The terminal reference is $\vect{p}_{\mathrm{goal}}$ when $\left\|\vect{p}_{k}-\vect{p}_{\mathrm{goal}}\right\|_2\leq25\,\mathrm{m}$; otherwise, it is the last local reference point. Minimizing $J_{\mathrm{terminal}}$ therefore promotes terminal convergence while avoiding residual terminal motion.''
+where the first two terms penalize terminal position error and terminal velocity, respectively. The final term is a stage-wise terminal-attraction penalty whose influence increases over the horizon. The terminal reference is $\vect{p}_{\text{goal}}$ when $\left\|\vect{p}_{k}-\vect{p}_{\text{goal}}\right\|_2\leq25\,\mathrm{m}$; otherwise, it is the last local reference point. Minimizing $J_{\text{terminal}}$ therefore promotes terminal convergence while avoiding residual terminal motion."
 
 The corresponding parameters in Table II have also been updated as follows:
 
@@ -333,11 +353,31 @@ Accordingly, the asymmetric climb penalty is retained as an energy-aware altitud
 
 The corresponding modifications are shown below:
 
-\textit{C. Paired Ablation of the Asymmetric Climb Penalty}
+"C. Paired Ablation of the Asymmetric Climb Penalty"
 
-To isolate the influence of the asymmetric climb penalty, we conducted 30 paired Monte Carlo scenarios comparing Asymmetric ET-NMPC with Symmetric-energy ET-NMPC. For each paired scenario, both controllers used the same random seed, static map, UAV initial state, goal position, dynamic-obstacle realization, and measurement-noise sequence. The only changed setting was the additional positive-climb penalty: the asymmetric controller used $c_3=3.0$, whereas the symmetric-energy controller disabled this term by setting $c_3=0$.
+"To isolate the influence of the asymmetric climb penalty, we conducted 30 paired Monte Carlo scenarios comparing Asymmetric ET-NMPC with Symmetric-energy ET-NMPC. For each paired scenario, both controllers used the same random seed, static map, UAV initial state, goal position, dynamic-obstacle realization, and measurement-noise sequence. The only changed setting was the additional positive-climb penalty: the asymmetric controller used $c_3=3.0$, whereas the symmetric-energy controller disabled this term by setting $c_3=0$."
 
-The asymmetric controller achieved 30/30 successful trials with no collision, whereas the symmetric-energy controller achieved 29/30 successful trials with one collision. The paired difference in total positive climb was 0.217 m (95\% CI: [$-0.069$, $0.503$]), and the paired difference in estimated energy proxy was 0.00368 Wh (95\% CI: [$-0.00169$, $0.00904$]), where each difference is defined as Asymmetric $-$ Symmetric. Both confidence intervals include zero. Therefore, this experiment does not provide statistical evidence that the asymmetric penalty reduces cumulative positive climb or estimated mission energy under the tested parameterization. Instead, the additional term shapes altitude-related optimization preference and provides energy-aware altitude regulation within the safety--energy tradeoff.
+"The asymmetric controller achieved 30/30 successful trials with no collision, whereas the symmetric-energy controller achieved 29/30 successful trials with one collision. The paired difference in total positive climb was 0.217 m (95\% CI: [$-0.069$, $0.503$]), and the paired difference in estimated energy proxy was 0.00368 Wh (95\% CI: [$-0.00169$, $0.00904$]), where each difference is defined as Asymmetric $-$ Symmetric. Both confidence intervals include zero. Therefore, this experiment does not provide statistical evidence that the asymmetric penalty reduces cumulative positive climb or estimated mission energy under the tested parameterization. Instead, the additional term shapes altitude-related optimization preference and provides energy-aware altitude regulation within the safety--energy tradeoff."
+
+"An asymmetric climb penalty is also introduced as an energy-aware altitude regulation mechanism that shapes the optimization preference for positive altitude gains."
+
+"These designs reduce unnecessary NMPC calls, schedule replanning according to real-time collision risk, and introduce energy-aware altitude regulation that shapes the optimization preference for positive altitude gains."
+
+"An energy-aware NMPC cost with an asymmetric climb penalty is introduced for 3D UAV obstacle avoidance. The additional penalty on positive altitude gains provides energy-aware altitude regulation by shaping the optimization preference among altitude motion, safety, and energy-related cost."
+
+"To implement energy-aware altitude regulation in the local optimization, the energy-aware cost $J_{energy}$ is defined as"
+
+"Here, $\phi_{\epsilon}(s)=\frac{1}{2}\left(s+\sqrt{s^2+\epsilon}\right)$ is a differentiable smooth approximation of the positive part of $s$, where $\epsilon>0$. The non-negative coefficients $c_1$, $c_2$, and $c_3$ weight the squared displacement, control-effort, and additional positive-altitude-gain terms, respectively. The third term assigns extra cost to positive altitude increments and therefore shapes the altitude-related optimization preference; it provides energy-aware altitude regulation rather than a guarantee of statistically significant mission-energy reduction. Thus, $J_{energy}$ remains a lightweight surrogate for online NMPC rather than a full rotor-level power model."
+
+"This quantity is a model-based mission-energy proxy for comparative analysis, rather than a hardware battery measurement, a power measurement, or a flight-energy validation result."
+
+"Table III reports the quantitative results over 30 randomized trials. The proposed ET-NMPC achieves a 100.0\% success rate, which is the highest among all methods. Compared with C-NMPC, it reduces the trigger rate from 100.0\% to 77.7\% and reduces the average CPU time from 2588.46 ms to 2163.62 ms. It also decreases the control effort from 119.83 to 107.92 while maintaining a comparable estimated energy proxy of 0.8082 Wh. Although NP-ET-NMPC obtains lower CPU time and a lower model-based energy proxy, its success rate drops to 83.3\%, and its clearance decreases to 1.44 m. Therefore, the proposed ET-NMPC achieves an overall trade-off among reliability, safety, computational efficiency, and energy-aware performance; the isolated influence of the asymmetric climb penalty is evaluated by the paired ablation in Table IV."
+
+"The asymmetric climb and energy-related weights regulate the tradeoff between altitude motion and energy-related cost. These weights are fixed in all reported experiments; their isolated influence is evaluated by the paired ablation, which does not claim statistically significant reduction in cumulative positive climb or estimated mission energy."
+
+"The estimated energy proxy of the proposed ET-NMPC remains comparable to the other NMPC-based methods. Therefore, these obstacle-count experiments characterize the overall robustness, safety margin, computational efficiency, and model-based energy-related behavior of the proposed framework; they do not isolate a statistically significant energy reduction attributable to the asymmetric climb penalty."
+
+"The asymmetric climb penalty introduces an energy-aware altitude regulation mechanism by assigning additional cost to positive altitude gains. The paired ablation experiment evaluates its isolated influence without claiming statistically significant reduction in cumulative positive climb or estimated mission energy."
 
 \begin{table}[h!]
 \centering
@@ -389,11 +429,15 @@ The corresponding revisions have been made in Section IV-B, Pages 7--8. The rele
 
 "C-NMPC, NP-ET-NMPC, and SE-ET-NMPC serve as internal ablation baselines for examining event-triggered activation, obstacle prediction, and the energy-aware formulation, respectively."
 
+"3D-APF and RRT* represent reactive-avoidance and sampling-based-planning paradigms. Thus, the baseline set spans predictive control, event-triggered operation, energy-aware optimization, reactive planning, and sampling-based planning."
+
 "All algorithms are compared under identical initial conditions, static maps, dynamic-obstacle realizations, and random seeds. The NMPC-based variants share the same system model, prediction horizon, constraints, and solver settings."
 
 "All methods use the same available obstacle observations, while only the prediction-based NMPC variants exploit future obstacle-state estimation within their original formulations."
 
 "RRT* is executed in closed loop through periodic replanning with updated obstacle states and collision checking during execution."
+
+"RRT* shows limited performance under dynamic obstacle motion because it does not explicitly optimize future obstacle interactions during closed-loop execution."
 
 "Recent prediction-based avoidance methods mainly address motion prediction and trajectory generation; they are complementary to, rather than directly equivalent to, the present focus on resource-aware online control and adaptive NMPC activation."
 
@@ -411,6 +455,24 @@ The corresponding modifications have been highlighted in blue in the revised man
 
 \textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
 
+Thank you very much for this valuable comment. We agree that the original Section III contained a high density of methodological material because it combined obstacle prediction, risk assessment, event-triggered switching, NMPC formulation, theoretical analysis, solver implementation, and the complete algorithm. We also agree that some explanations of solver activation and computational savings were repeated across the section.
+
+In response, we have streamlined Section III while retaining the core methodological formulas, theoretical analysis, and implementation transparency in the main text. The overall architecture is now focused on the observation--prediction--risk-evaluation--switching--control pipeline rather than performance conclusions. The risk-assessment subsection retains the TCPA/DCPA metrics, composite risk, and triggering conditions, while repeated descriptions of computational savings have been removed or condensed. In the theoretical discussion, experimental interpretations of CPU-time and Monte Carlo results have been removed so that the discussion remains focused on Zeno-free switching, computational complexity, recursive feasibility, and practical stability.
+
+The solver description in Section III-F has been shortened from a detailed implementation tutorial to a concise implementation summary. It retains the use of multiple shooting, CasADi/IPOPT, a shifted-reference warm-start during triggered replanning, and lightweight tracking control in low-risk mode. Solver configurations and the expanded computational profiling disclosure remain available in Section IV-E, whereas Section III-F now only describes the method implementation needed to interpret the framework and Algorithm 1.
+
+The corresponding revisions are shown below:
+
+"This dual-mode design enables risk-dependent switching between lightweight tracking and predictive replanning according to the estimated collision risk."
+
+"The NMPC optimization problem is implemented as a sparse nonlinear programming problem using multiple shooting. The resulting NLP is solved through the CasADi/IPOPT framework. During triggered replanning, a shifted-reference warm-start strategy is adopted, while low-risk periods bypass the optimization module and apply a lightweight tracking controller. Detailed solver configurations and computational profiling results are provided in Section IV-E."
+
+"This section provides theoretical analysis for the proposed event-triggered dual-mode NMPC framework. The analysis first proves that the triggering mechanism excludes Zeno-like mode chattering. It then characterizes the computational complexity of prediction and event-triggered solver activation. Finally, recursive feasibility and closed-loop stability are discussed under bounded prediction errors and feasible replanning conditions."
+
+"The complete procedure is summarized in Algorithm 1."
+
+The corresponding modifications have been highlighted in blue in the revised manuscript.
+
 \medskip
 
 \textcolor[rgb]{0.00,0.00,1.00}{[\textbf {Reviewer}]} \textit{\textbf{2. Table III should report statistical variation and provide more information about the randomized trials.}}
@@ -422,6 +484,20 @@ The corresponding modifications have been highlighted in blue in the revised man
 \textit{\textbf{For such comparisons, confidence intervals for paired differences, or another appropriate paired statistical analysis, would help determine whether the observed differences are practically meaningful.}}
 
 \textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
+
+Thank you for this important comment. We agree that the original presentation of Table III did not provide sufficient statistical variation or explicitly describe whether the comparisons were paired. In particular, point estimates alone were not sufficient to determine whether the small differences in climb and estimated energy were statistically meaningful.
+
+In response, we have added a 30-trial paired Monte Carlo ablation in Section IV-C and Table IV. The study isolates the asymmetric positive-climb penalty by comparing Asymmetric ET-NMPC and Symmetric-energy ET-NMPC under matched scenarios. It reports the continuous metrics as mean $\pm$ standard deviation and evaluates paired differences using 95\% confidence intervals. Table III remains the overall comparison of heterogeneous baseline methods, whereas the new paired analysis provides the appropriate statistical evidence for the isolated energy-aware formulation comparison.
+
+The corresponding revisions are shown below:
+
+"To isolate the influence of the asymmetric climb penalty, we conducted 30 paired Monte Carlo scenarios comparing Asymmetric ET-NMPC with Symmetric-energy ET-NMPC. For each paired scenario, both controllers used the same random seed, static map, UAV initial state, goal position, dynamic-obstacle realization, and measurement-noise sequence. The only changed setting was the additional positive-climb penalty: the asymmetric controller used $c_3=3.0$, whereas the symmetric-energy controller disabled this term by setting $c_3=0$."
+
+"Note: Continuous metrics are reported as mean $\pm$ standard deviation over 30 trials. Paired differences are defined as Asymmetric $-$ Symmetric. Estimated energy is a model-based mission-energy proxy rather than a hardware battery measurement."
+
+"The asymmetric controller achieved 30/30 successful trials with no collision, whereas the symmetric-energy controller achieved 29/30 successful trials with one collision. The paired difference in total positive climb was 0.217 m (95\% CI: [$-0.069$, $0.503$]), and the paired difference in estimated energy proxy was 0.00368 Wh (95\% CI: [$-0.00169$, $0.00904$]), where each difference is defined as Asymmetric $-$ Symmetric. Both confidence intervals include zero. Therefore, this experiment does not provide statistical evidence that the asymmetric penalty reduces cumulative positive climb or estimated mission energy under the tested parameterization. Instead, the additional term shapes altitude-related optimization preference and provides energy-aware altitude regulation within the safety--energy tradeoff."
+
+The corresponding modifications have been highlighted in blue in the revised manuscript.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{center}
