@@ -377,6 +377,28 @@ The corresponding modifications have been highlighted in blue in the revised man
 
 \textcolor[rgb]{0.00,0.00,1.00}{[\textbf{Authors}]}
 
+Thank you very much for this valuable comment. We agree that the original manuscript did not sufficiently explain the roles and representativeness of the selected baselines, or make the comparison-fairness conditions sufficiently explicit.
+
+In response, we have revised Section IV-B, Pages 7--8, to clarify the baseline-selection rationale. C-NMPC, NP-ET-NMPC, and SE-ET-NMPC are identified as internal ablation baselines for examining event-triggered activation, obstacle prediction, and the energy-aware formulation, respectively. In addition, 3D-APF and RRT* are identified as representative reactive-avoidance and sampling-based-planning methods.
+
+We have also clarified that all methods are evaluated under identical initial conditions, static maps, dynamic-obstacle realizations, and random seeds. The NMPC-based variants share the same system model, prediction horizon, constraints, and solver settings. The revised text further specifies the common available obstacle observations, the distinct role of future obstacle-state estimation in prediction-based NMPC variants, and the closed-loop RRT* implementation with periodic replanning, updated obstacle states, and collision checking during execution.
+
+Finally, we added a brief discussion explaining that recent prediction-based dynamic-obstacle avoidance methods mainly emphasize motion prediction and trajectory generation, whereas the present work focuses on resource-aware online control and adaptive NMPC activation. These directions are therefore complementary rather than directly equivalent baselines.
+
+The corresponding revisions have been made in Section IV-B, Pages 7--8. The relevant revised text is reproduced below:
+
+"C-NMPC, NP-ET-NMPC, and SE-ET-NMPC serve as internal ablation baselines for examining event-triggered activation, obstacle prediction, and the energy-aware formulation, respectively."
+
+"All algorithms are compared under identical initial conditions, static maps, dynamic-obstacle realizations, and random seeds. The NMPC-based variants share the same system model, prediction horizon, constraints, and solver settings."
+
+"All methods use the same available obstacle observations, while only the prediction-based NMPC variants exploit future obstacle-state estimation within their original formulations."
+
+"RRT* is executed in closed loop through periodic replanning with updated obstacle states and collision checking during execution."
+
+"Recent prediction-based avoidance methods mainly address motion prediction and trajectory generation; they are complementary to, rather than directly equivalent to, the present focus on resource-aware online control and adaptive NMPC activation."
+
+The corresponding modifications have been highlighted in blue in the revised manuscript.
+
 \medskip
 
 \textit{\textbf{Minor Comments}}
