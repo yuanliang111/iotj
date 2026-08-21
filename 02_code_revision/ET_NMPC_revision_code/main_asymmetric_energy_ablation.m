@@ -48,7 +48,7 @@ end
 rng(base_seed, 'twister');
 buildings = generate_city_map();
 
-result_folder = fullfile('results_reviewer_response', 'asymmetric_energy_ablation');
+result_folder = 'H:\1.school\3new_paper\IoTJ_R1_revision\03_new_experiments\reviewer1_comment4_asymmetric_energy_ablation\results';
 if ~exist(result_folder, 'dir')
     mkdir(result_folder);
 end
