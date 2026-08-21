@@ -12,6 +12,23 @@ clear; clc;
 
 %% Experiment configuration
 params_base = init_params();
+% Reviewer #1 Comment 4 energy-estimation defaults.  These match the
+% current Monte Carlo convention without modifying init_params.m.
+if ~isfield(params_base, 'P_base')
+    params_base.P_base = 45.0;
+end
+if ~isfield(params_base, 'uav_mass')
+    params_base.uav_mass = 1.2;
+end
+if ~isfield(params_base, 'gravity')
+    params_base.gravity = 9.81;
+end
+if ~isfield(params_base, 'climb_efficiency')
+    params_base.climb_efficiency = 0.70;
+end
+if ~isfield(params_base, 'k_u_energy')
+    params_base.k_u_energy = 0.08;
+end
 params_base.use_event_trigger = true;
 params_base.use_prediction = true;
 params_base.use_multi_obstacles = true;
