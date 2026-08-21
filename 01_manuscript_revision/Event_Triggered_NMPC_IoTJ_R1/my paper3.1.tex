@@ -68,7 +68,7 @@
 \maketitle
 
 \begin{abstract}
-	This paper proposes an event-triggered dual-mode nonlinear model predictive control (NMPC) framework for autonomous obstacle avoidance of uncrewed aerial vehicles (UAVs) in complex 3D dynamic environments. \textcolor{blue}{The framework is positioned in an IoT-enabled cyber--physical system, where the UAV operates as a mobile sensing-and-actuation node that converts available obstacle observations into safety-critical motion decisions.} To balance \textcolor{blue}{computational efficiency and resource-aware computation reduction}, motion safety, and energy preservation, a composite risk assessment mechanism is developed to schedule the NMPC solver according to instantaneous collision threats. Under low-risk conditions, the UAV follows nominal trajectory tracking. Under high-risk conditions, local predictive replanning is activated to generate a safe avoidance trajectory. By integrating a Kalman-based predictive horizon, the framework enables the UAV to anticipate heterogeneous dynamic obstacle motions and proactively avoid potential conflicts. An asymmetric energy penalty is also introduced to suppress unnecessary vertical maneuvers and reduce energy consumption. Extensive simulations, profiling experiments, and Monte Carlo stress tests show that the proposed framework maintains a 100\% obstacle-avoidance success rate under measurement noise and increasing obstacle density. \textcolor{blue}{Compared with the continuous NMPC baseline, the proposed method reduces average CPU time by 21.1\%--24.2\% in the reported desktop MATLAB/CasADi profiling experiments while preserving reliable clearance and stable solver behavior.}
+	This paper proposes an event-triggered dual-mode nonlinear model predictive control (NMPC) framework for autonomous obstacle avoidance of uncrewed aerial vehicles (UAVs) in complex 3D dynamic environments. \textcolor{blue}{The framework is positioned in an IoT-enabled cyber--physical system, where the UAV operates as a mobile sensing-and-actuation node that converts available obstacle observations into safety-critical motion decisions.} To balance \textcolor{blue}{computational efficiency and resource-aware computation reduction} with motion safety while considering \textcolor{blue}{the energy-related trade-off}, a composite risk assessment mechanism is developed to schedule the NMPC solver according to instantaneous collision threats. Under low-risk conditions, the UAV follows nominal trajectory tracking. Under high-risk conditions, local predictive replanning is activated to generate a safe avoidance trajectory. By integrating a Kalman-based predictive horizon, the framework enables the UAV to anticipate heterogeneous dynamic obstacle motions and proactively avoid potential conflicts. \textcolor{blue}{An asymmetric climb penalty is also introduced as an energy-aware altitude regulation mechanism that shapes the optimization preference for positive altitude gains.} Extensive simulations, profiling experiments, and Monte Carlo stress tests show that the proposed framework maintains a 100\% obstacle-avoidance success rate under measurement noise and increasing obstacle density. \textcolor{blue}{Compared with the continuous NMPC baseline, the proposed method reduces average CPU time by 21.1\%--24.2\% in the reported desktop MATLAB/CasADi profiling experiments while preserving reliable clearance and stable solver behavior.}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -90,7 +90,7 @@ The UAV obstacle avoidance also depends on energy efficiency because onboard bat
 
 \textcolor{blue}{Within this context, the present work focuses on the local perception--control computation required for dynamic obstacle avoidance. It does not model communication scheduling, radio resource allocation, or communication-energy optimization; these aspects are outside the scope of the proposed control formulation.}
 
-In complex 3D navigation, UAVs require on-demand solver activation, risk-aware threat assessment, and energy-aware maneuver regulation. However, existing methods rarely integrate these requirements into a unified obstacle-avoidance framework. To address this limitation, we propose an energy-aware ET-NMPC framework for 3D dynamic environments. The framework combines a risk-triggered dual-mode mechanism, a composite risk index, and an asymmetric energy penalty. These designs reduce unnecessary NMPC calls, schedule replanning according to real-time collision risk, and suppress unnecessary vertical maneuvers.
+In complex 3D navigation, UAVs require on-demand solver activation, risk-aware threat assessment, and energy-aware maneuver regulation. However, existing methods rarely integrate these requirements into a unified obstacle-avoidance framework. To address this limitation, we propose an energy-aware ET-NMPC framework for 3D dynamic environments. The framework combines a risk-triggered dual-mode mechanism, a composite risk index, and an asymmetric energy penalty. \textcolor{blue}{These designs reduce unnecessary NMPC calls, schedule replanning according to real-time collision risk, and introduce energy-aware altitude regulation that shapes the optimization preference for positive altitude gains.}
 
 \textcolor{blue}{The event-triggered mechanism reduces unnecessary optimization activations and computational workload, while the current study focuses on desktop MATLAB/CasADi computational characterization rather than strict onboard real-time validation. Accordingly, the reported CPU-time reductions represent relative computational savings, not a hard real-time guarantee.}
 
@@ -102,7 +102,7 @@ The main contributions of this work are summarized as follows:
 	
 	\item A composite risk index is designed by integrating encounter risk, predictive occupancy risk, and reference deviation risk. This index enables the controller to evaluate dynamic collision threats and schedule replanning according to real-time risk.
 	
-	\item An energy-aware NMPC cost with an asymmetric climb penalty is introduced for 3D UAV obstacle avoidance. This penalty suppresses unnecessary vertical maneuvers and improves the balance among safety, computational efficiency, and energy preservation.
+	\item \textcolor{blue}{An energy-aware NMPC cost with an asymmetric climb penalty is introduced for 3D UAV obstacle avoidance. The additional penalty on positive altitude gains provides energy-aware altitude regulation by shaping the optimization preference among altitude motion, safety, and energy-related cost.}
 \end{itemize}
 
 The remainder of this paper is organized as follows. Section II presents system modeling. Section III describes the ET-NMPC framework. Section IV gives simulation results, and Section V concludes the paper.
@@ -306,24 +306,24 @@ When $\sigma_k=1$, the system constructs a finite-horizon local predictive optim
 \end{equation}
 \textcolor{blue}{which penalizes large variations in the predicted control sequence to improve trajectory executability.}
 
-To explicitly reflect the asymmetric energy characteristics of 3D flight, the local energy cost $J_{energy}$ is defined as
+\textcolor{blue}{To implement energy-aware altitude regulation in the local optimization, the energy-aware cost $J_{energy}$ is defined as}
 \begin{equation}
 	\small
 	\begin{aligned}
-		J_{energy} 
-		&= c_1 \sum_{\tau=0}^{H-1} \| \vect{p}_{k+\tau+1} - \vect{p}_{k+\tau} \| + c_2 \sum_{\tau=0}^{H-1} \| \vect{u}_{k+\tau} \|^2 \\
-		&\quad + c_3 \sum_{\tau=0}^{H-1} \max(0, z_{k+\tau+1} - z_{k+\tau}),
+		\textcolor{blue}{J_{energy}}
+		&= \textcolor{blue}{c_1 \sum_{\tau=0}^{H-1} \| \vect{p}_{k+\tau+1} - \vect{p}_{k+\tau} \|_2^2 + c_2 \sum_{\tau=0}^{H-1} \| \vect{u}_{k+\tau} \|_2^2} \\
+		&\quad \textcolor{blue}{+ c_3 \sum_{\tau=0}^{H-1} \phi_{\epsilon}\!\left(z_{k+\tau+1} - z_{k+\tau}\right),}
 	\end{aligned}
 	\label{eq:jenergy}
 \end{equation}
-\textcolor{blue}{where $c_1$, $c_2$, and $c_3$ are non-negative weighting coefficients. The first term captures motion-related energy, including horizontal motion, the second accounts for control effort, and the third implements an asymmetric climb penalty for unnecessary positive altitude gains. Thus, $J_{energy}$ is the energy-aware objective used during optimization. It remains a lightweight surrogate for online NMPC rather than a full rotor-level power model.}
+\textcolor{blue}{Here, $\phi_{\epsilon}(s)=\frac{1}{2}\left(s+\sqrt{s^2+\epsilon}\right)$ is a differentiable smooth approximation of the positive part of $s$, where $\epsilon>0$. The non-negative coefficients $c_1$, $c_2$, and $c_3$ weight the squared displacement, control-effort, and additional positive-altitude-gain terms, respectively. The third term assigns extra cost to positive altitude increments and therefore shapes the altitude-related optimization preference; it provides energy-aware altitude regulation rather than a guarantee of statistically significant mission-energy reduction. Thus, $J_{energy}$ remains a lightweight surrogate for online NMPC rather than a full rotor-level power model.}
 
-To provide a quantitative energy assessment beyond geometric metrics, the estimated energy consumption is computed using a simplified physical model
+\textcolor{blue}{To provide a quantitative model-based energy proxy beyond geometric metrics, the estimated energy is computed using a simplified physical model}
 \begin{equation}
 	E_{est}=P_{base}T+\frac{m g \Delta z_+}{\eta_c}+k_u\int_0^T \|u(t)\|^2 dt,
 	\label{eq:estimated_energy}
 \end{equation}
-where $P_{base}$ is the baseline propulsion power, $T$ is the flight duration, $m$ is the UAV mass, $g$ is the gravitational acceleration, $\Delta z_+$ denotes the accumulated positive altitude change, $\eta_c$ is the climb efficiency, and $k_u$ is the maneuvering-energy coefficient. The three terms represent the baseline flight energy, climb-related potential energy, and additional energy caused by control effort, respectively. The estimated energy is converted into Watt-hours as $E_{Wh}=E_{est}/3600$. This metric provides a physically interpretable quantitative comparison of energy-aware performance across different algorithms.
+where $P_{base}$ is the baseline propulsion power, $T$ is the flight duration, $m$ is the UAV mass, $g$ is the gravitational acceleration, $\Delta z_+$ denotes the accumulated positive altitude change, $\eta_c$ is the climb efficiency, and $k_u$ is the maneuvering-energy coefficient. The three terms represent the baseline flight energy, climb-related potential energy, and additional energy caused by control effort, respectively. The estimated energy is converted into Watt-hours as $E_{Wh}=E_{est}/3600$. \textcolor{blue}{This quantity is a model-based mission-energy proxy for comparative analysis, rather than a hardware battery measurement, a power measurement, or a flight-energy validation result.}
 
 \textcolor{blue}{The risk cost $J_{risk}$ is formulated as a differentiable soft collision-avoidance penalty over the predicted UAV--obstacle separations:}
 \begin{equation}
@@ -612,9 +612,9 @@ The full collision-free trajectory is shown in Fig. \ref{fig:complete}. After re
 
 To further validate the proposed framework, we compare ET-NMPC with five baseline methods: continuous NMPC (C-NMPC), event-triggered NMPC without prediction (NP-ET-NMPC), event-triggered NMPC with symmetric energy cost (SE-ET-NMPC), 3D artificial potential field (3D-APF)~\cite{ref16}, and Rapidly-exploring Random Tree Star (RRT*). All methods are tested in the same complex urban environment with identical static maps, dynamic obstacle initialization, and random seeds.
 
-Fig.~\ref{fig:baseline_comparison} shows the trajectory comparison. The proposed ET-NMPC generates a smooth and collision-free trajectory by using dynamic obstacle prediction and risk-triggered local replanning. This predictive information helps the UAV respond before the dynamic obstacle reaches the nominal path. In contrast, 3D-APF becomes trapped by local minima, and RRT* fails to handle the dynamic obstacle motion under closed-loop tracking. NP-ET-NMPC reduces computation and energy consumption in some cases, but it has a smaller clearance and a lower success rate. This result shows that prediction is important for safe dynamic obstacle avoidance.
+Fig.~\ref{fig:baseline_comparison} shows the trajectory comparison. The proposed ET-NMPC generates a smooth and collision-free trajectory by using dynamic obstacle prediction and risk-triggered local replanning. This predictive information helps the UAV respond before the dynamic obstacle reaches the nominal path. In contrast, 3D-APF becomes trapped by local minima, and RRT* fails to handle the dynamic obstacle motion under closed-loop tracking. \textcolor{blue}{NP-ET-NMPC has lower computation time and a lower model-based energy proxy in some cases, but it has a smaller clearance and a lower success rate.} This result shows that prediction is important for safe dynamic obstacle avoidance.
 
-Table~\ref{tab:baseline_comparison} reports the quantitative results over 30 randomized trials. The proposed ET-NMPC achieves a 100.0\% success rate, which is the highest among all methods. Compared with C-NMPC, it reduces the trigger rate from 100.0\% to 77.7\% and reduces the average CPU time from 2588.46 ms to 2163.62 ms. It also decreases the control effort from 119.83 to 107.92 and reduces the estimated energy consumption from 0.8199 Wh to 0.8082 Wh. Although NP-ET-NMPC obtains lower CPU time and energy consumption, its success rate drops to 83.3\%, and its clearance decreases to 1.44 m. Therefore, the proposed ET-NMPC achieves the best overall trade-off among reliability, safety, computational efficiency, and energy-aware performance.
+\textcolor{blue}{Table~\ref{tab:baseline_comparison} reports the quantitative results over 30 randomized trials. The proposed ET-NMPC achieves a 100.0\% success rate, which is the highest among all methods. Compared with C-NMPC, it reduces the trigger rate from 100.0\% to 77.7\% and reduces the average CPU time from 2588.46 ms to 2163.62 ms. It also decreases the control effort from 119.83 to 107.92 while maintaining a comparable estimated energy proxy of 0.8082 Wh. Although NP-ET-NMPC obtains lower CPU time and a lower model-based energy proxy, its success rate drops to 83.3\%, and its clearance decreases to 1.44 m. Therefore, the proposed ET-NMPC achieves an overall trade-off among reliability, safety, computational efficiency, and energy-aware performance; the isolated influence of the asymmetric climb penalty is evaluated by the paired ablation in Table~\ref{tab:asymmetric_climb_ablation}.}
 
 \begin{table*}[t]
 	\centering
@@ -624,7 +624,7 @@ Table~\ref{tab:baseline_comparison} reports the quantitative results over 30 ran
 	\renewcommand{\arraystretch}{1.25} 
 	\begin{tabular}{l c c c c c c c}
 		\toprule[1.1pt]
-		\textbf{Algorithm} & \textbf{Success (\%)} & \textbf{Trigger (\%)} & \textbf{Avg CPU (ms)} & \textbf{Clearance (m)} & \textbf{Effort} & \textbf{Climb (m)} & \textbf{Est. Energy (Wh)} \\
+		\textbf{Algorithm} & \textbf{Success (\%)} & \textbf{Trigger (\%)} & \textbf{Avg CPU (ms)} & \textbf{Clearance (m)} & \textbf{Effort} & \textbf{Climb (m)} & \textcolor{blue}{\textbf{Est. energy proxy (Wh)}} \\
 		\midrule
 		\textbf{Proposed ET-NMPC} & 100.0 & 77.7 & 2163.62 & 1.94 & 107.92 & 11.59 & 0.8082 \\
 		C-NMPC & 96.7 & 100.0 & 2588.46 & 1.95 & 119.83 & 11.67 & 0.8199 \\
@@ -642,6 +642,35 @@ Table~\ref{tab:baseline_comparison} reports the quantitative results over 30 ran
 	\caption{Trajectory comparison of different path-planning algorithms under the same UAV initial condition, goal position, static map, and dynamic obstacle trajectories.} 
 	\label{fig:baseline_comparison} 
 \end{figure}
+
+\subsection{\textcolor{blue}{Paired Ablation of the Asymmetric Climb Penalty}}
+
+\textcolor{blue}{To isolate the influence of the asymmetric climb penalty, we conducted 30 paired Monte Carlo scenarios comparing Asymmetric ET-NMPC with Symmetric-energy ET-NMPC. For each paired scenario, both controllers used the same random seed, static map, UAV initial state, goal position, dynamic-obstacle realization, and measurement-noise sequence. The only changed setting was the additional positive-climb penalty: the asymmetric controller used $c_3=3.0$, whereas the symmetric-energy controller disabled this term by setting $c_3=0$.}
+
+\begin{table*}[t]
+	\centering
+	\caption{\textcolor{blue}{Paired Ablation Results for the Asymmetric Climb Penalty over 30 Matched Scenarios}}
+	\label{tab:asymmetric_climb_ablation}
+	\footnotesize
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{2.5pt}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{l c c c c c c c c c}
+			\toprule
+			\textcolor{blue}{\textbf{Algorithm}} & \textcolor{blue}{\textbf{Success (\%)}} & \textcolor{blue}{\textbf{Collision (\%)}} & \textcolor{blue}{\textbf{Total positive climb (m)}} & \textcolor{blue}{\textbf{Estimated energy proxy (Wh)}} & \textcolor{blue}{\textbf{Path length (m)}} & \textcolor{blue}{\textbf{Flight time (s)}} & \textcolor{blue}{\textbf{Minimum clearance (m)}} & \textcolor{blue}{\textbf{Trigger rate (\%)}} & \textcolor{blue}{\textbf{Control effort}} \\
+			\midrule
+			\textcolor{blue}{Asymmetric ET-NMPC} & \textcolor{blue}{100.0} & \textcolor{blue}{0.0} & \textcolor{blue}{11.52 $\pm$ 1.20} & \textcolor{blue}{0.22554 $\pm$ 0.01187} & \textcolor{blue}{60.55 $\pm$ 1.43} & \textcolor{blue}{13.55 $\pm$ 0.58} & \textcolor{blue}{1.93 $\pm$ 0.66} & \textcolor{blue}{77.92 $\pm$ 1.45} & \textcolor{blue}{107.51 $\pm$ 5.43} \\
+			\textcolor{blue}{Symmetric-energy ET-NMPC} & \textcolor{blue}{96.7} & \textcolor{blue}{3.3} & \textcolor{blue}{11.30 $\pm$ 1.23} & \textcolor{blue}{0.22186 $\pm$ 0.01807} & \textcolor{blue}{59.67 $\pm$ 4.60} & \textcolor{blue}{13.34 $\pm$ 1.09} & \textcolor{blue}{1.93 $\pm$ 0.66} & \textcolor{blue}{77.45 $\pm$ 2.69} & \textcolor{blue}{105.83 $\pm$ 9.60} \\
+			\bottomrule
+		\end{tabular}%
+	}
+	\vspace{2pt}
+	\begin{flushleft}
+		\textcolor{blue}{\textit{Note: Continuous metrics are reported as mean $\pm$ standard deviation over 30 trials. Paired differences are defined as Asymmetric $-$ Symmetric. Estimated energy is a model-based mission-energy proxy rather than a hardware battery measurement.}}
+	\end{flushleft}
+\end{table*}
+
+\textcolor{blue}{The asymmetric controller achieved 30/30 successful trials with no collision, whereas the symmetric-energy controller achieved 29/30 successful trials with one collision. The paired difference in total positive climb was 0.217 m (95\% CI: [$-0.069$, $0.503$]), and the paired difference in estimated energy proxy was 0.00368 Wh (95\% CI: [$-0.00169$, $0.00904$]), where each difference is defined as Asymmetric $-$ Symmetric. Both confidence intervals include zero. Therefore, this experiment does not provide statistical evidence that the asymmetric penalty reduces cumulative positive climb or estimated mission energy under the tested parameterization. Instead, the additional term shapes altitude-related optimization preference and provides energy-aware altitude regulation within the safety--energy tradeoff.}
 
 \subsection{Robustness and Parameter Sensitivity Analysis}
 
@@ -692,7 +721,7 @@ For each parameter setting, 30 independent randomized trials are conducted. We e
 
 Fig.~\ref{fig:sensitivity_analysis}(c) and Fig.~\ref{fig:sensitivity_analysis}(d) show the influence of $T_{ref}$. The trigger rate changes only slightly over the tested values, and the switch count remains low. This result shows that the hysteresis-based logic can suppress frequent mode switching. Among the tested values, $T_{ref}=5$ achieves a 100.0\% success rate with acceptable CPU time. Therefore, $T_{ref}=5$ is used in the following experiments.
 
-The weighting coefficients in Table~\ref{tab:key_parameters} are selected by empirical tuning under safety, smoothness, and energy-awareness requirements. The risk-related weights give priority to collision avoidance in high-risk regions. The tracking and control-effort weights maintain smooth motion and bounded acceleration. The asymmetric climb and energy-related weights reduce unnecessary vertical maneuvers while preserving the success rate. These weights are fixed in all reported experiments, and their effectiveness is supported by the comparative results, Monte Carlo tests, and sensitivity analysis. However, fixed weights may be sub-optimal under different operating conditions. Future work will study adaptive weighting mechanisms for more diverse environments.
+The weighting coefficients in Table~\ref{tab:key_parameters} are selected by empirical tuning under safety, smoothness, and energy-awareness requirements. The risk-related weights give priority to collision avoidance in high-risk regions. The tracking and control-effort weights maintain smooth motion and bounded acceleration. \textcolor{blue}{The asymmetric climb and energy-related weights regulate the tradeoff between altitude motion and energy-related cost. These weights are fixed in all reported experiments; their isolated influence is evaluated by the paired ablation, which does not claim statistically significant reduction in cumulative positive climb or estimated mission energy.} However, fixed weights may be sub-optimal under different operating conditions. Future work will study adaptive weighting mechanisms for more diverse environments.
 
 \subsection{\textcolor{blue}{Computational Performance Profiling and Deadline-Oriented Analysis}}
 
@@ -806,7 +835,7 @@ The results show that the proposed ET-NMPC maintains a 100.0\% success rate in a
 
 The proposed ET-NMPC also achieves a clear computational advantage over the continuous C-NMPC baseline. Since C-NMPC solves the NMPC problem at every time step, its trigger rate remains 100.0\% in all scenarios. In comparison, the proposed ET-NMPC keeps the trigger rate between 75.4\% and 78.3\%. As a result, it reduces the average CPU time by 24.2\%, 24.0\%, and 21.1\% for 1, 3, and 5 dynamic obstacles, respectively. This result supports the computational benefit of the risk-triggered scheduling mechanism.
 
-The safety margin also supports the advantage of the proposed method. When the number of dynamic obstacles increases to 5, the proposed ET-NMPC achieves the largest clearance of 2.05 m. This value is higher than those of C-NMPC, NP-ET-NMPC, and SE-ET-NMPC. Although NP-ET-NMPC obtains larger CPU savings in some cases, its success rate and clearance decrease significantly under dense dynamic obstacles. The estimated energy consumption of the proposed ET-NMPC remains comparable to the other NMPC-based methods. Therefore, the proposed ET-NMPC achieves the best overall trade-off among robustness, safety margin, computational efficiency, and energy-aware performance.
+The safety margin also supports the advantage of the proposed method. When the number of dynamic obstacles increases to 5, the proposed ET-NMPC achieves the largest clearance of 2.05 m. This value is higher than those of C-NMPC, NP-ET-NMPC, and SE-ET-NMPC. Although NP-ET-NMPC obtains larger CPU savings in some cases, its success rate and clearance decrease significantly under dense dynamic obstacles. \textcolor{blue}{The estimated energy proxy of the proposed ET-NMPC remains comparable to the other NMPC-based methods. Therefore, these obstacle-count experiments characterize the overall robustness, safety margin, computational efficiency, and model-based energy-related behavior of the proposed framework; they do not isolate a statistically significant energy reduction attributable to the asymmetric climb penalty.}
 
 \section{Conclusion}
 
@@ -814,7 +843,7 @@ This paper proposed an energy-aware event-triggered NMPC framework for UAV obsta
 
 \textcolor{blue}{From an IoT-system perspective, the proposed method provides a resource-aware local perception--control component for a mobile sensing-and-actuation node, with the demonstrated benefit of avoiding unnecessary NMPC activations and associated local computational workload.}
 
-Simulation results verified the effectiveness of the proposed method. Comparative experiments showed that the proposed ET-NMPC achieves a good balance among safety, computational efficiency, and energy-aware performance. The prediction mechanism improves avoidance performance under dynamic threats. The asymmetric climb penalty reduces unnecessary vertical maneuvers. Monte Carlo tests with statistical variations showed robust performance under noise and random obstacle states. \textcolor{blue}{Computational profiling also reported IPOPT iterations, solver settings, MATLAB process-memory observations, and timing distributions. These results characterize desktop computational behavior and relative CPU savings; they do not establish hard real-time operation at the 0.1-s deadline or embedded feasibility.}
+Simulation results verified the effectiveness of the proposed method. Comparative experiments showed that the proposed ET-NMPC achieves a good balance among safety, computational efficiency, and energy-aware performance. The prediction mechanism improves avoidance performance under dynamic threats. \textcolor{blue}{The asymmetric climb penalty introduces an energy-aware altitude regulation mechanism by assigning additional cost to positive altitude gains. The paired ablation experiment evaluates its isolated influence without claiming statistically significant reduction in cumulative positive climb or estimated mission energy.} Monte Carlo tests with statistical variations showed robust performance under noise and random obstacle states. \textcolor{blue}{Computational profiling also reported IPOPT iterations, solver settings, MATLAB process-memory observations, and timing distributions. These results characterize desktop computational behavior and relative CPU savings; they do not establish hard real-time operation at the 0.1-s deadline or embedded feasibility.}
 
 \textcolor{blue}{Future work will consider validation on embedded platforms, hardware-in-the-loop experiments, and compiled implementations, together with prediction enhancement and theoretical extension. We will extend the constant-velocity prediction model to more nonlinear and uncertain obstacle motions, study adaptive weighting mechanisms and terminal-set-based stability analysis, and investigate cooperative multi-UAV obstacle avoidance in real cluttered environments.}
 
