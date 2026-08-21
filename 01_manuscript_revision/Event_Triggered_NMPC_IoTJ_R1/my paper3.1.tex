@@ -611,28 +611,38 @@ To further validate the proposed framework, we compare ET-NMPC with five baselin
 
 \textcolor{blue}{C-NMPC, NP-ET-NMPC, and SE-ET-NMPC serve as internal ablation baselines for examining event-triggered activation, obstacle prediction, and the energy-aware formulation, respectively. 3D-APF and RRT* represent reactive-avoidance and sampling-based-planning paradigms. Thus, the baseline set spans predictive control, event-triggered operation, energy-aware optimization, reactive planning, and sampling-based planning. All algorithms are compared under identical initial conditions, static maps, dynamic-obstacle realizations, and random seeds. The NMPC-based variants share the same system model, prediction horizon, constraints, and solver settings. All methods use the same available obstacle observations, while only the prediction-based NMPC variants exploit future obstacle-state estimation within their original formulations. RRT* is executed in closed loop through periodic replanning with updated obstacle states and collision checking during execution. Recent prediction-based avoidance methods mainly address motion prediction and trajectory generation; they are complementary to, rather than directly equivalent to, the present focus on resource-aware online control and adaptive NMPC activation.}
 
-Fig.~\ref{fig:baseline_comparison} shows the trajectory comparison. The proposed ET-NMPC generates a smooth and collision-free trajectory by using dynamic obstacle prediction and risk-triggered local replanning. This predictive information helps the UAV respond before the dynamic obstacle reaches the nominal path. In contrast, 3D-APF becomes trapped by local minima, and \textcolor{blue}{RRT* shows limited performance under dynamic obstacle motion because it does not explicitly optimize future obstacle interactions during closed-loop execution.} \textcolor{blue}{NP-ET-NMPC has lower computation time and a lower model-based energy proxy in some cases, but it has a smaller clearance and a lower success rate.} This result shows that prediction is important for safe dynamic obstacle avoidance.
-
 \textcolor{blue}{Table~\ref{tab:baseline_comparison} reports the quantitative results over 30 randomized trials. The proposed ET-NMPC achieves a 100.0\% success rate, which is the highest among all methods. Compared with C-NMPC, it reduces the trigger rate from 100.0\% to 77.7\% and reduces the average CPU time from 2588.46 ms to 2163.62 ms. It also decreases the control effort from 119.83 to 107.92 while maintaining a comparable estimated energy proxy of 0.8082 Wh. Although NP-ET-NMPC obtains lower CPU time and a lower model-based energy proxy, its success rate drops to 83.3\%, and its clearance decreases to 1.44 m. Therefore, the proposed ET-NMPC achieves an overall trade-off among reliability, safety, computational efficiency, and energy-aware performance; the isolated influence of the asymmetric climb penalty is evaluated by the paired ablation in Table~\ref{tab:asymmetric_climb_ablation}.}
+
+\textcolor{blue}{All baseline comparisons are conducted using 30 paired randomized trials, where identical initial conditions, static maps, dynamic-obstacle trajectories, and random seeds are shared among all algorithms. The continuous results in Table~\ref{tab:baseline_comparison} are reported as mean $\pm$ standard deviation over successful trials. For each trial, all methods receive the same obstacle observations, while only the prediction-based NMPC variants additionally exploit future obstacle-state estimation within their original formulations.}
+
+\textcolor{blue}{For the 29 paired trials with valid continuous metrics, the CPU-time difference (C-NMPC minus ET-NMPC) was 425.11 ms (95\% CI: [372.62, 477.60] ms), confirming the reliability of the reported computational improvement. The paired differences in minimum clearance (ET-NMPC minus C-NMPC) and control effort (C-NMPC minus ET-NMPC) were 0.009 m (95\% CI: [-0.076, 0.094] m) and 11.83 (95\% CI: [10.82, 12.84]), respectively.}
+
+Fig.~\ref{fig:baseline_comparison} shows the trajectory comparison. The proposed ET-NMPC generates a smooth and collision-free trajectory by using dynamic obstacle prediction and risk-triggered local replanning. This predictive information helps the UAV respond before the dynamic obstacle reaches the nominal path. In contrast, 3D-APF becomes trapped by local minima, and \textcolor{blue}{RRT* shows limited performance under dynamic obstacle motion because it does not explicitly optimize future obstacle interactions during closed-loop execution.} \textcolor{blue}{NP-ET-NMPC has lower computation time and a lower model-based energy proxy in some cases, but it has a smaller clearance and a lower success rate.} This result shows that prediction is important for safe dynamic obstacle avoidance.
 
 \begin{table*}[t]
 	\centering
 	\caption{Quantitative Performance Comparison of Different Algorithms in a Complex Dynamic Urban Scenario}
 	\label{tab:baseline_comparison}
-	\footnotesize 
+	\scriptsize
+	\setlength{\tabcolsep}{1.5pt}
 	\renewcommand{\arraystretch}{1.25} 
-	\begin{tabular}{l c c c c c c c}
+	\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccccccc}
 		\toprule[1.1pt]
 		\textbf{Algorithm} & \textbf{Success (\%)} & \textbf{Trigger (\%)} & \textbf{Avg CPU (ms)} & \textbf{Clearance (m)} & \textbf{Effort} & \textbf{Climb (m)} & \textcolor{blue}{\textbf{Est. energy proxy (Wh)}} \\
 		\midrule
-		\textbf{Proposed ET-NMPC} & 100.0 & 77.7 & 2163.62 & 1.94 & 107.92 & 11.59 & 0.8082 \\
-		C-NMPC & 96.7 & 100.0 & 2588.46 & 1.95 & 119.83 & 11.67 & 0.8199 \\
-		NP-ET-NMPC & 83.3 & 75.0 & 1862.95 & 1.44 & 103.56 & 10.97 & 0.7944 \\
-		SE-ET-NMPC & 96.7 & 77.7 & 1918.71 & 1.96 & 107.65 & 11.46 & 0.8047 \\
-		3D-APF & 13.3 & 0.0 & 0.13 & 0.54 & 132.03 & 11.17 & 0.9548 \\
-		RRT* & 0.0 & -- & -- & -- & -- & -- & -- \\
+		\textbf{Proposed ET-NMPC} & \textcolor{blue}{100.0 (30/30)} & \textcolor{blue}{77.7 $\pm$ 1.4} & \textcolor{blue}{2163.62 $\pm$ 70.39} & \textcolor{blue}{1.94 $\pm$ 0.67} & \textcolor{blue}{107.92 $\pm$ 5.10} & \textcolor{blue}{11.59 $\pm$ 1.17} & \textcolor{blue}{0.8082 $\pm$ 0.0336} \\
+		C-NMPC & \textcolor{blue}{96.7 (29/30)} & \textcolor{blue}{100.0 $\pm$ 0.0} & \textcolor{blue}{2588.46 $\pm$ 136.94} & \textcolor{blue}{1.95 $\pm$ 0.63} & \textcolor{blue}{119.83 $\pm$ 5.36} & \textcolor{blue}{11.67 $\pm$ 1.32} & \textcolor{blue}{0.8199 $\pm$ 0.0389} \\
+		NP-ET-NMPC & \textcolor{blue}{83.3 (25/30)} & \textcolor{blue}{75.0 $\pm$ 0.4} & \textcolor{blue}{1862.95 $\pm$ 11.26} & \textcolor{blue}{1.44 $\pm$ 0.86} & \textcolor{blue}{103.56 $\pm$ 1.47} & \textcolor{blue}{10.97 $\pm$ 0.38} & \textcolor{blue}{0.7944 $\pm$ 0.0078} \\
+		SE-ET-NMPC & \textcolor{blue}{96.7 (29/30)} & \textcolor{blue}{77.7 $\pm$ 1.4} & \textcolor{blue}{1918.71 $\pm$ 35.32} & \textcolor{blue}{1.96 $\pm$ 0.67} & \textcolor{blue}{107.65 $\pm$ 4.85} & \textcolor{blue}{11.46 $\pm$ 1.17} & \textcolor{blue}{0.8047 $\pm$ 0.0310} \\
+		3D-APF & \textcolor{blue}{13.3 (4/30)} & \textcolor{blue}{0.0 $\pm$ 0.0} & \textcolor{blue}{0.13 $\pm$ 0.12} & \textcolor{blue}{0.54 $\pm$ 0.43} & \textcolor{blue}{132.03 $\pm$ 15.67} & \textcolor{blue}{11.17 $\pm$ 1.34} & \textcolor{blue}{0.9548 $\pm$ 0.1449} \\
+		RRT* & \textcolor{blue}{0.0 (0/30)} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} & \textcolor{blue}{--} \\
 		\bottomrule[1.1pt]
-	\end{tabular}
+	\end{tabular*}
+	\smallskip
+	\begin{minipage}{\textwidth}
+		\footnotesize
+		\textcolor{blue}{\textit{Note: Success is reported as rate (successful trials/30). Collision counts for Proposed ET-NMPC, C-NMPC, NP-ET-NMPC, SE-ET-NMPC, 3D-APF, and RRT* are 0/30, 1/30, 5/30, 1/30, 26/30, and 30/30, respectively. Continuous metrics are reported as mean $\pm$ standard deviation over successful trials. For failed trials, only success and collision statistics are counted.}}
+	\end{minipage}
 \end{table*}
 
 \begin{figure}[htbp] 
